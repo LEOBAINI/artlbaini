@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<class name="noConformidad.ComoMitigar" table="como_mitigar">
+<id name="idcomo_mitigar" column="idcomo_mitigar">
+
+</id>
+<property name="fotografia" type="binary" column="foto"/>
+<property name="descripcion"/>
+<property name="id_item_no_conf"/>
+<property name="cliente_depto"/>
+
+
+</class>
+</hibernate-mapping>
