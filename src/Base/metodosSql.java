@@ -1,40 +1,84 @@
 package Base;
 
-
 import java.awt.Choice;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+/*import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map.Entry;*/
 
 import java.util.Date;
 
 import java.util.Locale;
+import java.util.logging.Logger;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
-import Abm.Persistente;
 import Objetos.ModeloTabla;
 
-@SuppressWarnings("unused")
 public class metodosSql extends ConexionMySql {
 	
 	
 	
 	public metodosSql() {
 	}
+	
+	public ImageIcon dameImagen(String consulta,String nombreColumna) {
+       
+        ImageIcon image=null;
+        try {
+        	ConexionMySql con = new ConexionMySql();
+        	con.conectar();
+        	
+        	/*String cadena="jdbc:mysql://127.0.0.1/shiteckhibernate";        	
+            Class.forName("com.mysql.jdbc.Driver");*/
+            java.sql.Connection conexion = con.getConection();//java.sql.DriverManager.getConnection(cadena,"gestorit","zayb9183");//Conecta!
+            
+        	
+            
+           // java.sql.Statement s = conexion.createStatement();
+            java.sql.PreparedStatement ps;
+            String sql = consulta;
+            ps = conexion.prepareStatement(sql);
+            java.sql.ResultSet rs = ps.executeQuery();
+            if (rs.next()) {//solo quiero la primera imagen =P
+            	 
+                 Blob blob = rs.getBlob(nombreColumna);//Acá va el nombre de la columna
+                 BufferedImage i = javax.imageio.ImageIO.read(blob.getBinaryStream());
+                 image = new ImageIcon(i);
+
+            	
+               
+            }
+           rs.close();
+           conexion.close();
+        } catch (Exception e) {
+        	JOptionPane.showMessageDialog(null,"ERROR! "+ e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+        ;
+		return image;
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	public int llenarChoice(Choice desplegable,String consultaSQL) throws SQLException{
 		
@@ -47,14 +91,8 @@ public class metodosSql extends ConexionMySql {
 		return 0;
 		
 	}
-	public int reasignarHandHeld(String nroSerie,String locacion){
-		
-		String sentencia="UPDATE `furlong`.`handheld` SET `SECTOR_ASIGNADO`='"+locacion+"' WHERE `serial`='"+nroSerie+"';";
-		
-		return insertarOmodif(sentencia);
-		
-	}
 	
+	/*
 	public  int updateObjetoDelaBase(Persistente objeto,String base,String tabla){
 		int status=-1;
 		String atributos=formatearParaMySql(objeto.todosLosAtributos()).toString().replace('{', ' ').replace('}', ' ');
@@ -70,9 +108,14 @@ public class metodosSql extends ConexionMySql {
 		 * 
 		 * UPDATE `furlong`.`registrodebam` SET `LOCACION`='COMPUTOS1', `SOLICITANTE`='SIN SOLIC1', `CHIPNRO`='1', `MARCACHIP`='1', `IMEI`='8698960106972591', `PROVEEDOR_PREDET`='CLARO1' WHERE `ID`='3';
 
-*/
+
 		
-		status=insertarOmodif(sentencia);
+		try {
+			status=insertarOmodif(sentencia);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return status;
 	}
@@ -85,7 +128,12 @@ public class metodosSql extends ConexionMySql {
 		
 		String sentencia="insert into `"+base+"`.`"+tabla+"`"+atributos+valores;		
 		
-		status=insertarOmodif(sentencia);
+		try {
+			status=insertarOmodif(sentencia);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
+		}
 		
 		return status;
 	}
@@ -94,12 +142,17 @@ public class metodosSql extends ConexionMySql {
 		int status=0;
 		String sentencia="delete from `"+base+"`.`"+tabla+"` where `"+objeto.identificadorUnico()+"`='"+objeto.todosLosAtributos().get(objeto.identificadorUnico())+"';";
 		
-		status=insertarOmodif(sentencia);
+		try {
+			status=insertarOmodif(sentencia);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		return status;
 		
 	}
-	
+	*/
 	/*
     public int modificarObjetoDeLaBase(Persistente objeto,String base,String tabla){
     	int status=-1;
@@ -119,7 +172,7 @@ public class metodosSql extends ConexionMySql {
 	
 	
 	
-	private HashMap<Object,Object> formatearParaMySql(HashMap <Object,Object> mapa){
+	/*private HashMap<Object,Object> formatearParaMySql(HashMap <Object,Object> mapa){
 		HashMap<Object,Object> aux=new HashMap<Object,Object>();
 		Object clave = null;
 		Object valor = null;
@@ -129,26 +182,21 @@ public class metodosSql extends ConexionMySql {
 			clave=e.getKey();
 			valor=e.getValue();
 			clave="`"+clave+"`";
+			if(valor!=null){
 			if(valor.getClass().getSimpleName().equals("String"))
 				
 				valor="'"+valor+"'";
 			aux.put(clave, valor);
-			}		
+			}	
+			
+		}
 		
 		return aux;
 		
 	}
 	
-	public String dameHorasTrabajadas(String fecha,String usuario){
-		String horas="0";
-		String dni="0";
-		dni=consultarUnaColumna("select dni from proyectoweb.userlogin where usuario='"+usuario+"'").get(0);
-		horas=consultarUnaColumna("SELECT SUM(HORASTRABAJADAS) FROM proyectoweb.registrogral "+
-        " WHERE DNIPERSONAL="+dni+" AND FECHA='"+fecha+"';").get(0);
-		
-		return horas;
-	}
 	
+	*/
 	public String dameFechaDeHoy(){
 		 SimpleDateFormat formateador = new SimpleDateFormat("yyyy'-'MM'-'dd", new Locale("es_ES"));
 		 Date fechaDate = new Date();
@@ -164,7 +212,7 @@ public class metodosSql extends ConexionMySql {
 	return fecha;
 	}
 
-	public int insertarOmodif(String sentenciaSql) {
+	public int insertarOmodif(String sentenciaSql) throws SQLException {
 		int status=0;
 		ConexionMySql con = new ConexionMySql();
 		System.out.println(sentenciaSql);
@@ -172,6 +220,8 @@ public class metodosSql extends ConexionMySql {
 		try {
 			con.conectar();
 			con.statemente.executeUpdate(sentenciaSql);
+			con.commit();
+			
 
 			con.desconectar();
 			status=1;
@@ -181,125 +231,22 @@ public class metodosSql extends ConexionMySql {
 			if(e.getMessage().contains("Duplicate entry")){
 				System.out.println("Entrada duplicada cambie la clave primaria e intente de nuevo");
 				JOptionPane.showMessageDialog(null, "Entrada duplicada cambie la clave primaria e intente de nuevo");
-			
+			con.rollBack();
 			}
+		  
 			//e.printStackTrace();
 			
 			
 			con.desconectar();
 			status=-1;
 		}
+		
+		catch(Exception e){
+			  JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
+		  }
 		return status;
 
 	}
-
-	
-	 @SuppressWarnings("hiding")
-	public int escribirBlob(String nombre, String rutaArchivo) {
-	        InputStream entrada = null;
-
-	        PreparedStatement pst = null;
-	        int ingresados = 0;
-	        try {
-	            File archivo;
-	            String insert;
-
-	            conectar();
-	            getCon().setAutoCommit(false);
-
-	            insert = "Insert into auditoria values(?,?)";
-
-	            pst = getCon().prepareStatement(insert);
-
-	            archivo = new File(rutaArchivo);
-
-	            entrada = new FileInputStream(archivo);
-
-	            pst.setString(1, nombre.toUpperCase());
-	            pst.setBinaryStream(2, entrada, (int) archivo.length());
-
-	            ingresados = pst.executeUpdate();
-	            getCon().commit();
-
-	        } catch (FileNotFoundException ex) {
-	           ex.getLocalizedMessage();
-	        } catch (IOException ex) {
-	        	 ex.getLocalizedMessage();
-
-	        } catch (SQLException ex) {
-	        	 ex.getLocalizedMessage();
-	        } finally {
-	            try {
-	                if (entrada != null) {
-	                    entrada.close();
-	                }
-	            } catch (IOException ex) {
-	            	 ex.getLocalizedMessage();
-	            }
-	            try {
-	                if (pst != null) {
-	                    pst.close();
-	                }
-	            } catch (SQLException ex) {
-	            	 ex.getLocalizedMessage();
-	            }
-
-	        }
-	        return ingresados;
-	    }
-	 public boolean obtenerArchivoBlob(String nombreArchivoBuscar, String nombreArchivoSalida) {
-	        InputStream salida = null;
-	        try {
-	            PreparedStatement pst;
-	            ResultSet rs;
-	            Blob blob;
-	            FileOutputStream archivoSalida;
-	            String select;
-
-	            byte[] arreglo;
-	            int byteLeidos = 0;
-
-	            conectar();
-	            getCon().setAutoCommit(false);
-	            select = "select ARCHIVO from auditoria WHERE NOMBRE=?";
-	            pst = getCon().prepareStatement(select);
-	            pst.setString(1, nombreArchivoBuscar);
-
-	            rs = pst.executeQuery();
-
-	            if (rs != null) {
-	                rs.next();
-	                blob = rs.getBlob(1);
-	                salida = blob.getBinaryStream();
-
-	                arreglo = new byte[2048];
-
-	                archivoSalida = new FileOutputStream(nombreArchivoSalida);
-
-	                while ((byteLeidos = salida.read(arreglo)) > 0) {
-	                    archivoSalida.write(arreglo, 0, byteLeidos);
-	                }
-	                return true;
-	            } else {
-	                return false;
-	            }
-
-	        } catch (IOException ex) {
-	        	 ex.getLocalizedMessage();
-	            return false;
-	        } catch (SQLException ex) {
-	        	 ex.getLocalizedMessage();
-	            return false;
-	        } finally {
-	            try {
-	                if (salida != null) {
-	                    salida.close();
-	                }
-	            } catch (IOException ex) {
-	            	 ex.getLocalizedMessage();
-	            }
-	        }
-	    }
 
 	public ArrayList<ArrayList<String>> consultar(String SentenciaSql) {
 		ResultSet res =null;
@@ -448,7 +395,7 @@ public class metodosSql extends ConexionMySql {
 		if(fullConsulta.size()>0){
 		int columnas=fullConsulta.get(0).size();
 		int filas=fullConsulta.size();
-		ModeloTabla modelo = new ModeloTabla(); 
+		ModeloTabla modelo = new ModeloTabla();
 		
 		  
 
@@ -475,62 +422,19 @@ public class metodosSql extends ConexionMySql {
 		tabla.setModel(modelo);
 		
 		
+		}else{
+			ModeloTabla modelo = new ModeloTabla();			  
+
+			
+			modelo.setColumnCount(0);
+			modelo.setRowCount(0);
+			tabla.setModel(modelo);
 		}
 	}
-	public String estadoDeChip(String serie){
-		
-		
-		return consultarUnaColumna("select estado from chip where serial='"+serie+"'").get(0);
-	}
-	public String chipDeLaHandHeld(String serieDeLaHandHeld){
-		
-		
-		return consultarUnaColumna("select chip from handheld where serial= '"+serieDeLaHandHeld+"'").get(0);
-		
-	}
-	/**
-	 * 
-	 * @param serieChip
-	 * @param serieHand
-	 * @return Si asignó correctamente todos los valores, devolverá 1 sino -1.
-	 */
+	
+	
 
-	public int AsignarChipAHand(String serieChip, String serieHand) {
-		int status=0;
-		String marcaChip=consultarUnaColumna("select marca from chip where serial= '"+serieChip+"'" ).get(0);
-		//colocar chip en columna chipnro en hand
-		status=status+insertarOmodif("update handheld set chip = '"+serieChip+"' " +
-				"where serial= '"+serieHand+"'");
-		//colocar marca del chip en la columna de hand
-		status=status+insertarOmodif("update handheld set chipmarca = '"+marcaChip+"' where serial= '"+serieHand+"'");
-		//cambiar el estado del chip en chip a operativo mayus.
-		status=status+insertarOmodif("update chip set estado ='OPERATIVO' where serial= '"+serieChip+"'");
-		if(status==3){
-			status=1;
-		}else{
-			status=-1;
-		}
-		return status;
-		
-		
-	}
-	public int reAsignarChipAHand(String serieChip, String serieHand,String nuevoEstadoDelChip,String nuevoComentarioDelChip){
-		int status=0;
-		
-		JOptionPane.showMessageDialog(null, "En construccion");
-		/*String HandQueLoTeniaAlChip=consultarUnaColumna("select serial from handheld where chip= '"+serieChip+"'").get(0);;
-		String serieChipViejo=consultarUnaColumna("select chip from handheld where serial= '"+serieHand+"'").get(0);
-		status=status+insertarOmodif("update chip set estado ='"+nuevoEstadoDelChip+"'," +
-				" comentario='"+nuevoComentarioDelChip+"' where serial= '"+serieChipViejo+"'");
-		status=status+AsignarChipAHand(serieChip, serieHand);
-		if(status==2){
-			status=1;
-		}else{
-			status=-1;
-		}*/
-		return status;
-	}
-
+	
 	
 
 }

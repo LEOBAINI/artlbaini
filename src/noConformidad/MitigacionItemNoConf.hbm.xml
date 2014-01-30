@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<class name="noConformidad.MitigacionItemNoConf" table="mitigacion_item_no_conf">
+<id name="idmitigacion_item_no_conf" column="idmitigacion_item_no_conf">
+<generator class="increment"/>
+
+</id>
+<property name="clienteDeptoNro" column="cliente_depto_nro"/> 
+
+<property name="estaCumplido"  column="esta_cumplido"/>
+
+<property name="fechaCumplidaMitigacion" column="fecha_cumplida_mitigacion"/>
+
+<property name="fechaPrometidaParaMitigacion" column="fecha_prometida_mitigacion"/>
+
+<property name="nroCategoriaItem" column="nro_categoria_item_no_conf"/>
+
+<property name="nroItem" column="nro_item_no_conf"/>
+
+<property name="planDeAccion" column="plan_de_accion_nro"/>
+
+
+
+</class>
+</hibernate-mapping>
