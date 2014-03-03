@@ -20,7 +20,6 @@
 
 <property name="nroItem" column="nro_item_no_conf"/>
 
-<property name="planDeAccion" column="plan_de_accion_nro"/>
 
 
 
