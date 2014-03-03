@@ -1,6 +1,7 @@
 package persistencia;
 
 import org.hibernate.Session;
+import org.hibernate.SessionException;
 
 import util.HibernateUtil;
 
@@ -24,8 +25,8 @@ public class Hibernate {
 		session.getTransaction().commit();
 		status=1;
 		System.out.println("Guardado ok");
-		}catch(Exception e){
-			System.out.println("Error "+e.getMessage());
+		}catch(SessionException e){
+			System.out.println("Error desde consola "+e.getMessage());
 		session.getTransaction().rollback();	
 		status=0;
 			

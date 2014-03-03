@@ -1,5 +1,7 @@
 package Base;
 
+import herramientas.ModeloTabla;
+
 import java.awt.Choice;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -21,7 +23,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
-import Objetos.ModeloTabla;
 
 public class metodosSql extends ConexionMySql {
 	
