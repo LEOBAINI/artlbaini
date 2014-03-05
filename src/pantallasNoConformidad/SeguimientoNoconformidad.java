@@ -1,5 +1,6 @@
 package pantallasNoConformidad;
 
+import herramientas.Calendario;
 import herramientas.ColumnResizer;
 
 import java.awt.BorderLayout;
@@ -48,8 +49,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	private Choice choiceCliente = null;
 	private JButton jButtonNoOk = null;
 	private JPanel jPanelDetalles = null;
-	private JLabel jLabelPorcentajeCumplidoItem = null;
-	private JTextField jTextFieldPorcentajeDelItem = null;
+	private JButton jButtonCalendario = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -68,41 +68,60 @@ public class SeguimientoNoconformidad extends JFrame {
 		this.setContentPane(getJContentPane());
 		this.setTitle("Seguimiento de no conformidades");
 	}
-
-	private void actualizarPorcentaje(){
-		String nroCliente=choiceCliente.getSelectedItem();
+	/**
+	 * Llama al proc almacenado en la base de datos: PorcentajeCumplido(NroCliente);
+	 * Completa el campo jTextFieldObjCumplidos
+	 * 
+	 * @param clienteNro 
+	 */
+	private void actualizarPorcentaje(int clienteNro){
+		String nroCliente=String.valueOf(clienteNro);
 		metodosSql metodos=new metodosSql();
-		Double porcentajeCumplidoSubItems=0.0;
-		String SentenciaPorcentaje="select count(*)*100/(select count(*)FROM shiteckhibernate.como_mitigar" +
-				" where cliente_depto= "+nroCliente+")" +
-				" from shiteckhibernate.como_mitigar where cliente_depto= "+nroCliente+" and cumplido='SI';";
-		porcentajeCumplidoSubItems=Double.parseDouble(metodos.consultarUnaColumna(SentenciaPorcentaje).get(0).toString());
-		jTextFieldObjCumplidos.setText(String.valueOf(porcentajeCumplidoSubItems));
+		Double porcentajeCumplido=0.0;
+		String SentenciaPorcentaje="call PorcentajeCumplido("+nroCliente+")";
+		porcentajeCumplido=Double.parseDouble(metodos.consultarUnaColumna(SentenciaPorcentaje).get(0).toString());
+		
+		
+		jTextFieldObjCumplidos.setText(String.valueOf(porcentajeCumplido));
 		
 	}
-	private void actualizarTablaDetalle(){
-		String idItemNoConf=null;
-		idItemNoConf=jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(),0).toString();
+	
+	/**
+	 * Completa la tabla detalle, basado en la seleccion de la tabla anterior (Items no conformes).
+	 * @param idItemPadre 
+	 * @param clienteNro 
+	 */
+	private void actualizarTablaDetalle(int idItemPadre){
+		try{
+		int idItemNoConf=0;
+		idItemNoConf=idItemPadre;
 		String consulta=null;
 		consulta="SELECT idcomo_mitigar as id,descripcion,cumplido as 'ESTA CUMPLIDO' FROM shiteckhibernate.como_mitigar where id_item_no_conf = "+idItemNoConf;
 		metodosSql metodos=new metodosSql();
 		metodos.llenarJtable(jTableDetalle, consulta);
 		
 		ColumnResizer.adjustColumnPreferredWidths(jTableDetalle);
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null,"Problema en actualizarTablaDetalle(); ->"+ e.getMessage());
+		}
 	}
-	
-	private String TotalmenteCumplidoItem(int cliente_depto,int id_item_no_conf){
+	/**
+	 * Toma un cliente cómo entrada y calcula porcentaje total cumplido, devuelve si o no.
+	 * @param cliente_depto
+	 * @return
+	 */
+	private String totalmenteCumplido(int cliente_depto){
 		/*En esta consulta es total detalleitem*100/detalleItemCumplido */
-		String consultaSql="select count(*)*100/" +
-				" (select count(*)FROM shiteckhibernate.como_mitigar where cliente_depto="+cliente_depto+" and id_item_no_conf="+id_item_no_conf+") " +
-				" from shiteckhibernate.como_mitigar where cliente_depto="+cliente_depto+" and id_item_no_conf="+id_item_no_conf+" and cumplido='SI';";
+		String consultaSql="call PorcentajeCumplido("+cliente_depto+")";
 		metodosSql metodos=new metodosSql();
 		Double cienPorCiento=0.0;
 		cienPorCiento=Double.parseDouble(metodos.consultarUnaColumna(consultaSql).get(0).toString());
 		
 		if(cienPorCiento==100.0){
+			System.out.println("-----------------------"+cienPorCiento);
 			return "SI";
 		}else{
+			System.out.println("-----------------------"+cienPorCiento);
 			return "NO";
 			
 		}
@@ -111,7 +130,34 @@ public class SeguimientoNoconformidad extends JFrame {
 		
 		
 	}
-	private void actualizarItemNoConforme(int clienteNro,int idItemPadre,String estado){
+	
+	private String totalmenteCumplidoItem(int cliente_depto,int nroItemNoConforme){
+		String estaCumplido="NO SE";
+		try{
+		metodosSql metodos=new metodosSql();
+		String consultaTotalSubItems="SELECT count(*) FROM shiteckhibernate.como_mitigar where cliente_depto="+cliente_depto+" and id_item_no_conf="+nroItemNoConforme+";";
+		String consultaTotalSubItemsCumplidos="SELECT count(*) FROM shiteckhibernate.como_mitigar where cliente_depto="+cliente_depto+" and id_item_no_conf="+nroItemNoConforme+" and cumplido='SI';";
+		int totalSubItems=Integer.parseInt(metodos.consultarUnaColumna(consultaTotalSubItems).get(0));
+		int totalSubItemsCumplidos=Integer.parseInt(metodos.consultarUnaColumna(consultaTotalSubItemsCumplidos).get(0));
+		if(totalSubItemsCumplidos==totalSubItems){
+			return "SI";
+		}else{
+			return "NO";
+		}
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null," Error en totalmenteCumplidoItem "+e.getMessage());
+			
+		}
+		return estaCumplido;
+		
+		
+		
+	}
+	/**
+	 * Coloca si o no a un  item dado de la tabla mitigacion_item_no_conf, SI EL IDITEMPADRE=-1, IGNORA LA OPERACION.
+	 */
+	private void actualizarItemNoConformeCumplidoSioNo(int clienteNro,int idItemPadre,String estado){
+		if(idItemPadre!=-1){
 		metodosSql metodos=new metodosSql();
 		String sentenciaSql="update shiteckhibernate.mitigacion_item_no_conf set esta_cumplido='"+estado+"' where cliente_depto_nro="+clienteNro+" "+
 				" and idmitigacion_item_no_conf="+idItemPadre+";";
@@ -121,29 +167,82 @@ public class SeguimientoNoconformidad extends JFrame {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		}
 	}
+	/**
+	 * Llena una tabla (Items no conformes basado en el cliente seleccionado)
+	 * @param clienteNro */
 	
-	private void actualizarTablaItemsNoConformes(){
+	private void actualizarTablaItemsNoConformes(int clienteNro){
 		jTableNoConformes.removeAll();
 		String consultaSql=null;
 		jTextFieldObjCumplidos.removeAll();
 		metodosSql metodos=new metodosSql();
 		int nroCliente=0;
-		nroCliente=Integer.parseInt(choiceCliente.getSelectedItem());
+		nroCliente=clienteNro;
 		consultaSql="select `m`.`idmitigacion_item_no_conf` AS `id`,`i`.`descripcion` AS `descripcion`,`m`.`esta_cumplido` "+
 		" AS `esta_cumplido`,`m`.`fecha_prometida_mitigacion`"+
 		" AS`fecha_prometida_mitigacion`,`m`.`fecha_cumplida_mitigacion`"+ 
 		" AS `fecha_cumplida_mitigacion`,`i`.`norma_vigente`" +
 		" from (`mitigacion_item_no_conf` `m` join `itemnoconf` `i`)" +
 		" where ((`m`.`cliente_depto_nro` = "+nroCliente+") and (`i`.`nroItem` = `m`.`nro_item_no_conf`))";
-		actualizarPorcentaje();
+		//actualizarPorcentaje();
 		metodos.llenarJtable(jTableNoConformes, consultaSql);
+		
 		
 		
 
 							ColumnResizer.adjustColumnPreferredWidths(jTableNoConformes);
 		jContentPane.updateUI();
 	}
+	/**
+	 * Realiza un update en la tabla como_mitigar colocando cumplido= SI O NO, necesita identificador único.
+	 * Si el ID es -1, ignora la operación
+	 * @param idComo_mitigar
+	 * @param cumplidoSioNo
+	 */
+	
+	private void actualizarEstadoSubItemEnBase(int idComo_mitigar, String cumplidoSioNo){
+		if(idComo_mitigar!=-1){
+		String updateCumplido="update shiteckhibernate.como_mitigar set cumplido='"+cumplidoSioNo+"' where idcomo_mitigar= "+idComo_mitigar+";";
+		
+		metodosSql metodos=new metodosSql();
+
+		try {
+			metodos.insertarOmodif(updateCumplido);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+	}
+	/**
+	 * Usa un conjunto de funciones para actualizar toda la pantalla.
+	 * Si no hay un sub item, colocar -1, ignorará ésa parte de la operacion.
+	 * @param clienteNro
+	 * @param idItemPadre
+	 * @param cumplidoItemPadreSiNo
+	 * @param idSubItem
+	 * @param cumplidoSubItemSiNo
+	 */
+	
+	private void actualizarTodo(int clienteNro, int idItemPadre,String cumplidoItemPadreSiNo, int idSubItem, String cumplidoSubItemSiNo) {
+		
+		
+		
+		actualizarEstadoSubItemEnBase(idSubItem, cumplidoSubItemSiNo);
+		
+		actualizarItemNoConformeCumplidoSioNo(clienteNro,idItemPadre,cumplidoItemPadreSiNo);
+		
+		actualizarTablaDetalle(idItemPadre);
+		
+		actualizarPorcentaje(clienteNro);
+		
+		actualizarTablaItemsNoConformes(clienteNro);
+		
+	}
+		
+	
 	
 	/**
 	 * This method initializes jContentPane
@@ -152,9 +251,6 @@ public class SeguimientoNoconformidad extends JFrame {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
-			jLabelPorcentajeCumplidoItem = new JLabel();
-			jLabelPorcentajeCumplidoItem.setBounds(new Rectangle(394, 46, 256, 21));
-			jLabelPorcentajeCumplidoItem.setText("% cumplimiento del item seleccionado");
 			jLabelStatus = new JLabel();
 			jLabelStatus.setText("Status de detalle de item no conforme");
 			jLabelStatus.setBounds(new Rectangle(5, 158, 314, 23));
@@ -184,8 +280,7 @@ public class SeguimientoNoconformidad extends JFrame {
 			jContentPane.add(jLabelListadoItemsNoConformes, null);
 			jContentPane.add(getChoiceCliente(), null);
 			jContentPane.add(getJPanelDetalles(), null);
-			jContentPane.add(jLabelPorcentajeCumplidoItem, null);
-			jContentPane.add(getJTextFieldPorcentajeDelItem(), null);
+			jContentPane.add(getJButtonCalendario(), null);
 		}
 		return jContentPane;
 	}
@@ -212,7 +307,10 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JTextField getJTextFieldFecha() {
 		if (jTextFieldFecha == null) {
 			jTextFieldFecha = new JTextField();
-			jTextFieldFecha.setBounds(new Rectangle(826, 15, 147, 21));
+			jTextFieldFecha.setBounds(new Rectangle(826, 15, 70, 21));
+			jTextFieldFecha.setEditable(false);
+			metodosSql metodos=new metodosSql();
+			jTextFieldFecha.setText(metodos.dameFechaDeHoy());
 		}
 		return jTextFieldFecha;
 	}
@@ -241,7 +339,9 @@ public class SeguimientoNoconformidad extends JFrame {
 			jTableNoConformes = new JTable();
 			jTableNoConformes.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
-					actualizarTablaDetalle();
+					int idTablaPadre=0;
+					idTablaPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
+					actualizarTablaDetalle(idTablaPadre);
 				}
 
 				
@@ -315,29 +415,65 @@ public class SeguimientoNoconformidad extends JFrame {
 			jButtonCumplido.setIcon(new ImageIcon(getClass().getResource("/iconos/Ok.png")));
 			jButtonCumplido.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+				try{	
+					int clienteNro=Integer.parseInt(choiceCliente.getSelectedItem());
 					
-				int clienteNro=Integer.parseInt(choiceCliente.getSelectedItem());
-				int idItemPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
+					int idItemPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
 					
+					int idComo_mitigar=-1;
+				 
+					if(jTableDetalle.getRowCount()>=1){	//Si la tabla del medio tiene filas
 					
-				int idComo_mitigar=Integer.valueOf((String)jTableDetalle.getValueAt(jTableDetalle.getSelectedRow(),0));
-				String updateCumplido="update shiteckhibernate.como_mitigar set cumplido='SI' where idcomo_mitigar= "+idComo_mitigar+";";
-				metodosSql metodos=new metodosSql();
-				try {
-					metodos.insertarOmodif(updateCumplido);
-					actualizarPorcentaje();
-					actualizarTablaDetalle();
-					if(TotalmenteCumplidoItem(clienteNro, idItemPadre).equals("SI")){
-					actualizarItemNoConforme(clienteNro,idItemPadre,"SI");	
-					actualizarTablaItemsNoConformes();
-					}
-					JOptionPane.showMessageDialog(null,"Se actualizó correctamente ");
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					JOptionPane.showMessageDialog(null,"No se pudo actualizar, reintente");
-					e1.printStackTrace();
+						if(jTableDetalle.getSelectedRow()!=-1){//Si la tabla del medio tiene seleccionado algo
+						
+						idComo_mitigar=Integer.valueOf((String)jTableDetalle.getValueAt(jTableDetalle.getSelectedRow(),0));
+				
+						
+						try {				
+							
+							actualizarTodo(clienteNro,-1,"No interesa por -1",idComo_mitigar,"SI");
+					
+							if(totalmenteCumplidoItem(clienteNro,idItemPadre).equals("SI")){//si estan todos los subitems cumplidos poner si en item padre
+								
+							   actualizarTodo(clienteNro,idItemPadre,"SI",-1,"no interesa por -1");
+					
+							}else{
+								
+							  actualizarTodo(clienteNro,idItemPadre,"NO",idComo_mitigar,"SI");
+								
+							}
+					
+							JOptionPane.showMessageDialog(null,"Se actualizó correctamente ");
+						} catch (Exception e1) {
+					
+							JOptionPane.showMessageDialog(null,"No se pudo actualizar, reintente");
+							e1.printStackTrace();
+						}
+				
+						}//Si la tabla del medio NO tiene seleccionado algo
+						else{
+						JOptionPane.showMessageDialog(null,"Seleccione un elemento de la tabla detalle");
+						}
+						}//end if
+						else{//Si la tabla del medio NO tiene filas solo actualizar primera
+							
+							actualizarTodo(clienteNro, idItemPadre,"SI", -1, "No interesa por -1");
+							
 				}
+					
+				}catch(Exception e1){
+					JOptionPane.showMessageDialog(null,"Error, seleccione parámetros correctos." );
+					
 				}
+					
+					
+					
+					
+				
+				}// fin del evento
+				
+
+				
 			});
 		}
 		return jButtonCumplido;
@@ -368,7 +504,9 @@ public class SeguimientoNoconformidad extends JFrame {
 			
 			choiceCliente.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
-					actualizarTablaItemsNoConformes();
+					String clienteNro=choiceCliente.getSelectedItem();
+					actualizarTablaItemsNoConformes(Integer.parseInt(clienteNro));
+					actualizarPorcentaje(Integer.parseInt(clienteNro));
 				}
 			});
 		}
@@ -387,29 +525,53 @@ public class SeguimientoNoconformidad extends JFrame {
 			jButtonNoOk.setBounds(new Rectangle(1019, 7, 46, 37));
 			jButtonNoOk.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
-					if(jTableDetalle.getRowCount()>1){
-					int idComo_mitigar=Integer.valueOf((String)jTableDetalle.getValueAt(jTableDetalle.getSelectedRow(),0));
-					String updateNoCumplido="update shiteckhibernate.como_mitigar set cumplido='NO' where idcomo_mitigar= "+idComo_mitigar+";";
-					metodosSql metodos=new metodosSql();
-					try {
-						metodos.insertarOmodif(updateNoCumplido);
-						actualizarPorcentaje();
-						actualizarTablaDetalle();
-						JOptionPane.showMessageDialog(null,"Se actualizó correctamente");
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						JOptionPane.showMessageDialog(null,"No se pudo actualizar, reintente");
-						e1.printStackTrace();
-					}
-					}else{
+					
+					try{	
 						int clienteNro=Integer.parseInt(choiceCliente.getSelectedItem());
-						int idItemPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(),0).toString());
 						
-						actualizarItemNoConforme(clienteNro, idItemPadre,"NO");
-						actualizarTablaItemsNoConformes();
-						actualizarPorcentaje();
+						int idItemPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
+						
+						int idComo_mitigar=-1;
+					 
+						if(jTableDetalle.getRowCount()>=1){	//Si la tabla del medio tiene filas
+						
+							if(jTableDetalle.getSelectedRow()!=-1){//Si la tabla del medio tiene seleccionado algo
+							
+							idComo_mitigar=Integer.valueOf((String)jTableDetalle.getValueAt(jTableDetalle.getSelectedRow(),0));
+					
+							
+							try {			
+			
+									
+								actualizarTodo(clienteNro,idItemPadre,"NO",idComo_mitigar,"NO");
+									
+								
+						
+								JOptionPane.showMessageDialog(null,"Se actualizó correctamente ");
+							} catch (Exception e1) {
+						
+								JOptionPane.showMessageDialog(null,"No se pudo actualizar, reintente");
+								e1.printStackTrace();
+							}
+					
+							}//Si la tabla del medio NO tiene seleccionado algo
+							else{
+							JOptionPane.showMessageDialog(null,"Seleccione un elemento de la tabla detalle");
+							}
+							}//end if
+							else{//Si la tabla del medio NO tiene filas solo actualizar primera
+								
+								actualizarTodo(clienteNro, idItemPadre,"NO", -1, "No interesa por -1");
+								
 					}
-				}
+						
+					}catch(Exception e1){
+						JOptionPane.showMessageDialog(null,"Error, seleccione parámetros correctos." );
+						
+					}
+					
+									
+				}//fin del evento
 			});
 		}
 		return jButtonNoOk;
@@ -437,16 +599,23 @@ public class SeguimientoNoconformidad extends JFrame {
 	}
 
 	/**
-	 * This method initializes jTextFieldPorcentajeDelItem	
+	 * This method initializes jButtonCalendario	
 	 * 	
-	 * @return javax.swing.JTextField	
+	 * @return javax.swing.JButton	
 	 */
-	private JTextField getJTextFieldPorcentajeDelItem() {
-		if (jTextFieldPorcentajeDelItem == null) {
-			jTextFieldPorcentajeDelItem = new JTextField();
-			jTextFieldPorcentajeDelItem.setBounds(new Rectangle(300, 47, 89, 20));
+	private JButton getJButtonCalendario() {
+		if (jButtonCalendario == null) {
+			jButtonCalendario = new JButton();
+			jButtonCalendario.setBounds(new Rectangle(983, 10, 37, 34));
+			jButtonCalendario.setIcon(new ImageIcon(getClass().getResource("/iconos/calendario.png")));
+			jButtonCalendario.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					Calendario c=new Calendario(jTextFieldFecha);
+					c.setVisible(true);
+				}
+			});
 		}
-		return jTextFieldPorcentajeDelItem;
+		return jButtonCalendario;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
