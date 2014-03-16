@@ -244,6 +244,8 @@ public class metodosSql extends ConexionMySql {
 		
 		catch(Exception e){
 			  JOptionPane.showMessageDialog(null, e.getLocalizedMessage());
+			  status=-1;
+			
 		  }
 		return status;
 

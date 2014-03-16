@@ -590,7 +590,7 @@ public class PlanillaNoConformidad extends JFrame {
 	private JTextField getJTextFieldFecha() {
 		if (jTextFieldFecha == null) {
 			jTextFieldFecha = new JTextField();
-			jTextFieldFecha.setBounds(new Rectangle(312, 28, 79, 20));
+			jTextFieldFecha.setBounds(new Rectangle(312, 28, 96, 25));
 			jTextFieldFecha.setEditable(false);
 		}
 		return jTextFieldFecha;
