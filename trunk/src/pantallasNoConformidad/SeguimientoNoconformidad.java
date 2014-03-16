@@ -50,6 +50,11 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JButton jButtonNoOk = null;
 	private JPanel jPanelDetalles = null;
 	private JButton jButtonCalendario = null;
+	private JLabel hojaDeRuta = null;
+	private JLabel jLabelpendrelev = null;
+	private JScrollPane jScrollPanePend = null;
+	private JTable jTablePendiente = null;
+	private JLabel jLabeln = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -64,7 +69,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(1110, 549);
+		this.setSize(1274, 549);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Seguimiento de no conformidades");
 	}
@@ -154,13 +159,22 @@ public class SeguimientoNoconformidad extends JFrame {
 		
 	}
 	/**
-	 * Coloca si o no a un  item dado de la tabla mitigacion_item_no_conf, SI EL IDITEMPADRE=-1, IGNORA LA OPERACION.
+	 * Coloca si o no a un  item dado de la tabla mitigacion_item_no_conf, SI EL IDITEMPADRE=-1, IGNORA LA OPERACION.Cuando no está cumplido itempadre poner null en la fecha.
+	 * 
 	 */
-	private void actualizarItemNoConformeCumplidoSioNo(int clienteNro,int idItemPadre,String estado){
+	private void actualizarItemNoConformeCumplidoSioNo(int clienteNro,int idItemPadre,String estado,String fechaCumplidoPadre){
 		if(idItemPadre!=-1){
+		String sentenciaSql=null;
+		
 		metodosSql metodos=new metodosSql();
-		String sentenciaSql="update shiteckhibernate.mitigacion_item_no_conf set esta_cumplido='"+estado+"' where cliente_depto_nro="+clienteNro+" "+
+		if(fechaCumplidoPadre!=null){
+			sentenciaSql="update shiteckhibernate.mitigacion_item_no_conf set esta_cumplido='"+estado+"',fecha_cumplida_mitigacion='"+fechaCumplidoPadre+"' where cliente_depto_nro="+clienteNro+" "+
 				" and idmitigacion_item_no_conf="+idItemPadre+";";
+		}else{
+			sentenciaSql="update shiteckhibernate.mitigacion_item_no_conf set esta_cumplido='"+estado+"',fecha_cumplida_mitigacion=null where cliente_depto_nro="+clienteNro+" "+
+			" and idmitigacion_item_no_conf="+idItemPadre+";";
+			
+		}
 		try {
 			metodos.insertarOmodif(sentenciaSql);
 		} catch (SQLException e) {
@@ -226,20 +240,29 @@ public class SeguimientoNoconformidad extends JFrame {
 	 * @param cumplidoSubItemSiNo
 	 */
 	
-	private void actualizarTodo(int clienteNro, int idItemPadre,String cumplidoItemPadreSiNo, int idSubItem, String cumplidoSubItemSiNo) {
+	private void actualizarTodo(int clienteNro, int idItemPadre,String cumplidoItemPadreSiNo, int idSubItem, String cumplidoSubItemSiNo,String fechaCumplido) {
 		
 		
 		
-		actualizarEstadoSubItemEnBase(idSubItem, cumplidoSubItemSiNo);
+		actualizarEstadoSubItemEnBase(idSubItem, cumplidoSubItemSiNo);//update tabla como_mitigar
 		
-		actualizarItemNoConformeCumplidoSioNo(clienteNro,idItemPadre,cumplidoItemPadreSiNo);
+		actualizarItemNoConformeCumplidoSioNo(clienteNro,idItemPadre,cumplidoItemPadreSiNo,fechaCumplido);//update mitigacion_item_no_conf
 		
-		actualizarTablaDetalle(idItemPadre);
+		actualizarTablaDetalle(idItemPadre);//SELECT de la tabla como_mitigar
 		
-		actualizarPorcentaje(clienteNro);
+		actualizarPorcentaje(clienteNro);// llama al proc almac call PorcentajeCumplido("+nroCliente+")
 		
-		actualizarTablaItemsNoConformes(clienteNro);
+		actualizarTablaItemsNoConformes(clienteNro);// SELECT DE mitigacion_item_no_conf` `m` join `itemnoconf` `i`
 		
+	}
+	
+	private void insertarEnHistorialRelevamiento(String fechaRelev,int nroSubItem,String estaCumplidoSiNo,String responsable,int item_padre,int clienteNro){
+		/**
+		 * insert into shiteckhibernate.historialrelevamiento
+(fecha_relevamiento,nro_sub_item,esta_cumplido,descripcion,responsable,item_padre,clienteNro)values
+('2014-03-08',1,'NO','un item descripcion','sergio Herrera',2,2000);
+
+		 */
 	}
 		
 	
@@ -251,6 +274,15 @@ public class SeguimientoNoconformidad extends JFrame {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			jLabeln = new JLabel();
+			jLabeln.setBounds(new Rectangle(1094, 51, 158, 18));
+			jLabeln.setText("no cumplidos a la fecha");
+			jLabelpendrelev = new JLabel();
+			jLabelpendrelev.setBounds(new Rectangle(1094, 30, 156, 17));
+			jLabelpendrelev.setText("Pendientes a relevar");
+			hojaDeRuta = new JLabel();
+			hojaDeRuta.setBounds(new Rectangle(1094, 8, 128, 18));
+			hojaDeRuta.setText("Hoja de ruta");
 			jLabelStatus = new JLabel();
 			jLabelStatus.setText("Status de detalle de item no conforme");
 			jLabelStatus.setBounds(new Rectangle(5, 158, 314, 23));
@@ -281,6 +313,10 @@ public class SeguimientoNoconformidad extends JFrame {
 			jContentPane.add(getChoiceCliente(), null);
 			jContentPane.add(getJPanelDetalles(), null);
 			jContentPane.add(getJButtonCalendario(), null);
+			jContentPane.add(hojaDeRuta, null);
+			jContentPane.add(jLabelpendrelev, null);
+			jContentPane.add(getJScrollPanePend(), null);
+			jContentPane.add(jLabeln, null);
 		}
 		return jContentPane;
 	}
@@ -307,7 +343,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JTextField getJTextFieldFecha() {
 		if (jTextFieldFecha == null) {
 			jTextFieldFecha = new JTextField();
-			jTextFieldFecha.setBounds(new Rectangle(826, 15, 70, 21));
+			jTextFieldFecha.setBounds(new Rectangle(815, 11, 83, 29));
 			jTextFieldFecha.setEditable(false);
 			metodosSql metodos=new metodosSql();
 			jTextFieldFecha.setText(metodos.dameFechaDeHoy());
@@ -421,6 +457,8 @@ public class SeguimientoNoconformidad extends JFrame {
 					int idItemPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
 					
 					int idComo_mitigar=-1;
+					
+					String fechaCumplido=jTextFieldFecha.getText();
 				 
 					if(jTableDetalle.getRowCount()>=1){	//Si la tabla del medio tiene filas
 					
@@ -431,15 +469,15 @@ public class SeguimientoNoconformidad extends JFrame {
 						
 						try {				
 							
-							actualizarTodo(clienteNro,-1,"No interesa por -1",idComo_mitigar,"SI");
+							actualizarTodo(clienteNro,-1,"No interesa por -1",idComo_mitigar,"SI",fechaCumplido);
 					
 							if(totalmenteCumplidoItem(clienteNro,idItemPadre).equals("SI")){//si estan todos los subitems cumplidos poner si en item padre
 								
-							   actualizarTodo(clienteNro,idItemPadre,"SI",-1,"no interesa por -1");
+							   actualizarTodo(clienteNro,idItemPadre,"SI",-1,"no interesa por -1",fechaCumplido);
 					
 							}else{
 								
-							  actualizarTodo(clienteNro,idItemPadre,"NO",idComo_mitigar,"SI");
+							  actualizarTodo(clienteNro,idItemPadre,"NO",idComo_mitigar,"SI",null);
 								
 							}
 					
@@ -457,7 +495,7 @@ public class SeguimientoNoconformidad extends JFrame {
 						}//end if
 						else{//Si la tabla del medio NO tiene filas solo actualizar primera
 							
-							actualizarTodo(clienteNro, idItemPadre,"SI", -1, "No interesa por -1");
+							actualizarTodo(clienteNro, idItemPadre,"SI", -1, "No interesa por -1",fechaCumplido);
 							
 				}
 					
@@ -543,7 +581,7 @@ public class SeguimientoNoconformidad extends JFrame {
 							try {			
 			
 									
-								actualizarTodo(clienteNro,idItemPadre,"NO",idComo_mitigar,"NO");
+								actualizarTodo(clienteNro,idItemPadre,"NO",idComo_mitigar,"NO",null);
 									
 								
 						
@@ -561,7 +599,7 @@ public class SeguimientoNoconformidad extends JFrame {
 							}//end if
 							else{//Si la tabla del medio NO tiene filas solo actualizar primera
 								
-								actualizarTodo(clienteNro, idItemPadre,"NO", -1, "No interesa por -1");
+								actualizarTodo(clienteNro, idItemPadre,"NO", -1, "No interesa por -1",null);
 								
 					}
 						
@@ -616,6 +654,32 @@ public class SeguimientoNoconformidad extends JFrame {
 			});
 		}
 		return jButtonCalendario;
+	}
+
+	/**
+	 * This method initializes jScrollPanePend	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPanePend() {
+		if (jScrollPanePend == null) {
+			jScrollPanePend = new JScrollPane();
+			jScrollPanePend.setBounds(new Rectangle(1094, 75, 159, 427));
+			jScrollPanePend.setViewportView(getJTablePendiente());
+		}
+		return jScrollPanePend;
+	}
+
+	/**
+	 * This method initializes jTablePendiente	
+	 * 	
+	 * @return javax.swing.JTable	
+	 */
+	private JTable getJTablePendiente() {
+		if (jTablePendiente == null) {
+			jTablePendiente = new JTable();
+		}
+		return jTablePendiente;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
