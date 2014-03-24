@@ -4,6 +4,7 @@ package noConformidad;
 
 public class ComoMitigar {
 	
+	
 	public long getId_item_no_conf() {
 		return id_item_no_conf;
 	}
@@ -11,8 +12,10 @@ public class ComoMitigar {
 		this.id_item_no_conf = id_item_no_conf2;
 	}
 	int idcomo_mitigar;
-	String descripcion;
+	String descripcion;  
 	byte[] fotografia;
+	String descripcionOk;
+	byte[] fotografiaOk;
 	String cliente_depto;
 	long id_item_no_conf;
 	
@@ -45,6 +48,18 @@ public class ComoMitigar {
 	}
 	public void setCliente_depto(String cliente_depto) {
 		this.cliente_depto = cliente_depto;
+	}
+	public String getDescripcionOk() {
+		return descripcionOk;
+	}
+	public void setDescripcionOk(String descripcionOk) {
+		this.descripcionOk = descripcionOk;
+	}
+	public byte[] getFotografiaOk() {
+		return fotografiaOk;
+	}
+	public void setFotografiaOk(byte[] fotografiaOk) {
+		this.fotografiaOk = fotografiaOk;
 	}
 	
 	

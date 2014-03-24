@@ -289,7 +289,7 @@ public class PlanillaNoConformidad extends JFrame {
 					String idItemNoConf=null;
 					idItemNoConf=jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(),0).toString();
 					String consulta=null;
-					consulta="SELECT idcomo_mitigar as id,descripcion FROM shiteckhibernate.como_mitigar where id_item_no_conf = "+idItemNoConf;
+					consulta="SELECT idcomo_mitigar as id,descripcion as Anomalia_detectada,descripcionFotoBien as Como_solucionar FROM shiteckhibernate.como_mitigar where id_item_no_conf = "+idItemNoConf;
 					metodosSql metodos=new metodosSql();
 					metodos.llenarJtable(jTableFotosDeItems, consulta);
 					
@@ -541,7 +541,7 @@ public class PlanillaNoConformidad extends JFrame {
 					jLabelNombreTabla1.setText("TABLA= mitigacion_item_no_conf");
 					int nroCliente=0;
 					nroCliente=Integer.parseInt(choiceClientes.getSelectedItem());
-					consultaSql="select `m`.`idmitigacion_item_no_conf` AS `id`,`i`.`descripcion` AS `descripcion`,`m`.`esta_cumplido` "+
+					consultaSql="select `m`.`idmitigacion_item_no_conf` AS `id`,`i`.`nroitem` AS `351`,`i`.`descripcion` AS `descripcion`,`m`.`esta_cumplido` "+
 					" AS `esta_cumplido`,`m`.`fecha_prometida_mitigacion`"+
 					" AS`fecha_prometida_mitigacion`,`m`.`fecha_cumplida_mitigacion`"+ 
 					" AS `fecha_cumplida_mitigacion`,`i`.`norma_vigente`" +
@@ -645,8 +645,9 @@ public class PlanillaNoConformidad extends JFrame {
 					idComo_mitigar=jTableFotosDeItems.getValueAt(jTableFotosDeItems.getSelectedRow(),0).toString();
 					metodosSql metodos=new metodosSql();
 					String consulta="SELECT foto FROM shiteckhibernate.como_mitigar where idcomo_mitigar="+idComo_mitigar;
-					VerFoto foto=new VerFoto(metodos.dameImagen(consulta, "foto"));
-					foto.setVisible(true);
+					String consulta2="SELECT fotoBien FROM shiteckhibernate.como_mitigar where idcomo_mitigar="+idComo_mitigar;
+					VerFoto fotos=new VerFoto(metodos.dameImagen(consulta, "foto"),metodos.dameImagen(consulta2, "fotoBien"));
+					fotos.setVisible(true);
 				
 					
 				}
