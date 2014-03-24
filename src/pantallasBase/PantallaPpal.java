@@ -45,7 +45,7 @@ public class PantallaPpal extends JFrame {
 	private void initialize() {
 		this.setSize(1248, 527);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/iconos/LogoShetek.png")));
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/iconos/logoShiteck.gif")));
 		this.setJMenuBar(getJJMenuBarMenu());
 		this.setContentPane(getJContentPane());
 		this.setTitle("Shiteck ");
@@ -59,8 +59,8 @@ public class PantallaPpal extends JFrame {
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			jLabelLogo = new JLabel();
-			jLabelLogo.setBounds(new Rectangle(311, 107, 693, 219));
-			jLabelLogo.setIcon(new ImageIcon(getClass().getResource("/iconos/LogoShetek.png")));
+			jLabelLogo.setBounds(new Rectangle(424, 148, 326, 98));
+			jLabelLogo.setIcon(new ImageIcon(getClass().getResource("/iconos/logoShiteck.gif")));
 			jLabelLogo.setText("");
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);

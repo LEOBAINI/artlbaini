@@ -23,6 +23,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
+import reporte.Auditoria;
+import reporte.GeneradorDeReporte;
+
 
 public class metodosSql extends ConexionMySql {
 	
@@ -61,14 +64,167 @@ public class metodosSql extends ConexionMySql {
            rs.close();
            conexion.close();
         } catch (Exception e) {
-        	JOptionPane.showMessageDialog(null,"ERROR! "+ e.getMessage());
-            e.printStackTrace();
+        	JOptionPane.showMessageDialog(null,"ERROR! HAY UNA FOTO VACÍA O ILEGIBLE"+ e.getMessage());
+           
             return null;
         }
         ;
 		return image;
     }
-	
+public void generarAuditoriasDeLaBase(String clienteDeptoNro,String Nombreresponsable,String auditoriaNumero,String rutaDeSalidaMasNombrePDF) {
+String consulta="SELECT "+
+		 
+"C.descripcion as descripcionFotoMal,C.descripcionFotoBien,C.foto as fotoMal,C.fotoBien,C.cumplido, "+
+"I.norma_vigente,concat_ws(' _', I.nroItem, I.descripcion)  as 351detalle, "+
+"CAT.descripcion as categoria, "+
+"CLI.email,CLI.domicilio,CLI.telefono, "+
+"E.logo,E.nombre "+
+
+
+"FROM "+
+
+"como_mitigar C, "+
+"itemnoconf I, "+
+"categoriaplanilla351 CAT, "+
+"cliente CLI, "+
+"empresa E "+
+
+
+"where C.cliente_depto="+clienteDeptoNro+" "+
+"and C.id_item_no_conf=I.nroItem "+
+"and I.categoriaNro=CAT.idcategoria "+
+"and CLI.departamento_nro=C.cliente_depto "+
+
+"order by C.cumplido desc; ";
+		
+		
+		ArrayList<Object>auditorias=new ArrayList<Object>();
+		
+		
+		String nroEstablecimiento=null;//cliente_depto
+		Image logoCliente=null;//logo
+		Image fotoMal=null ;//foto
+		Image fotoBien=null;//fotoBien
+		String auditoriaNro = null;
+		String categoria = null;
+		String decreto351 = null;
+		String detalleFotoBien = null;//descripcionFotoBien
+		String detalleFotoMal = null;//descripcion
+		String direccionCliente=null;
+		String estadoCumplimiento=null;
+		String fechaCumplido = null;
+		String fechaPrometida = null;
+		String horarioOut = null;
+		String horarioIn = null;
+		String mailCliente=null;
+		String nombreEmpresaCliente = null;
+		String normaVigente = null;
+		String porcentajeCumplido = null;
+		String responsable = null;
+		String telefonoCliente = null;
+		
+	       
+        
+        try {
+        	ConexionMySql con = new ConexionMySql();
+        	con.conectar();        	        	
+            java.sql.Connection conexion = con.getConection();
+            java.sql.PreparedStatement ps;
+            
+            String sql = consulta;
+            ps = conexion.prepareStatement(sql);
+            java.sql.ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+            	Auditoria au=new Auditoria();
+            	 
+              
+                
+                nroEstablecimiento=clienteDeptoNro;
+        		auditoriaNro = auditoriaNumero;
+        		categoria = rs.getString("categoria");
+        		decreto351 = rs.getString("351detalle");
+        		detalleFotoBien = rs.getString("descripcionFotoBien");
+        		detalleFotoMal = rs.getString("descripcionFotoMal");
+        		direccionCliente=rs.getString("domicilio");
+        		estadoCumplimiento= rs.getString("cumplido");
+        		fechaCumplido ="Verificar" ;//rs.getString("nombreColumna");
+        		fechaPrometida = "Verificar";//rs.getString("nombreColumna");
+        		horarioOut = "Solicitar";//rs.getString("nombreColumna");
+        		horarioIn ="Solicitar";//rs.getString("nombreColumna");
+        		mailCliente=rs.getString("email");
+        		nombreEmpresaCliente = rs.getString("nombre");
+        		normaVigente = rs.getString("norma_vigente");
+        		metodosSql metodos=new metodosSql();
+        		porcentajeCumplido =metodos.consultarUnaColumna("call porcentajeCumplido("+nroEstablecimiento+")").get(0);
+        		responsable = Nombreresponsable;
+        		telefonoCliente = rs.getString("telefono");
+        		  Blob blobLogoCli = rs.getBlob("logo");
+        		  Blob blobFotBien = rs.getBlob("fotoBien");
+                  Blob blobFotMal = rs.getBlob("fotoMal");
+                if(blobLogoCli!=null){
+                BufferedImage logCli = javax.imageio.ImageIO.read(blobLogoCli.getBinaryStream());
+                if(logCli!=null)
+                logoCliente = new ImageIcon(logCli).getImage(); 
+                }
+                if(blobFotBien!=null){
+               	BufferedImage fotBien = javax.imageio.ImageIO.read(blobFotBien.getBinaryStream());
+                if(fotBien!=null)
+               	fotoBien = new ImageIcon(fotBien).getImage();
+                }
+                if(blobFotMal!=null){                   
+                BufferedImage fotMal = javax.imageio.ImageIO.read(blobFotMal.getBinaryStream());
+                if(fotMal!=null)
+                fotoMal = new ImageIcon(fotMal).getImage();
+                }
+                
+              
+               
+                
+                
+                
+                
+                 
+                 
+                au.setAuditoriaNro(auditoriaNro);		
+         		au.setCategoria(categoria);		
+         		au.setDecreto351(decreto351);		
+         		au.setDetalleFotoBien(detalleFotoBien);		
+         		au.setDetalleFotoMal(detalleFotoMal);		
+         		au.setDireccionCliente(direccionCliente);		
+         		au.setEstadoCumplimiento(estadoCumplimiento);		
+         		au.setFechaCumplido(fechaCumplido);		
+         		au.setFechaPrometida(fechaPrometida);
+         		au.setFotoBien(fotoBien);
+         		au.setFotoMal(fotoMal);		
+         		au.setHorarioOut(horarioOut);		
+         		au.setHorarioIn(horarioIn);
+         		au.setLogoCliente(logoCliente);		
+         		au.setMailCliente(mailCliente);		
+         		au.setNombreEmpresaCliente(nombreEmpresaCliente);		
+         		au.setNormaVigente(normaVigente);
+         		au.setNroEstablecimiento(nroEstablecimiento);		
+         		au.setPorcentajeCumplido(porcentajeCumplido);		
+         		au.setResponsable(responsable);		
+         		au.setTelefonoCliente(telefonoCliente);		
+         		auditorias.add(au);            	
+               
+            }
+           rs.close();
+           conexion.close();
+           GeneradorDeReporte jasperReports=new GeneradorDeReporte();
+           jasperReports.crearReporte(auditorias, "src\\reporte\\Plantilladeauditoria.jasper", rutaDeSalidaMasNombrePDF);
+           
+           
+           
+        } catch (Exception e) {
+        	JOptionPane.showMessageDialog(null,"ERROR! "+ e.getMessage());
+            e.printStackTrace();
+          
+        }
+        ;
+		
+		
+    }
 	
 	
 	

@@ -11,6 +11,8 @@
 <property name="descripcion"/>
 <property name="id_item_no_conf"/>
 <property name="cliente_depto"/>
+<property name="descripcionOk" column="descripcionFotoBien"/>
+<property name="fotografiaOk" type="binary" column="fotoBien"/>
 
 
 </class>
