@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="D:/Desktop/GESTIONIT/mysql-connector-java-3.1.7-bin.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Desktop/GESTIONIT/JPComponents_1.0_b1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Hibernate/hibernate-release-4.1.10.Final/lib/required/antlr-2.7.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Hibernate/hibernate-release-4.1.10.Final/lib/required/dom4j-1.6.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Hibernate/hibernate-release-4.1.10.Final/lib/required/hibernate-commons-annotations-4.0.1.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Hibernate/hibernate-release-4.1.10.Final/lib/required/hibernate-core-4.1.10.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Hibernate/hibernate-release-4.1.10.Final/lib/required/hibernate-jpa-2.0-api-1.0.1.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Hibernate/hibernate-release-4.1.10.Final/lib/required/javassist-3.15.0-GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Hibernate/hibernate-release-4.1.10.Final/lib/required/jboss-logging-3.1.0.GA.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Hibernate/hibernate-release-4.1.10.Final/lib/required/jboss-transaction-api_1.1_spec-1.0.0.Final.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/commons-beanutils-1.8.0.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/commons-collections-2.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/commons-digester-2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/commons-javaflow-20060411.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/commons-logging-1.1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/groovy-all-1.7.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/iText-2.1.7.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/jasperreports-4.5.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/jasperreports-javaflow-4.5.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/png-encoder-1.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/jasper/poi-3.7-20101029.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/icePdf/icepdf-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Librerías Java/Reportes/icePdf/icepdf-viewer.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
