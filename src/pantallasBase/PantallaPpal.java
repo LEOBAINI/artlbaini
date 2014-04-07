@@ -12,6 +12,8 @@ import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 
+import pantallasABM.AltaEmpresa;
+import pantallasABM.Altaestablecimiento;
 import pantallasNoConformidad.PlanillaNoConformidad;
 import pantallasNoConformidad.SeguimientoNoconformidad;
 
@@ -29,6 +31,9 @@ public class PantallaPpal extends JFrame {
 	private JMenuItem jMenuItemAltaNoConformidad = null;
 	private JMenuItem jMenuItemRelevamiento = null;
 	private JMenuItem jMenuItemSalir = null;
+	private JMenu jMenuAltas = null;
+	private JMenuItem jMenuItemAltasEmpresas = null;
+	private JMenuItem jMenuItemAltasEstablecimientos = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -49,6 +54,8 @@ public class PantallaPpal extends JFrame {
 		this.setJMenuBar(getJJMenuBarMenu());
 		this.setContentPane(getJContentPane());
 		this.setTitle("Shiteck ");
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		
 	}
 
 	/**
@@ -59,7 +66,7 @@ public class PantallaPpal extends JFrame {
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			jLabelLogo = new JLabel();
-			jLabelLogo.setBounds(new Rectangle(424, 148, 326, 98));
+			jLabelLogo.setBounds(new Rectangle(501, 164, 326, 98));
 			jLabelLogo.setIcon(new ImageIcon(getClass().getResource("/iconos/logoShiteck.gif")));
 			jLabelLogo.setText("");
 			jContentPane = new JPanel();
@@ -150,6 +157,7 @@ public class PantallaPpal extends JFrame {
 		if (jMenuABM == null) {
 			jMenuABM = new JMenu();
 			jMenuABM.setText("ABM");
+			jMenuABM.add(getJMenuAltas());
 		}
 		return jMenuABM;
 	}
@@ -209,6 +217,60 @@ public class PantallaPpal extends JFrame {
 			});
 		}
 		return jMenuItemSalir;
+	}
+
+	/**
+	 * This method initializes jMenuAltas	
+	 * 	
+	 * @return javax.swing.JMenu	
+	 */
+	private JMenu getJMenuAltas() {
+		if (jMenuAltas == null) {
+			jMenuAltas = new JMenu();
+			jMenuAltas.setText("Altas");
+			jMenuAltas.add(getJMenuItemAltasEmpresas());
+			jMenuAltas.add(getJMenuItemAltasEstablecimientos());
+		}
+		return jMenuAltas;
+	}
+
+	/**
+	 * This method initializes jMenuItemAltasEmpresas	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItemAltasEmpresas() {
+		if (jMenuItemAltasEmpresas == null) {
+			jMenuItemAltasEmpresas = new JMenuItem();
+			jMenuItemAltasEmpresas.setText("Empresas");
+			jMenuItemAltasEmpresas.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					AltaEmpresa altaEmp=new AltaEmpresa();
+					altaEmp.setVisible(true);
+				}
+			});
+		}
+		return jMenuItemAltasEmpresas;
+	}
+
+	/**
+	 * This method initializes jMenuItemAltasEstablecimientos	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItemAltasEstablecimientos() {
+		if (jMenuItemAltasEstablecimientos == null) {
+			jMenuItemAltasEstablecimientos = new JMenuItem();
+			jMenuItemAltasEstablecimientos.setText("Establecimientos");
+			jMenuItemAltasEstablecimientos
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+						Altaestablecimiento altaEst=new Altaestablecimiento();
+						altaEst.setVisible(true);
+						}
+					});
+		}
+		return jMenuItemAltasEstablecimientos;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

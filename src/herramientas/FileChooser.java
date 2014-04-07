@@ -67,7 +67,8 @@ public String lanzarSeleccionDeCarpeta(){
 
 	} else {
 
-	System.out.println("No seleccion ");
+	System.out.println("No seleccion");
+	return "No seleccion";
 
 	}
 	return chooser.getSelectedFile().toString();
