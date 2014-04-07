@@ -242,6 +242,7 @@ String consulta="SELECT "+
 		ArrayList<String>lista;
 		lista=consultarUnaColumna(consultaSQL);
 		desplegable.removeAll();
+		desplegable.add("");
 		for(int i=0;i<lista.size();i++)
 			desplegable.add(lista.get(i));
 		

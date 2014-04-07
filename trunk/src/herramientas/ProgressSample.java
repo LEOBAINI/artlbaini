@@ -20,8 +20,11 @@ public class ProgressSample {
     private static int DELAY = 50;
     private static int bandera=0;
     private static  JFrame theFrame;
+    public BarThread(){
+    	super();
+    }
     
-    public static void comenzar(){
+    public void comenzar(){
     	
     	 final JProgressBar aJProgressBar = new JProgressBar(0, 50);
     	    aJProgressBar.setStringPainted(false);
@@ -32,7 +35,7 @@ public class ProgressSample {
     	    
     	    theFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    	    Container contentPane = theFrame.getContentPane();
+    	   Container contentPane = theFrame.getContentPane();
     	    contentPane.add(aJProgressBar, BorderLayout.NORTH);
     	   // contentPane.add(aJButton, BorderLayout.SOUTH);
     	   
@@ -59,7 +62,7 @@ public class ProgressSample {
 		return bandera;
 	}
 
-	public static void setBandera(int bandera) {
+	public void setBandera(int bandera) {
 		BarThread.bandera = bandera;
 		
 	}
