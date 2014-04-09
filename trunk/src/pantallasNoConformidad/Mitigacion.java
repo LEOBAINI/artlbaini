@@ -57,7 +57,7 @@ public class Mitigacion extends JFrame {
 	private JPanel jContentPane = null;
 	
 	private String rutaFoto;  //  @jve:decl-index=0:
-	private String rutaFotoBien; 
+	private String rutaFotoBien;  //  @jve:decl-index=0:
 	private JLabel jLabelFoto = null;
 	private JEditorPane jEditorPane = null;
 	private JButton jButtonExaminar = null;

@@ -20,6 +20,7 @@ import herramientas.pdfopener;
 
 
 
+@SuppressWarnings("unused")
 public class Shiteck {
 	
 	
@@ -32,8 +33,8 @@ public class Shiteck {
 	
 		
 		
-	    { 
-	        try {
+	  
+	     /*   try {
 				UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
 				
 			} catch (ClassNotFoundException e) {
@@ -49,10 +50,10 @@ public class Shiteck {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} 
-	       
+	       */
 	       
 	        
-	    } 
+	   
 	   
 	    
 		PantallaPpal pan=new PantallaPpal();

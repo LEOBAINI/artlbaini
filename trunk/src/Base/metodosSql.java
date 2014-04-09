@@ -1,5 +1,6 @@
 package Base;
 
+import herramientas.ColumnResizer;
 import herramientas.ModeloTabla;
 
 import java.awt.Choice;
@@ -27,6 +28,7 @@ import reporte.Auditoria;
 import reporte.GeneradorDeReporte;
 
 
+@SuppressWarnings("unused")
 public class metodosSql extends ConexionMySql {
 	
 	
@@ -71,14 +73,15 @@ public class metodosSql extends ConexionMySql {
         ;
 		return image;
     }
-public void generarAuditoriasDeLaBase(String clienteDeptoNro,String Nombreresponsable,String auditoriaNumero,String rutaDeSalidaMasNombrePDF) {
+public void generarAuditoriasDeLaBase(String clienteDeptoNro,String horaIn,String horaOut,String Nombreresponsable,String auditoriaNumero,String rutaDeSalidaMasNombrePDF) {
 String consulta="SELECT "+
 		 
-"C.descripcion as descripcionFotoMal,C.descripcionFotoBien,C.foto as fotoMal,C.fotoBien,C.cumplido, "+
+"C.descripcion as descripcionFotoMal,C.descripcionFotoBien,C.foto as fotoMal,C.fotoBien,C.cumplido,C.fechaCumplido, "+
 "I.norma_vigente,concat_ws(' _', I.nroItem, I.descripcion)  as 351detalle, "+
 "CAT.descripcion as categoria, "+
 "CLI.email,CLI.domicilio,CLI.telefono, "+
-"E.logo,E.nombre "+
+"E.logo,E.nombre," +
+"M.fecha_prometida_mitigacion "+
 
 
 "FROM "+
@@ -87,15 +90,18 @@ String consulta="SELECT "+
 "itemnoconf I, "+
 "categoriaplanilla351 CAT, "+
 "cliente CLI, "+
-"empresa E "+
+"empresa E, " +
+"mitigacion_item_no_conf M "+
 
 
 "where C.cliente_depto="+clienteDeptoNro+" "+
-"and C.id_item_no_conf=I.nroItem "+
+"and C.id_item_no_conf=I.nroItem " +
+"and C.id_item_no_conf=M.idmitigacion_item_no_conf "+
 "and I.categoriaNro=CAT.idcategoria "+
-"and CLI.departamento_nro=C.cliente_depto "+
+"and CLI.departamento_nro=C.cliente_depto " +
 
-"order by C.cumplido desc; ";
+
+"GROUP BY C.idCOMO_MITIGAR order by C.cumplido desc; ";//GROUP BY C.idCOMO_MITIGAR PK DE COMO MITIGAR
 		
 		
 		ArrayList<Object>auditorias=new ArrayList<Object>();
@@ -147,10 +153,10 @@ String consulta="SELECT "+
         		detalleFotoMal = rs.getString("descripcionFotoMal");
         		direccionCliente=rs.getString("domicilio");
         		estadoCumplimiento= rs.getString("cumplido");
-        		fechaCumplido ="Verificar" ;//rs.getString("nombreColumna");
-        		fechaPrometida = "Verificar";//rs.getString("nombreColumna");
-        		horarioOut = "Solicitar";//rs.getString("nombreColumna");
-        		horarioIn ="Solicitar";//rs.getString("nombreColumna");
+        		fechaCumplido =rs.getString("fechaCumplido");
+        		fechaPrometida = rs.getString("fecha_prometida_mitigacion");
+        		horarioOut = horaOut;//rs.getString("nombreColumna");
+        		horarioIn =horaIn;//rs.getString("nombreColumna");
         		mailCliente=rs.getString("email");
         		nombreEmpresaCliente = rs.getString("nombre");
         		normaVigente = rs.getString("norma_vigente");
@@ -577,9 +583,10 @@ String consulta="SELECT "+
 		}
 		modelo.setColumnIdentifiers(metodos.consultarNombresColumnas(consulta));
 		
-		
-		
 		tabla.setModel(modelo);
+		tabla.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		ColumnResizer.adjustColumnPreferredWidths(tabla);
+		
 		
 		
 		}else{
@@ -592,6 +599,17 @@ String consulta="SELECT "+
 		}
 	}
 	
+	
+	
+	public void vaciarTabla(JTable tabla){
+		tabla.removeAll();
+		ModeloTabla modelo = new ModeloTabla();			  
+
+		
+		modelo.setColumnCount(0);
+		modelo.setRowCount(0);
+		tabla.setModel(modelo);
+	}
 	
 
 	

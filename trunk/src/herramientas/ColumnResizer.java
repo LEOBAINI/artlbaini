@@ -13,7 +13,7 @@ public class ColumnResizer {
 	// make that the preferred width
 	TableColumnModel columnModel = table.getColumnModel();
 	for (int col=0; col<table.getColumnCount(); col++) {
-	int maxwidth = 0;
+	int maxwidth = 200;
 	for (int row=0; row<table.getRowCount(); row++) {
 	TableCellRenderer rend =
 	
