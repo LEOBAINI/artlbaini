@@ -21,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.Choice;
+import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import javax.swing.BorderFactory;
@@ -29,7 +30,13 @@ import javax.swing.table.DefaultTableModel;
 import Base.metodosSql;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
+import javax.swing.JScrollBar;
+import javax.swing.border.TitledBorder;
+
+import org.apache.poi.hssf.util.HSSFColor.GREEN;
+import javax.swing.JCheckBox;
 
 @SuppressWarnings("unused")
 public class SeguimientoNoconformidad extends JFrame {
@@ -41,7 +48,6 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JTextField jTextFieldObjCumplidos = null;
 	private JLabel jLabelFecha = null;
 	private JTextField jTextFieldFecha = null;
-	private JScrollPane jScrollPaneNoConformes = null;
 	private JTable jTableNoConformes = null;
 	private JLabel jLabelListadoItemsNoConformes = null;
 	private JLabel jLabelDetalleItemsNoConformes = null;
@@ -55,7 +61,6 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JButton jButtonNoOk = null;
 	private JPanel jPanelDetalles = null;
 	private JButton jButtonCalendario = null;
-	private JButton jButtonDetalle = null;
 	private JLabel jLabelAuditoriaNro = null;
 	private JTextField jTextFieldAudNro = null;
 	private JLabel jLabelResponsable = null;
@@ -63,6 +68,18 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JButton jButtonGenerarAuditoria = null;
 	private JLabel jLabelEmpresaNombre = null;
 	private Choice choiceEmpresaNombre = null;
+	private JScrollPane jScrollPaneNoConformes = null;
+	private JLabel jLabelHoraIn = null;
+	private Choice choiceHoraIn = null;
+	private Choice choiceMinutoIn = null;
+	private JLabel jLabelHoraOut = null;
+	private Choice choiceHoraOut = null;
+	private Choice choiceMinutoOut = null;
+	private JPanel jPanelHoraInOut = null;
+	private JLabel jLabelCuit = null;
+	private JTextField jTextFieldCuit = null;
+	private JCheckBox jCheckBoxPrevisualizar = null;
+	private JLabel jLabelPre = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -77,9 +94,31 @@ public class SeguimientoNoconformidad extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(1274, 568);
+		this.setSize(1274, 565);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Seguimiento de no conformidades");
+		
+		for(int i=0;i<24;i++){
+			if(String.valueOf(i).length()==1){
+			choiceHoraIn.add("0"+String.valueOf(i));
+			choiceHoraOut.add("0"+String.valueOf(i));
+			}else{
+				choiceHoraIn.add(String.valueOf(i));
+				choiceHoraOut.add(String.valueOf(i));
+				
+			}
+		}
+		
+		for(int j=0;j<60;j++){
+			if(String.valueOf(j).length()==1){
+			choiceMinutoIn.add("0"+String.valueOf(j));
+			choiceMinutoOut.add("0"+String.valueOf(j));
+			}else{
+				choiceMinutoIn.add(String.valueOf(j));
+				choiceMinutoOut.add(String.valueOf(j));
+				
+			}
+		}
 	}
 	/**
 	 * Llama al proc almacenado en la base de datos: PorcentajeCumplido(NroCliente);
@@ -106,14 +145,20 @@ public class SeguimientoNoconformidad extends JFrame {
 	 */
 	private void actualizarTablaDetalle(int idItemPadre){
 		try{
+			metodosSql metodos=new metodosSql();
+		if(idItemPadre!=-1){
 		int idItemNoConf=0;
 		idItemNoConf=idItemPadre;
 		String consulta=null;
-		consulta="SELECT idcomo_mitigar as id,descripcion,cumplido as 'ESTA CUMPLIDO' FROM shiteckhibernate.como_mitigar where id_item_no_conf = "+idItemNoConf;
-		metodosSql metodos=new metodosSql();
+		consulta="SELECT idcomo_mitigar as id,descripcion,cumplido as 'ESTA CUMPLIDO',fechaCumplido as 'FECHA DE CUMPLIMIENTO' FROM shiteckhibernate.como_mitigar where id_item_no_conf = "+idItemNoConf;
+		//metodosSql metodos=new metodosSql();
 		metodos.llenarJtable(jTableDetalle, consulta);
 		
-		ColumnResizer.adjustColumnPreferredWidths(jTableDetalle);
+		//ColumnResizer.adjustColumnPreferredWidths(jTableDetalle);
+		}else{
+			metodos.vaciarTabla(jTableDetalle);
+			
+		}
 		}catch(Exception e){
 			JOptionPane.showMessageDialog(null,"Problema en actualizarTablaDetalle(); ->"+ e.getMessage());
 		}
@@ -219,7 +264,7 @@ public class SeguimientoNoconformidad extends JFrame {
 		
 		
 
-							ColumnResizer.adjustColumnPreferredWidths(jTableNoConformes);
+							//ColumnResizer.adjustColumnPreferredWidths(jTableNoConformes);
 		jContentPane.updateUI();
 	}
 	/**
@@ -229,10 +274,15 @@ public class SeguimientoNoconformidad extends JFrame {
 	 * @param cumplidoSioNo
 	 */
 	
-	private void actualizarEstadoSubItemEnBase(int idComo_mitigar, String cumplidoSioNo){
+	private void actualizarEstadoSubItemEnBase(int idComo_mitigar, String cumplidoSioNo,String fechaCumplido){
 		if(idComo_mitigar!=-1){
-		String updateCumplido="update shiteckhibernate.como_mitigar set cumplido='"+cumplidoSioNo+"' where idcomo_mitigar= "+idComo_mitigar+";";
-		
+			String updateCumplido=null;
+		if(cumplidoSioNo.equalsIgnoreCase("si")){//si cumple
+		updateCumplido="update shiteckhibernate.como_mitigar set cumplido='"+cumplidoSioNo+"',fechaCumplido='"+fechaCumplido+"' where idcomo_mitigar= "+idComo_mitigar+";";
+		}
+		else{//si no cumple
+		updateCumplido="update shiteckhibernate.como_mitigar set cumplido='"+cumplidoSioNo+"',fechaCumplido=null where idcomo_mitigar= "+idComo_mitigar+";";
+		}
 		metodosSql metodos=new metodosSql();
 
 		try {
@@ -257,7 +307,7 @@ public class SeguimientoNoconformidad extends JFrame {
 		
 		
 		
-		actualizarEstadoSubItemEnBase(idSubItem, cumplidoSubItemSiNo);//update tabla como_mitigar
+		actualizarEstadoSubItemEnBase(idSubItem, cumplidoSubItemSiNo,fechaCumplido);//update tabla como_mitigar
 		
 		actualizarItemNoConformeCumplidoSioNo(clienteNro,idItemPadre,cumplidoItemPadreSiNo,fechaCumplido);//update mitigacion_item_no_conf
 		
@@ -287,6 +337,18 @@ public class SeguimientoNoconformidad extends JFrame {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			jLabelPre = new JLabel();
+			jLabelPre.setBounds(new Rectangle(1122, 38, 99, 22));
+			jLabelPre.setText("Previsualizar");
+			jLabelCuit = new JLabel();
+			jLabelCuit.setBounds(new Rectangle(13, 36, 136, 17));
+			jLabelCuit.setText("Cuit/Cuip Nro");
+			jLabelHoraOut = new JLabel();
+			jLabelHoraOut.setText("Hora OUT");
+			jLabelHoraOut.setBounds(new Rectangle(4, 54, 57, 26));
+			jLabelHoraIn = new JLabel();
+			jLabelHoraIn.setText("Hora IN");
+			jLabelHoraIn.setBounds(new Rectangle(5, 14, 50, 26));
 			jLabelEmpresaNombre = new JLabel();
 			jLabelEmpresaNombre.setBounds(new Rectangle(13, 7, 136, 16));
 			jLabelEmpresaNombre.setText("Nombre de la Empresa");
@@ -298,22 +360,22 @@ public class SeguimientoNoconformidad extends JFrame {
 			jLabelAuditoriaNro.setText("Auditoria Nro");
 			jLabelStatus = new JLabel();
 			jLabelStatus.setText("Status de detalle de item no conforme");
-			jLabelStatus.setBounds(new Rectangle(5, 158, 314, 23));
+			jLabelStatus.setBounds(new Rectangle(5, 147, 314, 23));
 			jLabelDetalleItemsNoConformes = new JLabel();
 			jLabelDetalleItemsNoConformes.setText("Detalle de items no conformes ");
 			jLabelDetalleItemsNoConformes.setBounds(new Rectangle(6, 24, 179, 17));
 			jLabelListadoItemsNoConformes = new JLabel();
-			jLabelListadoItemsNoConformes.setBounds(new Rectangle(14, 94, 263, 18));
+			jLabelListadoItemsNoConformes.setBounds(new Rectangle(13, 126, 263, 18));
 			jLabelListadoItemsNoConformes.setText("Listado de items detectados - NoConformes - ");
 			jLabelFecha = new JLabel();
 			jLabelFecha.setBounds(new Rectangle(650, 13, 44, 21));
 			jLabelFecha.setText("Fecha");
 			jLabelCumplido = new JLabel();
-			jLabelCumplido.setBounds(new Rectangle(454, 47, 362, 21));
-			jLabelCumplido.setText("% total de objetivos cumplidos por el departamento del cliente");
+			jLabelCumplido.setBounds(new Rectangle(13, 94, 378, 21));
+			jLabelCumplido.setText("Total de objetivos cumplidos por el departamento del cliente en %");
 			jLabelClienteNro = new JLabel();
-			jLabelClienteNro.setBounds(new Rectangle(15, 47, 69, 21));
-			jLabelClienteNro.setText("Cliente Nro");
+			jLabelClienteNro.setBounds(new Rectangle(13, 62, 69, 21));
+			jLabelClienteNro.setText("Depto Nro");
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
 			jContentPane.add(jLabelClienteNro, null);
@@ -321,7 +383,6 @@ public class SeguimientoNoconformidad extends JFrame {
 			jContentPane.add(getJTextFieldObjCumplidos(), null);
 			jContentPane.add(jLabelFecha, null);
 			jContentPane.add(getJTextFieldFecha(), null);
-			jContentPane.add(getJScrollPaneNoConformes(), null);
 			jContentPane.add(jLabelListadoItemsNoConformes, null);
 			jContentPane.add(getChoiceCliente(), null);
 			jContentPane.add(getJPanelDetalles(), null);
@@ -333,6 +394,12 @@ public class SeguimientoNoconformidad extends JFrame {
 			jContentPane.add(getJButtonGenerarAuditoria(), null);
 			jContentPane.add(jLabelEmpresaNombre, null);
 			jContentPane.add(getChoiceEmpresaNombre(), null);
+			jContentPane.add(getJScrollPaneNoConformes(), null);
+			jContentPane.add(getJPanelHoraInOut(), null);
+			jContentPane.add(jLabelCuit, null);
+			jContentPane.add(getJTextFieldCuit(), null);
+			jContentPane.add(getJCheckBoxPrevisualizar(), null);
+			jContentPane.add(jLabelPre, null);
 		}
 		return jContentPane;
 	}
@@ -345,7 +412,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JTextField getJTextFieldObjCumplidos() {
 		if (jTextFieldObjCumplidos == null) {
 			jTextFieldObjCumplidos = new JTextField();
-			jTextFieldObjCumplidos.setBounds(new Rectangle(366, 47, 87, 22));
+			jTextFieldObjCumplidos.setBounds(new Rectangle(394, 92, 87, 22));
 			jTextFieldObjCumplidos.setEditable(false);
 		}
 		return jTextFieldObjCumplidos;
@@ -368,20 +435,6 @@ public class SeguimientoNoconformidad extends JFrame {
 	}
 
 	/**
-	 * This method initializes jScrollPaneNoConformes	
-	 * 	
-	 * @return javax.swing.JScrollPane	
-	 */
-	private JScrollPane getJScrollPaneNoConformes() {
-		if (jScrollPaneNoConformes == null) {
-			jScrollPaneNoConformes = new JScrollPane();
-			jScrollPaneNoConformes.setBounds(new Rectangle(14, 113, 1073, 122));
-			jScrollPaneNoConformes.setViewportView(getJTableNoConformes());
-		}
-		return jScrollPaneNoConformes;
-	}
-
-	/**
 	 * This method initializes jTableNoConformes	
 	 * 	
 	 * @return javax.swing.JTable	
@@ -389,6 +442,8 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JTable getJTableNoConformes() {
 		if (jTableNoConformes == null) {
 			jTableNoConformes = new JTable();
+			//jTableNoConformes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
 			jTableNoConformes.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					int idTablaPadre=0;
@@ -397,6 +452,16 @@ public class SeguimientoNoconformidad extends JFrame {
 				}
 
 				
+			});
+			jTableNoConformes.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyReleased(java.awt.event.KeyEvent e) {
+					if(e.getKeyCode()==KeyEvent.VK_DOWN || e.getKeyCode()==KeyEvent.VK_UP){
+						int idTablaPadre=0;
+						idTablaPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
+						actualizarTablaDetalle(idTablaPadre);
+						
+					}
+				}
 			});
 		}
 		return jTableNoConformes;
@@ -436,7 +501,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JScrollPane getJScrollPaneStatus() {
 		if (jScrollPaneStatus == null) {
 			jScrollPaneStatus = new JScrollPane();
-			jScrollPaneStatus.setBounds(new Rectangle(4, 184, 1059, 107));
+			jScrollPaneStatus.setBounds(new Rectangle(4, 184, 1059, 87));
 			jScrollPaneStatus.setViewportView(getJTableStatus());
 		}
 		return jScrollPaneStatus;
@@ -541,19 +606,8 @@ public class SeguimientoNoconformidad extends JFrame {
 	private Choice getChoiceCliente() {
 		if (choiceCliente == null) {
 			choiceCliente = new Choice();
-			choiceCliente.setBounds(new Rectangle(86, 47, 209, 21));
-			choiceCliente.addMouseListener(new java.awt.event.MouseAdapter() {
-				public void mousePressed(java.awt.event.MouseEvent e) {
-					metodosSql metodos=new metodosSql();
-					try {
-						metodos.llenarChoice(choiceCliente, "select TRIM(departamento_nro) from cliente");
-						
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null, "Hubo un error : "+e1.getMessage());
-						
-					}
-				}
-			});
+			choiceCliente.setBounds(new Rectangle(86, 63, 209, 21));
+			
 			
 			
 			choiceCliente.addItemListener(new java.awt.event.ItemListener() {
@@ -568,6 +622,14 @@ public class SeguimientoNoconformidad extends JFrame {
 						System.out.println(e1.getMessage());
 					}
 					
+				}
+			});
+			choiceCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyPressed(java.awt.event.KeyEvent e) {
+					System.out.println(e.getKeyCode());
+					if(e.getKeyCode()==153){
+						jTextFieldAudNro.requestFocusInWindow();
+					}
 				}
 			});
 		}
@@ -647,7 +709,7 @@ public class SeguimientoNoconformidad extends JFrame {
 		if (jPanelDetalles == null) {
 			jPanelDetalles = new JPanel();
 			jPanelDetalles.setLayout(null);
-			jPanelDetalles.setBounds(new Rectangle(13, 237, 1072, 300));
+			jPanelDetalles.setBounds(new Rectangle(13, 261, 1072, 276));
 			jPanelDetalles.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
 			jPanelDetalles.add(getJScrollPaneDetalle(), null);
 			jPanelDetalles.add(getJScrollPaneStatus(), null);
@@ -655,7 +717,6 @@ public class SeguimientoNoconformidad extends JFrame {
 			jPanelDetalles.add(getJButtonNoOk(), null);
 			jPanelDetalles.add(getJButtonCumplido(), null);
 			jPanelDetalles.add(jLabelDetalleItemsNoConformes, null);
-			jPanelDetalles.add(getJButtonDetalle(), null);
 		}
 		return jPanelDetalles;
 	}
@@ -681,20 +742,6 @@ public class SeguimientoNoconformidad extends JFrame {
 	}
 
 	/**
-	 * This method initializes jButtonDetalle	
-	 * 	
-	 * @return javax.swing.JButton	
-	 */
-	private JButton getJButtonDetalle() {
-		if (jButtonDetalle == null) {
-			jButtonDetalle = new JButton();
-			jButtonDetalle.setBounds(new Rectangle(804, 9, 157, 31));
-			jButtonDetalle.setText("Ver Detalle");
-		}
-		return jButtonDetalle;
-	}
-
-	/**
 	 * This method initializes jTextFieldAudNro	
 	 * 	
 	 * @return javax.swing.JTextField	
@@ -703,6 +750,13 @@ public class SeguimientoNoconformidad extends JFrame {
 		if (jTextFieldAudNro == null) {
 			jTextFieldAudNro = new JTextField();
 			jTextFieldAudNro.setBounds(new Rectangle(896, 9, 119, 29));
+			jTextFieldAudNro.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyTyped(java.awt.event.KeyEvent e) {
+				if(e.getKeyCode()==153){
+					jTextFieldResponsable.requestFocusInWindow();
+				}
+				}
+			});
 		}
 		return jTextFieldAudNro;
 	}
@@ -716,6 +770,13 @@ public class SeguimientoNoconformidad extends JFrame {
 		if (jTextFieldResponsable == null) {
 			jTextFieldResponsable = new JTextField();
 			jTextFieldResponsable.setBounds(new Rectangle(896, 41, 196, 31));
+			jTextFieldResponsable.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyTyped(java.awt.event.KeyEvent e) {
+					if(e.getKeyCode()==153){
+						choiceHoraIn.requestFocusInWindow();
+					}
+				}
+			});
 		}
 		return jTextFieldResponsable;
 	}
@@ -742,7 +803,11 @@ public class SeguimientoNoconformidad extends JFrame {
 						JOptionPane.showMessageDialog(null,"Complete todos los campos en blanco");
 					}else{
 					try{
-						
+						int confirm=-1;
+						//confirm=JOptionPane.showConfirmDialog(null," continuar?");
+						confirm=JOptionPane.showConfirmDialog(null,"IMPORTANTE, si genera 2 auditorias con el mismo número de auditoría para el mismo cliente y mismo depto, la última sustituye a la anterior","¿Desea continuar?",JOptionPane.YES_NO_OPTION);
+						if(confirm==0){
+						//System.out.println(confirm);
 						String clienteDeptpNro=choiceCliente.getSelectedItem();
 						String responsable=jTextFieldResponsable.getText();
 						String auditoriaNro="AU"+jTextFieldAudNro.getText();
@@ -765,25 +830,33 @@ public class SeguimientoNoconformidad extends JFrame {
 					String empresaNombre=metodos.consultarUnaColumna(consultaNombreEmp).get(0);
 					String rutaFull=rutaCarpeta+"\\"+fecha+empresaNombre+"DPnro"+clienteDeptpNro+auditoriaNro+".pdf";
 					System.out.println(rutaFull);
-				//	metodos.insertarOmodif(	"call insertarEnHistorialYauditoria("+auditoriaNro+","+clienteDeptpNro+",28737766,"+fecha+",20:00,22:00);");
+					String horaIn=choiceHoraIn.getSelectedItem()+":"+choiceMinutoIn.getSelectedItem();
+					String horaOut=choiceHoraOut.getSelectedItem()+":"+choiceMinutoOut.getSelectedItem();
 					
-					metodos.generarAuditoriasDeLaBase(clienteDeptpNro,responsable,auditoriaNro,rutaFull);	
+				    
+					metodos.insertarOmodif(	"call insertarEnHistorialYauditoria("+auditoriaNro.replaceAll("AU","")+","+clienteDeptpNro+",28737766,'"+fecha+"','"+horaIn+"','"+horaOut+"');");
 					
+					metodos.generarAuditoriasDeLaBase(clienteDeptpNro,horaIn,horaOut,responsable,auditoriaNro,rutaFull);	
+					
+					if(jCheckBoxPrevisualizar.isSelected()){
 					pdfopener pdf=new pdfopener(rutaFull);
-					
+					pdf.abrirDocumento();
+					}
 						
 					
 					//JOptionPane.showMessageDialog(null,"Reporte generado OK!");
 					
 					
-					pdf.abrirDocumento();
+					
 					((BarThread) hilo).setBandera(1);
 					
 					
 						}else{
 							JOptionPane.showMessageDialog(null,"Acción cancelada por el usuario...");
 						}
-					
+						}else{
+							JOptionPane.showMessageDialog(null,"Acción cancelada por el usuario...");
+						}
 					 
 					}catch(Exception e1){
 						JOptionPane.showMessageDialog(null,"Error! "+e1.getMessage());
@@ -792,6 +865,21 @@ public class SeguimientoNoconformidad extends JFrame {
 					
 					
 					
+				}
+			});
+			jButtonGenerarAuditoria.addFocusListener(new java.awt.event.FocusAdapter() {   
+				public void focusLost(java.awt.event.FocusEvent e) {    
+					jButtonGenerarAuditoria.setBackground(Color.getColor("9FB2D5"));
+				}
+				public void focusGained(java.awt.event.FocusEvent e) {
+					jButtonGenerarAuditoria.setBackground(Color.GREEN);
+				}
+			});
+			jButtonGenerarAuditoria.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyPressed(java.awt.event.KeyEvent e) {
+					if(e.getKeyCode()==KeyEvent.VK_ENTER){
+						jButtonGenerarAuditoria.doClick();
+					}
 				}
 			});
 		}
@@ -810,18 +898,228 @@ public class SeguimientoNoconformidad extends JFrame {
 			choiceEmpresaNombre.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mousePressed(java.awt.event.MouseEvent e) {
 					metodosSql metodos=new metodosSql();
-					try {
+					try { 
+						if(choiceEmpresaNombre.getItemCount()>1){
+							
+						}else{
 						metodos.llenarChoice(choiceEmpresaNombre, "select nombre from empresa");
+						}
 						
 						
+							
+									
 					} catch (SQLException e1) {
 						JOptionPane.showMessageDialog(null, "Hubo un error : "+e1.getMessage());
 						
 					}
 				}
 			});
+			choiceEmpresaNombre.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					try{
+					metodosSql metodos=new metodosSql();
+					String cuit=null;
+					cuit=metodos.consultarUnaColumna("select cuit_cuip from empresa where nombre= '"+choiceEmpresaNombre.getSelectedItem()+"';").get(0);
+					jTextFieldCuit.setText(cuit);
+					jTextFieldObjCumplidos.setText("");
+					
+					actualizarTablaDetalle(-1);
+					actualizarTablaItemsNoConformes(-1);
+					
+					}catch(java.lang.IndexOutOfBoundsException e1){
+						jTextFieldCuit.setText("");
+						
+					}
+				
+				}
+			});
+			choiceEmpresaNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyPressed(java.awt.event.KeyEvent e) {
+				
+					if(e.getKeyCode()==153){	//barra, salto de campo					
+						choiceCliente.requestFocusInWindow();					
+			    	}
+					
+					if(e.getKeyCode()==40){//va para abajo
+					metodosSql metodos=new metodosSql();
+					try { 
+						if(choiceEmpresaNombre.getItemCount()>1){
+							
+						}else{
+						metodos.llenarChoice(choiceEmpresaNombre, "select nombre from empresa");
+						}							
+									
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, "Hubo un error : "+e1.getMessage());
+						
+					   }
+					}
+				}
+			});
+			
+			
 		}
 		return choiceEmpresaNombre;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,-8"
+	/**
+	 * This method initializes jScrollPaneNoConformes	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPaneNoConformes() {
+		if (jScrollPaneNoConformes == null) {
+			jScrollPaneNoConformes = new JScrollPane(getJTableNoConformes(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			jScrollPaneNoConformes.setBounds(new Rectangle(14, 152, 1070, 109));
+			jScrollPaneNoConformes.setViewportView(getJTableNoConformes());
+		}
+		return jScrollPaneNoConformes;
+	}
+
+	/**
+	 * This method initializes choiceHoraIn	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceHoraIn() {
+		if (choiceHoraIn == null) {
+			choiceHoraIn = new Choice();
+			choiceHoraIn.setBounds(new Rectangle(72, 18, 37, 21));
+			choiceHoraIn.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyPressed(java.awt.event.KeyEvent e) {
+					if(e.getKeyCode()==153){
+						choiceMinutoIn.requestFocusInWindow();
+					}
+				}
+			});
+		}
+		return choiceHoraIn;
+	}
+
+	/**
+	 * This method initializes choiceMinutoIn	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceMinutoIn() {
+		if (choiceMinutoIn == null) {
+			choiceMinutoIn = new Choice();
+			choiceMinutoIn.setBounds(new Rectangle(121, 18, 37, 21));
+			choiceMinutoIn.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyPressed(java.awt.event.KeyEvent e) {
+					if(e.getKeyCode()==153){
+						choiceHoraOut.requestFocusInWindow();
+					}
+				}
+			});
+		}
+		return choiceMinutoIn;
+	}
+
+	/**
+	 * This method initializes choiceHoraOut	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceHoraOut() {
+		if (choiceHoraOut == null) {
+			choiceHoraOut = new Choice();
+			choiceHoraOut.setBounds(new Rectangle(72, 57, 37, 21));
+			choiceHoraOut.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyPressed(java.awt.event.KeyEvent e) {
+					if(e.getKeyCode()==153){
+						choiceMinutoOut.requestFocusInWindow();
+					}
+				}
+			});
+		}
+		return choiceHoraOut;
+	}
+
+	/**
+	 * This method initializes choiceMinutoOut	
+	 * 	
+	 * @return java.awt.Choice	
+	 */
+	private Choice getChoiceMinutoOut() {
+		if (choiceMinutoOut == null) {
+			choiceMinutoOut = new Choice();
+			choiceMinutoOut.setBounds(new Rectangle(121, 57, 37, 21));
+			choiceMinutoOut.addKeyListener(new java.awt.event.KeyAdapter() {
+				public void keyPressed(java.awt.event.KeyEvent e) {
+					if(e.getKeyCode()==153){
+						jButtonGenerarAuditoria.requestFocusInWindow();
+					}
+				}
+			});
+		}
+		return choiceMinutoOut;
+	}
+
+	/**
+	 * This method initializes jPanelHoraInOut	
+	 * 	
+	 * @return javax.swing.JPanel	
+	 */
+	private JPanel getJPanelHoraInOut() {
+		if (jPanelHoraInOut == null) {
+			jPanelHoraInOut = new JPanel();
+			jPanelHoraInOut.setLayout(null);
+			jPanelHoraInOut.setBounds(new Rectangle(1088, 118, 164, 96));
+			jPanelHoraInOut.setBorder(BorderFactory.createTitledBorder(null, "Fichero", TitledBorder.CENTER, TitledBorder.DEFAULT_POSITION, null, null));
+			jPanelHoraInOut.add(jLabelHoraIn, null);
+			jPanelHoraInOut.add(jLabelHoraOut, null);
+			jPanelHoraInOut.add(getChoiceHoraIn(), null);
+			jPanelHoraInOut.add(getChoiceMinutoIn(), null);
+			jPanelHoraInOut.add(getChoiceHoraOut(), null);
+			jPanelHoraInOut.add(getChoiceMinutoOut(), null);
+		}
+		return jPanelHoraInOut;
+	}
+
+	/**
+	 * This method initializes jTextFieldCuit	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getJTextFieldCuit() {
+		if (jTextFieldCuit == null) {
+			jTextFieldCuit = new JTextField();
+			jTextFieldCuit.setBounds(new Rectangle(154, 31, 262, 24));
+			jTextFieldCuit.setEditable(false);
+			jTextFieldCuit.addCaretListener(new javax.swing.event.CaretListener() {
+				public void caretUpdate(javax.swing.event.CaretEvent e) {
+					metodosSql metodos=new metodosSql();
+					try {
+						
+						metodos.llenarChoice(choiceCliente, "select TRIM(departamento_nro) from cliente where empresa_cuit='"+jTextFieldCuit.getText()+"';");
+						if(choiceCliente.getItemCount()>1){
+							choiceCliente.setBackground(Color.GREEN);
+							System.out.println(choiceCliente.getItemCount()+" ELEMENTOS");
+						}else{
+							choiceCliente.setBackground(Color.white);
+						}
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return jTextFieldCuit;
+	}
+
+	/**
+	 * This method initializes jCheckBoxPrevisualizar	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getJCheckBoxPrevisualizar() {
+		if (jCheckBoxPrevisualizar == null) {
+			jCheckBoxPrevisualizar = new JCheckBox();
+			jCheckBoxPrevisualizar.setBounds(new Rectangle(1226, 42, 21, 17));
+		}
+		return jCheckBoxPrevisualizar;
+	}
+
+}  //  @jve:decl-index=0:visual-constraint="10,-3"

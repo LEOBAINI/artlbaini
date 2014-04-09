@@ -15,7 +15,7 @@ public class Hibernate {
 	
 	public static int guardarObjeto(Object objeto){
 		int status=0;
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+		final Session session = HibernateUtil.getSessionFactory().getCurrentSession();
 		try{
 			
 		session.beginTransaction();
@@ -24,13 +24,16 @@ public class Hibernate {
 				
 		session.getTransaction().commit();
 		status=1;
+		
 		System.out.println("Guardado ok");
 		}catch(SessionException e){
 			System.out.println("Error desde consola "+e.getMessage());
 		session.getTransaction().rollback();	
+		
 		status=0;
 			
 		}
+		HibernateUtil.getSessionFactory().getCurrentSession().close();
 		return status;
 		
 	}
