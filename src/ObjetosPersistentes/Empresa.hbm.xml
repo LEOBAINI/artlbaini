@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<class name="ObjetosPersistentes.Empresa" table="Empresa">
+<id name="cuit_cuip" column="cuit_cuip">
+
+</id>
+<property name="logo" type="binary" column="logo"/>
+<property name="nombre"/>
+<property name="domicilio"/>
+<property name="localidad"/>
+<property name="actividad_economica"/>
+<property name="cp_cpa"/>
+<property name="provincia"/>
+<property name="contrato"/>
+<property name="eMail"/>
+<property name="telefono"/>
+
+
+</class>
+</hibernate-mapping>

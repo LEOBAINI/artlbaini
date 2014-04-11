@@ -35,16 +35,6 @@ CREATE TABLE `mitigacion_item_no_conf` (
   PRIMARY KEY (`idmitigacion_item_no_conf`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `mitigacion_item_no_conf`
---
-
-LOCK TABLES `mitigacion_item_no_conf` WRITE;
-/*!40000 ALTER TABLE `mitigacion_item_no_conf` DISABLE KEYS */;
-INSERT INTO `mitigacion_item_no_conf` VALUES (1,'2014-12-01','2014-03-12',1,NULL,'SI','2000'),(2,'2014-01-30','2014-04-07',2,1,'SI','2000'),(3,'2014-02-20',NULL,19,5,'NO','1000'),(4,'2014-02-20',NULL,6,2,'NO','1000'),(5,'2014-02-20','2014-03-22',5,2,'SI','2000'),(6,'2014-03-19','2014-03-22',15,4,'SI','2000'),(7,'2014-03-13','2014-03-23',4,2,'SI','1000'),(8,'2014-03-28',NULL,24,7,'NO','1000'),(9,'2014-03-19',NULL,1,1,'NO','1000'),(10,'2014-03-31','2014-03-23',19,5,'SI','1000'),(11,'2014-04-08',NULL,5,2,'NO','2000'),(12,'2014-04-18',NULL,19,5,'NO','1000');
-/*!40000 ALTER TABLE `mitigacion_item_no_conf` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -55,4 +45,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-09  2:07:28
+-- Dump completed on 2014-04-11  4:24:54
