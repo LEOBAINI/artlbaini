@@ -21,6 +21,7 @@ import java.util.Locale;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
@@ -248,14 +249,35 @@ String consulta="SELECT "+
 		ArrayList<String>lista;
 		lista=consultarUnaColumna(consultaSQL);
 		desplegable.removeAll();
-		desplegable.add("");
+		
+		desplegable.add("Seleccione...");
+		desplegable.select(0);
+		
+		
 		for(int i=0;i<lista.size();i++)
 			desplegable.add(lista.get(i));
+		
 		
 		return 0;
 		
 	}
-	
+public int llenarComboBox(JComboBox<String> desplegable,String consultaSQL) throws SQLException{
+		
+		ArrayList<String>lista;
+		lista=consultarUnaColumna(consultaSQL);
+		desplegable.removeAll();
+		
+		
+		
+		
+		
+		for(int i=0;i<lista.size();i++)
+			desplegable.addItem(lista.get(i));
+		
+		
+		return 0;
+		
+	}
 	/*
 	public  int updateObjetoDelaBase(Persistente objeto,String base,String tabla){
 		int status=-1;

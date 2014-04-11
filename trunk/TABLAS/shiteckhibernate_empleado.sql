@@ -18,16 +18,21 @@ USE `shiteckhibernate`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `categoriaplanilla351`
+-- Table structure for table `empleado`
 --
 
-DROP TABLE IF EXISTS `categoriaplanilla351`;
+DROP TABLE IF EXISTS `empleado`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `categoriaplanilla351` (
-  `idcategoria` int(11) NOT NULL,
-  `descripcion` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`idcategoria`)
+CREATE TABLE `empleado` (
+  `Cuil` varchar(100) NOT NULL,
+  `Nombre` varchar(100) DEFAULT NULL,
+  `Apellido` varchar(100) DEFAULT NULL,
+  `Puesto` varchar(45) DEFAULT NULL,
+  `Sexo` varchar(45) DEFAULT NULL,
+  `Turno` varchar(45) DEFAULT NULL,
+  `Empresa_Departamento` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`Cuil`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -40,4 +45,4 @@ CREATE TABLE `categoriaplanilla351` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-11  4:24:54
+-- Dump completed on 2014-04-11  4:24:53

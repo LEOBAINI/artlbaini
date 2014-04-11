@@ -12,8 +12,9 @@ import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 
+import pantallasABM.AltaEmpleado;
 import pantallasABM.AltaEmpresa;
-import pantallasABM.Altaestablecimiento;
+import pantallasABM.AltaDepartamento;
 import pantallasNoConformidad.PlanillaNoConformidad;
 import pantallasNoConformidad.SeguimientoNoconformidad;
 
@@ -34,6 +35,7 @@ public class PantallaPpal extends JFrame {
 	private JMenu jMenuAltas = null;
 	private JMenuItem jMenuItemAltasEmpresas = null;
 	private JMenuItem jMenuItemAltasEstablecimientos = null;
+	private JMenuItem jMenuItemAltaEmpleado = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -230,6 +232,7 @@ public class PantallaPpal extends JFrame {
 			jMenuAltas.setText("Altas");
 			jMenuAltas.add(getJMenuItemAltasEmpresas());
 			jMenuAltas.add(getJMenuItemAltasEstablecimientos());
+			jMenuAltas.add(getJMenuItemAltaEmpleado());
 		}
 		return jMenuAltas;
 	}
@@ -265,12 +268,31 @@ public class PantallaPpal extends JFrame {
 			jMenuItemAltasEstablecimientos
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
-						Altaestablecimiento altaEst=new Altaestablecimiento();
+						AltaDepartamento altaEst=new AltaDepartamento();
 						altaEst.setVisible(true);
 						}
 					});
 		}
 		return jMenuItemAltasEstablecimientos;
+	}
+
+	/**
+	 * This method initializes jMenuItemAltaEmpleado	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItemAltaEmpleado() {
+		if (jMenuItemAltaEmpleado == null) {
+			jMenuItemAltaEmpleado = new JMenuItem();
+			jMenuItemAltaEmpleado.setText("Empleados");
+			jMenuItemAltaEmpleado.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					AltaEmpleado alemp=new AltaEmpleado();
+					alemp.setVisible(true);
+				}
+			});
+		}
+		return jMenuItemAltaEmpleado;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

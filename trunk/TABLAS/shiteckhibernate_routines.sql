@@ -18,10 +18,6 @@ USE `shiteckhibernate`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Dumping events for database 'shiteckhibernate'
---
-
---
 -- Dumping routines for database 'shiteckhibernate'
 --
 /*!50003 DROP FUNCTION IF EXISTS `FuncPorcentajeCumplido` */;
@@ -97,11 +93,9 @@ delete from historialrelevamiento where auditoriaNro=auditNro and cliente_depto=
 insert into auditoria(auditorianro,clienteDeptoNro,empresa_cuit_cuip,fechaCreacion,horaIn,horaOut)
               values(auditNro,clientdepto,cuit,fechaAud,horaIn,horaOut);                                                                           
 
-insert into historialrelevamiento(idcomomitigar,descripcion,descripcionFotoBien,
-foto,fotobien,cliente_depto,id_item_no_conf,cumplido,fechaCumplido,auditoriaNro,cuit_empresa) 
+insert into historialrelevamiento(idcomomitigar,descripcion,descripcionFotoBien,cliente_depto,id_item_no_conf,cumplido,fechaCumplido,auditoriaNro,cuit_empresa) 
 
-(SELECT idcomo_mitigar,descripcion,descripcionFotoBien,
-foto,fotobien,cliente_depto,id_item_no_conf,cumplido,fechaCumplido,auditNro,cuit
+(SELECT idcomo_mitigar,descripcion,descripcionFotoBien,cliente_depto,id_item_no_conf,cumplido,fechaCumplido,auditNro,cuit
 FROM shiteckhibernate.como_mitigar where cliente_depto=clientDepto);
 
 END */;;
@@ -175,4 +169,4 @@ DELIMITER ;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-09  2:07:38
+-- Dump completed on 2014-04-11  4:24:55

@@ -21,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.Choice;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -36,7 +37,11 @@ import javax.swing.JScrollBar;
 import javax.swing.border.TitledBorder;
 
 import org.apache.poi.hssf.util.HSSFColor.GREEN;
+
+import pantallasABM.AltaDepartamento;
+
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 
 @SuppressWarnings("unused")
 public class SeguimientoNoconformidad extends JFrame {
@@ -94,7 +99,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(1274, 565);
+		this.setSize(1274, 620);
 		this.setContentPane(getJContentPane());
 		this.setTitle("Seguimiento de no conformidades");
 		
@@ -150,8 +155,14 @@ public class SeguimientoNoconformidad extends JFrame {
 		int idItemNoConf=0;
 		idItemNoConf=idItemPadre;
 		String consulta=null;
-		consulta="SELECT idcomo_mitigar as id,descripcion,cumplido as 'ESTA CUMPLIDO',fechaCumplido as 'FECHA DE CUMPLIMIENTO' FROM shiteckhibernate.como_mitigar where id_item_no_conf = "+idItemNoConf;
+		// consulta="SELECT idcomo_mitigar as id,descripcion,descripcionfotobien as 'COMO MITIGAR',cumplido as 'ESTA CUMPLIDO',fechaCumplido as 'FECHA DE CUMPLIMIENTO' FROM shiteckhibernate.como_mitigar where id_item_no_conf = "+idItemNoConf;
 		//metodosSql metodos=new metodosSql();
+		consulta="SELECT M.idcomo_mitigar,M.descripcion,M.cumplido as 'ESTA CUMPLIDO'," +
+				" M.fechaCumplido as 'FECHA DE CUMPLIMIENTO',COUNT(H.IDCOMOMITIGAR) AS 'VECES RELEVADO' " +
+				" FROM shiteckhibernate.como_mitigar M,historialrelevamiento H " +
+				" where M.id_item_no_conf ="+idItemNoConf+" AND H.IDCOMOMITIGAR=M.IDCOMO_MITIGAR " +
+				" GROUP BY M.IDCOMO_MITIGAR;";
+				
 		metodos.llenarJtable(jTableDetalle, consulta);
 		
 		//ColumnResizer.adjustColumnPreferredWidths(jTableDetalle);
@@ -187,6 +198,32 @@ public class SeguimientoNoconformidad extends JFrame {
 		
 		
 		
+	}
+	
+	private void actualizarTablaStatusItemNoConforme(int idComoMitigar){
+		try{
+			
+			metodosSql metodos=new metodosSql();
+			
+		if(idComoMitigar!=-1){
+		
+		String consulta=null;
+		
+		consulta="SELECT AUDITORIANRO,FECHACREACION AS 'FECHA DE AUDITORIA',HORAIN,HORAOUT FROM shiteckhibernate.auditoria where auditorianro in " +
+				"(SELECT auditorianro FROM shiteckhibernate.historialrelevamiento " +
+				" where idcomomitigar="+idComoMitigar+") ORDER BY FECHACREACION DESC;";
+				
+		metodos.llenarJtable(jTableStatus, consulta);
+		
+		
+		}else{
+			metodos.vaciarTabla(jTableStatus);
+			
+		}
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(null,"Problema en actualizarTablaStatus(); ->"+ e.getMessage());
+			
+		}
 	}
 	
 	private String totalmenteCumplidoItem(int cliente_depto,int nroItemNoConforme){
@@ -317,6 +354,7 @@ public class SeguimientoNoconformidad extends JFrame {
 		
 		actualizarTablaItemsNoConformes(clienteNro);// SELECT DE mitigacion_item_no_conf` `m` join `itemnoconf` `i`
 		
+		actualizarTablaStatusItemNoConforme(idSubItem);
 	}
 	
 	private void insertarEnHistorialRelevamiento(String fechaRelev,int nroSubItem,String estaCumplidoSiNo,String responsable,int item_padre,int clienteNro){
@@ -449,6 +487,8 @@ public class SeguimientoNoconformidad extends JFrame {
 					int idTablaPadre=0;
 					idTablaPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
 					actualizarTablaDetalle(idTablaPadre);
+					metodosSql metodos=new metodosSql();
+					metodos.vaciarTabla(jTableStatus);
 				}
 
 				
@@ -475,7 +515,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JScrollPane getJScrollPaneDetalle() {
 		if (jScrollPaneDetalle == null) {
 			jScrollPaneDetalle = new JScrollPane();
-			jScrollPaneDetalle.setBounds(new Rectangle(5, 43, 1060, 103));
+			jScrollPaneDetalle.setBounds(new Rectangle(5, 43, 1225, 103));
 			jScrollPaneDetalle.setViewportView(getJTableDetalle());
 		}
 		return jScrollPaneDetalle;
@@ -489,6 +529,23 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JTable getJTableDetalle() {
 		if (jTableDetalle == null) {
 			jTableDetalle = new JTable();
+			jTableDetalle.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+
+					try{
+					/*SELECT * FROM shiteckhibernate.auditoria where auditorianro in
+					(SELECT auditorianro FROM shiteckhibernate.historialrelevamiento where idcomomitigar=6);*/
+					int idComomitigar=Integer.parseInt(jTableDetalle.getValueAt(jTableDetalle.getSelectedRow(),0).toString());
+					
+					actualizarTablaStatusItemNoConforme(idComomitigar);
+					}catch(Exception e1){
+						JOptionPane.showMessageDialog(null,"Error action listener al llenar tabla status "+e1.getMessage());
+						e1.printStackTrace();
+					}
+					
+					
+				}
+			});
 		}
 		return jTableDetalle;
 	}
@@ -501,7 +558,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JScrollPane getJScrollPaneStatus() {
 		if (jScrollPaneStatus == null) {
 			jScrollPaneStatus = new JScrollPane();
-			jScrollPaneStatus.setBounds(new Rectangle(4, 184, 1059, 87));
+			jScrollPaneStatus.setBounds(new Rectangle(7, 174, 1224, 137));
 			jScrollPaneStatus.setViewportView(getJTableStatus());
 		}
 		return jScrollPaneStatus;
@@ -528,7 +585,7 @@ public class SeguimientoNoconformidad extends JFrame {
 		if (jButtonCumplido == null) {
 			jButtonCumplido = new JButton();
 			jButtonCumplido.setText("");
-			jButtonCumplido.setBounds(new Rectangle(965, 7, 46, 37));
+			jButtonCumplido.setBounds(new Rectangle(1119, 6, 46, 37));
 			jButtonCumplido.setIcon(new ImageIcon(getClass().getResource("/iconos/Ok.png")));
 			jButtonCumplido.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -613,14 +670,19 @@ public class SeguimientoNoconformidad extends JFrame {
 			choiceCliente.addItemListener(new java.awt.event.ItemListener() {
 				public void itemStateChanged(java.awt.event.ItemEvent e) {
 					try{
-					if(!choiceCliente.getSelectedItem().isEmpty()){
-					String clienteNro=choiceCliente.getSelectedItem();
-					actualizarTablaItemsNoConformes(Integer.parseInt(clienteNro));
-					actualizarPorcentaje(Integer.parseInt(clienteNro));
-					}
-					}catch(Exception e1){
-						System.out.println(e1.getMessage());
-					}
+						System.out.println("cambio");
+						
+						String clienteNro=choiceCliente.getSelectedItem();
+						actualizarTablaItemsNoConformes(Integer.parseInt(clienteNro));
+						actualizarPorcentaje(Integer.parseInt(clienteNro));
+						System.out.println("Presed2");
+						
+						System.out.println("Presed3");
+						
+						}catch(Exception e1){
+							//System.out.println(e1.getMessage());
+						}
+					
 					
 				}
 			});
@@ -632,6 +694,9 @@ public class SeguimientoNoconformidad extends JFrame {
 					}
 				}
 			});
+		
+			
+			
 		}
 		return choiceCliente;
 	}
@@ -645,7 +710,7 @@ public class SeguimientoNoconformidad extends JFrame {
 		if (jButtonNoOk == null) {
 			jButtonNoOk = new JButton();
 			jButtonNoOk.setIcon(new ImageIcon(getClass().getResource("/iconos/NoOK.png")));
-			jButtonNoOk.setBounds(new Rectangle(1019, 7, 46, 37));
+			jButtonNoOk.setBounds(new Rectangle(1184, 6, 46, 37));
 			jButtonNoOk.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					
@@ -709,7 +774,7 @@ public class SeguimientoNoconformidad extends JFrame {
 		if (jPanelDetalles == null) {
 			jPanelDetalles = new JPanel();
 			jPanelDetalles.setLayout(null);
-			jPanelDetalles.setBounds(new Rectangle(13, 261, 1072, 276));
+			jPanelDetalles.setBounds(new Rectangle(13, 261, 1237, 323));
 			jPanelDetalles.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.white));
 			jPanelDetalles.add(getJScrollPaneDetalle(), null);
 			jPanelDetalles.add(getJScrollPaneStatus(), null);
@@ -902,7 +967,9 @@ public class SeguimientoNoconformidad extends JFrame {
 						if(choiceEmpresaNombre.getItemCount()>1){
 							
 						}else{
+						
 						metodos.llenarChoice(choiceEmpresaNombre, "select nombre from empresa");
+						
 						}
 						
 						
@@ -925,6 +992,7 @@ public class SeguimientoNoconformidad extends JFrame {
 					
 					actualizarTablaDetalle(-1);
 					actualizarTablaItemsNoConformes(-1);
+					actualizarTablaStatusItemNoConforme(-1);
 					
 					}catch(java.lang.IndexOutOfBoundsException e1){
 						jTextFieldCuit.setText("");
@@ -1099,6 +1167,7 @@ public class SeguimientoNoconformidad extends JFrame {
 						}else{
 							choiceCliente.setBackground(Color.white);
 						}
+					
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();

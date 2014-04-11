@@ -20,9 +20,9 @@
  
     <property name="connection.url">jdbc:mysql://localhost/shiteckhibernate</property>
  
-    <property name="connection.username">gestorit</property> 
+    <property name="connection.username">root</property> 
  
-    <property name="connection.password">zayb9183</property>
+    <property name="connection.password">root</property>
  
 
  
@@ -41,6 +41,7 @@
     <mapping resource="noConformidad/ComoMitigar.hbm.xml"/>
     <mapping resource="noConformidad/MitigacionItemNoConf.hbm.xml"/>
     <mapping resource="ObjetosPersistentes/Empresa.hbm.xml"/>
+    <mapping resource="ObjetosPersistentes/Empleado.hbm.xml"/>
  
   </session-factory>
  
