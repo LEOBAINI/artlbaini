@@ -201,36 +201,42 @@ public class Mitigacion extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{
 					ComoMitigar comoM=new ComoMitigar();
-					
-					File file = new File(rutaFoto);
-			        byte[] bFile = new byte[(int) file.length()];
-			        File file2 = new File(rutaFotoBien);
-			        byte[] bFile2 = new byte[(int) file.length()];
-			 
-			        try {
-				     FileInputStream fileInputStream = new FileInputStream(file);
-				     //convert file into array of bytes
-				     fileInputStream.read(bFile);
-				     fileInputStream.close();
-				     
-				     FileInputStream fileInputStream2 = new FileInputStream(file2);
-				     //convert file into array of bytes
-				     fileInputStream.read(bFile2);
-				     fileInputStream.close();
-			        } catch (Exception e1) {
-				     e1.printStackTrace();
-			        }
-			        comoM.setFotografia(bFile);
-			        comoM.setDescripcion(jEditorPane.getText());
-			        comoM.setFotografiaOk(bFile2);
-			        comoM.setDescripcionOk(jEditorPaneDetalleFotoBien.getText());
-			        comoM.setCliente_depto(cliente_depto);
-			        comoM.setId_item_no_conf(id_item_no_conf);
-			        
+					 int flagBien=0;
+					 int flagMal=0;
+			        	
+			        	
+						if(getRutaFoto()!=null){
+						File fileMal = new File(getRutaFoto());					
+				        byte[] bFileMal = new byte[(int) fileMal.length()];
+				        FileInputStream fileInputStream = new FileInputStream(fileMal);
+					     //convert file into array of bytes
+					     fileInputStream.read(bFileMal);
+					     fileInputStream.close();
+					     comoM.setFotografia(bFileMal);
+					     flagMal=1;
+						}
+				        if(getRutaFotoBien()!=null){
+				        File fileBien = new File(getRutaFotoBien());
+				        byte[] bFileBien = new byte[(int) fileBien.length()];
+				        FileInputStream fileInputStream2 = new FileInputStream(fileBien);
+					     //convert file into array of bytes
+					     fileInputStream2.read(bFileBien);
+					     fileInputStream2.close();	
+					     comoM.setFotografiaOk(bFileBien);  
+					     flagBien=1;
+				        }
+					     
+					     comoM.setDescripcion(jEditorPane.getText());
+					        
+					        comoM.setDescripcionOk(jEditorPaneDetalleFotoBien.getText());
+					        comoM.setCliente_depto(cliente_depto);
+					        comoM.setId_item_no_conf(id_item_no_conf);
+					        
+					       
+					        Hibernate.guardarObjeto(comoM);
+					        JOptionPane.showMessageDialog(null,"Guardado correcto!");
+					        dispose();			       
 			       
-			        Hibernate.guardarObjeto(comoM);
-			        JOptionPane.showMessageDialog(null,"Guardado correcto!");
-			        dispose();
 					}
 					catch(Exception e1){
 						JOptionPane.showMessageDialog(null,"Error! "+e1.getMessage());

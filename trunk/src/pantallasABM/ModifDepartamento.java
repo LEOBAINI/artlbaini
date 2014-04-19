@@ -28,9 +28,12 @@ import persistencia.Hibernate;
 import Base.metodosSql;
 import ObjetosPersistentes.Departamento;
 import ObjetosPersistentes.Empresa;
+import java.awt.Toolkit;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 @SuppressWarnings("unused")
-public class AltaDepartamento extends JFrame {
+public class ModifDepartamento extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
@@ -66,11 +69,13 @@ public class AltaDepartamento extends JFrame {
 	private ArrayList<Object>empresas=null;  //  @jve:decl-index=0:
 	private JComboBox<String> jComboBoxNombreEmpresa = null;
 	private JButton jButtonAlta = null;
+	private JScrollPane jScrollPaneDepto = null;
+	private JTable jTableDeptos = null;
 
 	/**
 	 * This is the default constructor
 	 */
-	public AltaDepartamento() {
+	public ModifDepartamento() {
 		
 		super();
 		initialize();
@@ -82,9 +87,10 @@ public class AltaDepartamento extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(792, 504);
+		this.setSize(1146, 639);
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/iconos/Departamento.png")));
 		this.setContentPane(getJContentPane());
-		this.setTitle("Alta de Establecimientos");
+		this.setTitle("Modificación de Departamentos");
 		Empresa emp=new Empresa();
 		empresas=Hibernate.DameListaDeObjetos("select cuit_cuip from empresa", emp);
 		
@@ -112,6 +118,7 @@ public class AltaDepartamento extends JFrame {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
 			jContentPane.add(getJPanelAltaEstablecimientos(), null);
+			jContentPane.add(getJScrollPaneDepto(), null);
 		}
 		return jContentPane;
 	}
@@ -124,59 +131,59 @@ public class AltaDepartamento extends JFrame {
 	private JPanel getJPanelAltaEstablecimientos() {
 		if (jPanelAltaEstablecimientos == null) {
 			jLabelCUITVALOR = new JLabel();
-			jLabelCUITVALOR.setBounds(new Rectangle(441, 2, 312, 29));
+			jLabelCUITVALOR.setBounds(new Rectangle(467, 78, 312, 29));
 			jLabelCUITVALOR.setText("");
 			jLabelCuit = new JLabel();
-			jLabelCuit.setBounds(new Rectangle(377, 1, 62, 29));
+			jLabelCuit.setBounds(new Rectangle(403, 77, 62, 29));
 			jLabelCuit.setText("CUIT/CUIP");
 			jLabelRutaCertificado = new JLabel();
-			jLabelRutaCertificado.setBounds(new Rectangle(18, 425, 743, 25));
+			jLabelRutaCertificado.setBounds(new Rectangle(8, 303, 743, 25));
 			jLabelRutaCertificado.setText("Ruta al certificado");
 			jLabelCertificado = new JLabel();
-			jLabelCertificado.setBounds(new Rectangle(17, 390, 301, 30));
+			jLabelCertificado.setBounds(new Rectangle(7, 268, 301, 30));
 			jLabelCertificado.setText("Certiificado              ====>");
 			jLabelTipoZona = new JLabel();
-			jLabelTipoZona.setBounds(new Rectangle(13, 64, 301, 25));
+			jLabelTipoZona.setBounds(new Rectangle(405, 10, 301, 25));
 			jLabelTipoZona.setIcon(new ImageIcon(getClass().getResource("/iconos/Info.png")));
 			jLabelTipoZona.setText("Tipo de Zona");
 			jLabelTelefono = new JLabel();
-			jLabelTelefono.setBounds(new Rectangle(380, 319, 301, 30));
+			jLabelTelefono.setBounds(new Rectangle(780, 211, 301, 30));
 			jLabelTelefono.setIcon(new ImageIcon(getClass().getResource("/iconos/Phone-icon.png")));
 			jLabelTelefono.setText("Telefono");
 			jLabelEmail = new JLabel();
-			jLabelEmail.setBounds(new Rectangle(13, 318, 301, 31));
+			jLabelEmail.setBounds(new Rectangle(3, 196, 301, 31));
 			jLabelEmail.setIcon(new ImageIcon(getClass().getResource("/iconos/Email.png")));
 			jLabelEmail.setText("Email");
 			jLabelNombreDepto = new JLabel();
-			jLabelNombreDepto.setBounds(new Rectangle(13, 121, 301, 31));
+			jLabelNombreDepto.setBounds(new Rectangle(779, 6, 301, 31));
 			jLabelNombreDepto.setText("Nombre del Departamento");
 			jLabelDepartamento = new JLabel();
-			jLabelDepartamento.setBounds(new Rectangle(13, 188, 301, 31));
+			jLabelDepartamento.setBounds(new Rectangle(3, 66, 301, 31));
 			jLabelDepartamento.setText("Departamento Nro");
 			jLabelCP = new JLabel();
-			jLabelCP.setBounds(new Rectangle(380, 187, 301, 30));
+			jLabelCP.setBounds(new Rectangle(780, 79, 301, 30));
 			jLabelCP.setText("CP/CPA");
 			jLabelProvincia = new JLabel();
-			jLabelProvincia.setBounds(new Rectangle(380, 121, 301, 30));
+			jLabelProvincia.setBounds(new Rectangle(406, 197, 301, 30));
 			jLabelProvincia.setText("Provincia");
 			jLabelLocalidad = new JLabel();
-			jLabelLocalidad.setBounds(new Rectangle(380, 253, 301, 30));
+			jLabelLocalidad.setBounds(new Rectangle(780, 145, 301, 30));
 			jLabelLocalidad.setText("Localidad");
 			jLabeldomicilio = new JLabel();
-			jLabeldomicilio.setBounds(new Rectangle(380, 55, 301, 30));
+			jLabeldomicilio.setBounds(new Rectangle(406, 131, 301, 30));
 			jLabeldomicilio.setIcon(new ImageIcon(getClass().getResource("/iconos/Departamento.png")));
 			jLabeldomicilio.setText("Domicilio");
 			jLabelSuperficie = new JLabel();
-			jLabelSuperficie.setBounds(new Rectangle(13, 252, 301, 31));
+			jLabelSuperficie.setBounds(new Rectangle(3, 130, 301, 31));
 			jLabelSuperficie.setText("Superficie en Metros Cuadrados (nro decimal)");
 			jLabelNombre = new JLabel();
-			jLabelNombre.setBounds(new Rectangle(13, -1, 301, 31));
+			jLabelNombre.setBounds(new Rectangle(2, 2, 301, 31));
 			jLabelNombre.setIcon(new ImageIcon(getClass().getResource("/iconos/Profile.png")));
 			jLabelNombre.setText("Nombre de la Empresa");
 			
 			jPanelAltaEstablecimientos = new JPanel();
 			jPanelAltaEstablecimientos.setLayout(null);
-			jPanelAltaEstablecimientos.setBounds(new Rectangle(10, 8, 763, 458));
+			jPanelAltaEstablecimientos.setBounds(new Rectangle(7, 273, 1104, 335));
 			jPanelAltaEstablecimientos.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 			jPanelAltaEstablecimientos.add(jLabelNombre, null);
 			jPanelAltaEstablecimientos.add(jLabelSuperficie, null);
@@ -218,7 +225,7 @@ public class AltaDepartamento extends JFrame {
 	private JTextField getJTextFieldMetrosCuadrados() {
 		if (jTextFieldMetrosCuadrados == null) {
 			jTextFieldMetrosCuadrados = new JTextField();
-			jTextFieldMetrosCuadrados.setBounds(new Rectangle(13, 285, 301, 31));
+			jTextFieldMetrosCuadrados.setBounds(new Rectangle(3, 163, 301, 31));
 		}
 		return jTextFieldMetrosCuadrados;
 	}
@@ -231,7 +238,7 @@ public class AltaDepartamento extends JFrame {
 	private JTextField getJTextFieldDepartamentoNro() {
 		if (jTextFieldDepartamentoNro == null) {
 			jTextFieldDepartamentoNro = new JTextField();
-			jTextFieldDepartamentoNro.setBounds(new Rectangle(13, 217, 301, 31));
+			jTextFieldDepartamentoNro.setBounds(new Rectangle(3, 95, 301, 31));
 		}
 		return jTextFieldDepartamentoNro;
 	}
@@ -244,7 +251,7 @@ public class AltaDepartamento extends JFrame {
 	private JTextField getJTextFieldNombreDepto() {
 		if (jTextFieldNombreDepto == null) {
 			jTextFieldNombreDepto = new JTextField();
-			jTextFieldNombreDepto.setBounds(new Rectangle(13, 153, 301, 31));
+			jTextFieldNombreDepto.setBounds(new Rectangle(779, 38, 301, 31));
 		}
 		return jTextFieldNombreDepto;
 	}
@@ -257,7 +264,7 @@ public class AltaDepartamento extends JFrame {
 	private JTextField getJTextFieldEmail() {
 		if (jTextFieldEmail == null) {
 			jTextFieldEmail = new JTextField();
-			jTextFieldEmail.setBounds(new Rectangle(13, 351, 301, 31));
+			jTextFieldEmail.setBounds(new Rectangle(3, 229, 301, 31));
 		}
 		return jTextFieldEmail;
 	}
@@ -270,7 +277,7 @@ public class AltaDepartamento extends JFrame {
 	private JTextField getJTextFieldDomicilio() {
 		if (jTextFieldDomicilio == null) {
 			jTextFieldDomicilio = new JTextField();
-			jTextFieldDomicilio.setBounds(new Rectangle(380, 88, 301, 30));
+			jTextFieldDomicilio.setBounds(new Rectangle(406, 164, 301, 30));
 		}
 		return jTextFieldDomicilio;
 	}
@@ -283,7 +290,7 @@ public class AltaDepartamento extends JFrame {
 	private JTextField getJTextFieldProvincia() {
 		if (jTextFieldProvincia == null) {
 			jTextFieldProvincia = new JTextField();
-			jTextFieldProvincia.setBounds(new Rectangle(380, 154, 301, 30));
+			jTextFieldProvincia.setBounds(new Rectangle(406, 230, 301, 30));
 		}
 		return jTextFieldProvincia;
 	}
@@ -296,7 +303,7 @@ public class AltaDepartamento extends JFrame {
 	private JTextField getJTextFieldCpPA() {
 		if (jTextFieldCpPA == null) {
 			jTextFieldCpPA = new JTextField();
-			jTextFieldCpPA.setBounds(new Rectangle(380, 217, 301, 30));
+			jTextFieldCpPA.setBounds(new Rectangle(780, 109, 301, 30));
 		}
 		return jTextFieldCpPA;
 	}
@@ -309,7 +316,7 @@ public class AltaDepartamento extends JFrame {
 	private JTextField getJTextFieldLocalidad() {
 		if (jTextFieldLocalidad == null) {
 			jTextFieldLocalidad = new JTextField();
-			jTextFieldLocalidad.setBounds(new Rectangle(380, 286, 301, 30));
+			jTextFieldLocalidad.setBounds(new Rectangle(780, 178, 301, 30));
 		}
 		return jTextFieldLocalidad;
 	}
@@ -322,7 +329,7 @@ public class AltaDepartamento extends JFrame {
 	private JTextField getJTextFieldTelefono() {
 		if (jTextFieldTelefono == null) {
 			jTextFieldTelefono = new JTextField();
-			jTextFieldTelefono.setBounds(new Rectangle(380, 352, 301, 30));
+			jTextFieldTelefono.setBounds(new Rectangle(780, 244, 301, 30));
 		}
 		return jTextFieldTelefono;
 	}
@@ -335,7 +342,7 @@ public class AltaDepartamento extends JFrame {
 	private JComboBox<String> getJComboBoxTipoZona() {
 		if (jComboBoxTipoZona == null) {
 			jComboBoxTipoZona = new JComboBox<String>();
-			jComboBoxTipoZona.setBounds(new Rectangle(13, 90, 301, 31));
+			jComboBoxTipoZona.setBounds(new Rectangle(405, 36, 301, 31));
 			jComboBoxTipoZona.addItem("Zona Residencial exclusiva");
 			jComboBoxTipoZona.addItem("Zona Industrial exclusiva");
 			jComboBoxTipoZona.addItem("Zona Residencial mixta");
@@ -355,7 +362,7 @@ public class AltaDepartamento extends JFrame {
 	private JButton getJButtonCertificado() {
 		if (jButtonCertificado == null) {
 			jButtonCertificado = new JButton();
-			jButtonCertificado.setBounds(new Rectangle(323, 389, 50, 32));
+			jButtonCertificado.setBounds(new Rectangle(313, 267, 50, 32));
 			jButtonCertificado.setIcon(new ImageIcon(getClass().getResource("/iconos/Modify.png")));
 			jButtonCertificado.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -384,7 +391,7 @@ public class AltaDepartamento extends JFrame {
 	private JComboBox<String>getJComboBoxNombreEmpresa() {
 		if (jComboBoxNombreEmpresa == null) {
 			jComboBoxNombreEmpresa = new JComboBox<String>();
-			jComboBoxNombreEmpresa.setBounds(new Rectangle(14, 32, 300, 29));
+			jComboBoxNombreEmpresa.setBounds(new Rectangle(3, 35, 300, 29));
 			jComboBoxNombreEmpresa.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{
@@ -407,7 +414,7 @@ public class AltaDepartamento extends JFrame {
 	private JButton getJButtonAlta() {
 		if (jButtonAlta == null) {
 			jButtonAlta = new JButton();
-			jButtonAlta.setBounds(new Rectangle(613, 388, 145, 33));
+			jButtonAlta.setBounds(new Rectangle(936, 283, 145, 33));
 			jButtonAlta.setIcon(new ImageIcon(getClass().getResource("/iconos/Save.png")));
 			jButtonAlta.setText("Dar de Alta");
 			jButtonAlta.addActionListener(new java.awt.event.ActionListener() {
@@ -478,4 +485,30 @@ public class AltaDepartamento extends JFrame {
 		return jButtonAlta;
 	}
 
-}  //  @jve:decl-index=0:visual-constraint="10,10"
+	/**
+	 * This method initializes jScrollPaneDepto	
+	 * 	
+	 * @return javax.swing.JScrollPane	
+	 */
+	private JScrollPane getJScrollPaneDepto() {
+		if (jScrollPaneDepto == null) {
+			jScrollPaneDepto = new JScrollPane();
+			jScrollPaneDepto.setBounds(new Rectangle(4, 7, 1110, 250));
+			jScrollPaneDepto.setViewportView(getJTableDeptos());
+		}
+		return jScrollPaneDepto;
+	}
+
+	/**
+	 * This method initializes jTableDeptos	
+	 * 	
+	 * @return javax.swing.JTable	
+	 */
+	private JTable getJTableDeptos() {
+		if (jTableDeptos == null) {
+			jTableDeptos = new JTable();
+		}
+		return jTableDeptos;
+	}
+
+}  //  @jve:decl-index=0:visual-constraint="10,-71"

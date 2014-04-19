@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import javax.swing.JLabel;
 import java.awt.Rectangle;
 
+@SuppressWarnings("unused")
 public class PantallaConsultaHistoriaAuditorias extends JFrame {
 
 	private static final long serialVersionUID = 1L;

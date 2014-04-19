@@ -15,9 +15,11 @@ import javax.swing.JMenuItem;
 import pantallasABM.AltaEmpleado;
 import pantallasABM.AltaEmpresa;
 import pantallasABM.AltaDepartamento;
+import pantallasABM.ModifEmpresa;
 import pantallasNoConformidad.PlanillaNoConformidad;
 import pantallasNoConformidad.SeguimientoNoconformidad;
 
+@SuppressWarnings("unused")
 public class PantallaPpal extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -36,6 +38,8 @@ public class PantallaPpal extends JFrame {
 	private JMenuItem jMenuItemAltasEmpresas = null;
 	private JMenuItem jMenuItemAltasEstablecimientos = null;
 	private JMenuItem jMenuItemAltaEmpleado = null;
+	private JMenu jMenuModificaciones = null;
+	private JMenuItem jMenuItemEmpresa = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -160,6 +164,7 @@ public class PantallaPpal extends JFrame {
 			jMenuABM = new JMenu();
 			jMenuABM.setText("ABM");
 			jMenuABM.add(getJMenuAltas());
+			jMenuABM.add(getJMenuModificaciones());
 		}
 		return jMenuABM;
 	}
@@ -264,7 +269,7 @@ public class PantallaPpal extends JFrame {
 	private JMenuItem getJMenuItemAltasEstablecimientos() {
 		if (jMenuItemAltasEstablecimientos == null) {
 			jMenuItemAltasEstablecimientos = new JMenuItem();
-			jMenuItemAltasEstablecimientos.setText("Establecimientos");
+			jMenuItemAltasEstablecimientos.setText("Departamentos");
 			jMenuItemAltasEstablecimientos
 					.addActionListener(new java.awt.event.ActionListener() {
 						public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -293,6 +298,39 @@ public class PantallaPpal extends JFrame {
 			});
 		}
 		return jMenuItemAltaEmpleado;
+	}
+
+	/**
+	 * This method initializes jMenuModificaciones	
+	 * 	
+	 * @return javax.swing.JMenu	
+	 */
+	private JMenu getJMenuModificaciones() {
+		if (jMenuModificaciones == null) {
+			jMenuModificaciones = new JMenu();
+			jMenuModificaciones.setText("Modificaciones");
+			jMenuModificaciones.add(getJMenuItemEmpresa());
+		}
+		return jMenuModificaciones;
+	}
+
+	/**
+	 * This method initializes jMenuItemEmpresa	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItemEmpresa() {
+		if (jMenuItemEmpresa == null) {
+			jMenuItemEmpresa = new JMenuItem();
+			jMenuItemEmpresa.setText("Empresas");
+			jMenuItemEmpresa.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					ModifEmpresa modemp=new ModifEmpresa();
+					modemp.setVisible(true);
+				}
+			});
+		}
+		return jMenuItemEmpresa;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

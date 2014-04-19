@@ -26,6 +26,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 
+@SuppressWarnings("unused")
 public class AltaEmpresa extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -183,7 +184,7 @@ public class AltaEmpresa extends JFrame {
 						String domicilio=jTextFieldDomicilio.getText();
 						String localidad=jTextFieldlLocalidad.getText();
 						String actividad_economica=jTextFieldActEconomica.getText();
-						String cp_cpa=jTextFieldCodigoPostal.getText();
+						int cp_cpa=Integer.parseInt(jTextFieldCodigoPostal.getText());
 						String provincia=jTextFieldProvincia.getText();
 						String contrato=jTextFieldContrato.getText();
 						String eMail=jTextFieldEmail.getText();

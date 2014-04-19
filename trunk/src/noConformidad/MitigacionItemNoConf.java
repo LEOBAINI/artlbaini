@@ -3,7 +3,7 @@ package noConformidad;
 public class MitigacionItemNoConf {
 	
 	private long idmitigacion_item_no_conf;
-	private long clienteDeptoNro;
+	private String clienteDeptoNro;
 	private String fechaPrometidaParaMitigacion;
 	private String fechaCumplidaMitigacion;
 	private long nroItem;
@@ -73,12 +73,12 @@ public class MitigacionItemNoConf {
 		this.nroCategoriaItem = nroCategoriaItem;
 	}
 
-	public long getClienteDeptoNro() {
+	public String getClienteDeptoNro() {
 		return clienteDeptoNro;
 	}
 
-	public void setClienteDeptoNro(long clienteDeptoNro) {
-		this.clienteDeptoNro = clienteDeptoNro;
+	public void setClienteDeptoNro(String string) {
+		this.clienteDeptoNro = string;
 	}
 	
 	

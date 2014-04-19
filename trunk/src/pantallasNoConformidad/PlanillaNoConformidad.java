@@ -36,6 +36,9 @@ import persistencia.Hibernate;
 import noConformidad.CategoriaNoConf;
 import noConformidad.ItemNoConf;
 import noConformidad.MitigacionItemNoConf;
+import javax.swing.JComboBox;
+import java.awt.Font;
+import java.awt.ComponentOrientation;
 
 @SuppressWarnings("unused")
 public class PlanillaNoConformidad extends JFrame {
@@ -43,7 +46,6 @@ public class PlanillaNoConformidad extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel jContentPane = null;
 	private JLabel jLabelClientes = null;
-	private Choice choiceClientes = null;
 	private JLabel jLabelCategoriaNoConf = null;
 	private Choice choiceCategorias = null;
 	private JLabel jLabelItemNoConforme = null;
@@ -51,10 +53,6 @@ public class PlanillaNoConformidad extends JFrame {
 	private JScrollPane jScrollPane = null;
 	private JTable jTableNoConformes = null;
 	private JMenuBar jJMenuBarNoConforme = null;
-	private JMenu jMenuAbm = null;
-	private JMenuItem jMenuItemCliente = null;
-	private JMenuItem jMenuItemCategoria = null;
-	private JMenuItem jMenuItems = null;
 	private JButton jButtonCargaMitigacion = null;
 	private JButton jButtonAgregar = null;
 	private JButton jButtonBorrar = null;
@@ -73,6 +71,13 @@ public class PlanillaNoConformidad extends JFrame {
 	private JLabel jLabelNombreTabla1 = null;
 	private JLabel jLabelNombreTabla2 = null;
 	private JLabel jLabelNombreTabla3 = null;
+	private JComboBox<String> jComboBoxEmpresa = null;
+	private JLabel jLabel3NombreEmpresa = null;
+	private JLabel jLabel3Cuit = null;
+	private JTextField jTextFieldCuit = null;
+	private JComboBox <String>jComboBoxCliente = null;
+	private JLabel jLabel3InfoDepto = null;
+	private JLabel jLabel3Depto = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -87,7 +92,7 @@ public class PlanillaNoConformidad extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(1232, 551);
+		this.setSize(1246, 604);
 		this.setJMenuBar(getJJMenuBarNoConforme());
 		this.setContentPane(getJContentPane());
 		this.setTitle("Planilla de no conformidad");
@@ -100,50 +105,62 @@ public class PlanillaNoConformidad extends JFrame {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			jLabel3Depto = new JLabel();
+			jLabel3Depto.setBounds(new Rectangle(217, 81, 46, 33));
+			jLabel3Depto.setIcon(new ImageIcon(getClass().getResource("/iconos/Departamento.png")));
+			jLabel3Depto.setText("");
+			jLabel3InfoDepto = new JLabel();
+			jLabel3InfoDepto.setBounds(new Rectangle(281, 115, 368, 24));
+			jLabel3InfoDepto.setText("");
+			jLabel3Cuit = new JLabel();
+			jLabel3Cuit.setBounds(new Rectangle(6, 57, 199, 25));
+			jLabel3Cuit.setText("Cuit / Cuip nro");
+			jLabel3NombreEmpresa = new JLabel();
+			jLabel3NombreEmpresa.setBounds(new Rectangle(6, 2, 297, 22));
+			jLabel3NombreEmpresa.setText("Nombre de la Empresa");
 			jLabelNombreTabla3 = new JLabel();
-			jLabelNombreTabla3.setBounds(new Rectangle(403, 329, 264, 20));
+			jLabelNombreTabla3.setBounds(new Rectangle(401, 409, 264, 20));
 			jLabelNombreTabla3.setText("");
 			jLabelNombreTabla2 = new JLabel();
 			jLabelNombreTabla2.setText("JLabel");
 			jLabelNombreTabla1 = new JLabel();
-			jLabelNombreTabla1.setBounds(new Rectangle(222, 151, 292, 20));
+			jLabelNombreTabla1.setBounds(new Rectangle(225, 235, 292, 20));
 			jLabelNombreTabla1.setText("");
 			jLabelfotosDeItems = new JLabel();
-			jLabelfotosDeItems.setBounds(new Rectangle(8, 330, 389, 18));
+			jLabelfotosDeItems.setBounds(new Rectangle(9, 410, 389, 18));
 			jLabelfotosDeItems.setText("Descripcion y Fotos de Items seleccionados en el cuadro de arriba. ");
 			jLabelItemsDetectados = new JLabel();
-			jLabelItemsDetectados.setBounds(new Rectangle(6, 151, 203, 21));
+			jLabelItemsDetectados.setBounds(new Rectangle(9, 235, 203, 21));
 			jLabelItemsDetectados.setText("Items detectados con anomalías.");
 			jLabel2 = new JLabel();
-			jLabel2.setBounds(new Rectangle(312, 4, 183, 19));
+			jLabel2.setBounds(new Rectangle(800, 157, 183, 19));
 			jLabel2.setText("Fecha prometida de correccion");
 			jLabelCliente = new JLabel();
-			jLabelCliente.setBounds(new Rectangle(211, 2, 31, 34));
+			jLabelCliente.setBounds(new Rectangle(307, 2, 31, 26));
 			jLabelCliente.setIcon(new ImageIcon(getClass().getResource("/iconos/Profile.png")));
 			jLabelCliente.setText("");
 			jLabel1 = new JLabel();
-			jLabel1.setBounds(new Rectangle(719, 119, 26, 32));
+			jLabel1.setBounds(new Rectangle(722, 203, 26, 32));
 			jLabel1.setIcon(new ImageIcon(getClass().getResource("/iconos/Search.png")));
 			jLabel1.setText("");
 			jLabel1.setDisplayedMnemonic(KeyEvent.VK_UNDEFINED);
 			jLabel = new JLabel();
-			jLabel.setBounds(new Rectangle(717, 74, 29, 27));
+			jLabel.setBounds(new Rectangle(720, 158, 29, 27));
 			jLabel.setDisplayedMnemonic(KeyEvent.VK_UNDEFINED);
 			jLabel.setIcon(new ImageIcon(getClass().getResource("/iconos/Search.png")));
 			jLabel.setText("");
 			jLabelItemNoConforme = new JLabel();
-			jLabelItemNoConforme.setBounds(new Rectangle(3, 102, 255, 22));
+			jLabelItemNoConforme.setBounds(new Rectangle(6, 186, 255, 22));
 			jLabelItemNoConforme.setText("Seleccione Item No conforme");
 			jLabelCategoriaNoConf = new JLabel();
-			jLabelCategoriaNoConf.setBounds(new Rectangle(3, 54, 197, 21));
+			jLabelCategoriaNoConf.setBounds(new Rectangle(6, 138, 197, 21));
 			jLabelCategoriaNoConf.setText("Seleccione Categoria");
 			jLabelClientes = new JLabel();
-			jLabelClientes.setBounds(new Rectangle(2, 2, 203, 20));
-			jLabelClientes.setText("Seleccione Cliente");
+			jLabelClientes.setBounds(new Rectangle(6, 86, 203, 20));
+			jLabelClientes.setText("Seleccione Departamento");
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
 			jContentPane.add(jLabelClientes, null);
-			jContentPane.add(getChoiceClientes(), null);
 			jContentPane.add(jLabelCategoriaNoConf, null);
 			jContentPane.add(getChoiceCategorias(), null);
 			jContentPane.add(jLabelItemNoConforme, null);
@@ -162,48 +179,15 @@ public class PlanillaNoConformidad extends JFrame {
 			jContentPane.add(jLabelNombreTabla1, null);
 			jContentPane.add(jLabelNombreTabla2, null);
 			jContentPane.add(jLabelNombreTabla3, null);
+			jContentPane.add(getJComboBoxEmpresa(), null);
+			jContentPane.add(jLabel3NombreEmpresa, null);
+			jContentPane.add(jLabel3Cuit, null);
+			jContentPane.add(getJTextFieldCuit(), null);
+			jContentPane.add(getJComboBoxCliente(), null);
+			jContentPane.add(jLabel3InfoDepto, null);
+			jContentPane.add(jLabel3Depto, null);
 		}
 		return jContentPane;
-	}
-
-	/**
-	 * This method initializes choiceClientes	
-	 * 	
-	 * @return java.awt.Choice	
-	 */
-	private Choice getChoiceClientes() {
-		if (choiceClientes == null) {
-			choiceClientes = new Choice();
-			choiceClientes.setBounds(new Rectangle(3, 28, 203, 22));
-			
-				
-			choiceClientes.addMouseListener(new java.awt.event.MouseAdapter() {   
-				  
-				public void mousePressed(java.awt.event.MouseEvent e) {    
-					metodosSql metodos=new metodosSql();
-					try {
-						metodos.llenarChoice(choiceClientes, "select TRIM(departamento_nro) from cliente");
-						
-					} catch (SQLException e1) {
-						JOptionPane.showMessageDialog(null, "Hubo un error : "+e1.getMessage());
-						
-					}
-				}
-				
-			});
-			choiceClientes.addKeyListener(new java.awt.event.KeyAdapter() {
-				public void keyPressed(java.awt.event.KeyEvent e) {
-					if (e.getKeyCode()==KeyEvent.VK_ENTER) {
-						jButtonTablaRefresh.doClick();
-					}
-						
-
-				}
-			});
-			
-			
-		}
-		return choiceClientes;
 	}
 
 	/**
@@ -214,7 +198,7 @@ public class PlanillaNoConformidad extends JFrame {
 	private Choice getChoiceCategorias() {
 		if (choiceCategorias == null) {
 			choiceCategorias = new Choice();
-			choiceCategorias.setBounds(new Rectangle(2, 79, 712, 21));
+			choiceCategorias.setBounds(new Rectangle(6, 163, 712, 21));
 			choiceCategorias.addMouseListener(new java.awt.event.MouseAdapter() {   
 				  
 				public void mousePressed(java.awt.event.MouseEvent e) {    
@@ -242,7 +226,7 @@ public class PlanillaNoConformidad extends JFrame {
 	private Choice getChoiceItemsNoConforme() {
 		if (choiceItemsNoConforme == null) {
 			choiceItemsNoConforme = new Choice();
-			choiceItemsNoConforme.setBounds(new Rectangle(3, 129, 711, 21));
+			choiceItemsNoConforme.setBounds(new Rectangle(6, 213, 711, 21));
 			choiceItemsNoConforme.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mousePressed(java.awt.event.MouseEvent e) {
 					metodosSql metodos=new metodosSql();
@@ -269,7 +253,7 @@ public class PlanillaNoConformidad extends JFrame {
 	private JScrollPane getJScrollPane() {
 		if (jScrollPane == null) {
 			jScrollPane = new JScrollPane();
-			jScrollPane.setBounds(new Rectangle(7, 175, 1094, 150));
+			jScrollPane.setBounds(new Rectangle(8, 257, 1094, 150));
 			jScrollPane.setViewportView(getJTableNoConformes());
 		}
 		return jScrollPane;
@@ -289,6 +273,11 @@ public class PlanillaNoConformidad extends JFrame {
 					String idItemNoConf=null;
 					idItemNoConf=jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(),0).toString();
 					String consulta=null;
+					/*consulta="SELECT M.idcomo_mitigar,M.descripcion,M.cumplido as 'ESTA CUMPLIDO'," +
+					" M.fechaCumplido as 'FECHA DE CUMPLIMIENTO',COUNT(H.IDCOMOMITIGAR) AS 'VECES RELEVADO' " +
+					" FROM shiteckhibernate.como_mitigar M,historialrelevamiento H " +
+					" where M.id_item_no_conf ="+idItemNoConf+" AND H.IDCOMOMITIGAR=M.IDCOMO_MITIGAR " +
+					" GROUP BY M.IDCOMO_MITIGAR;";*/
 					consulta="SELECT idcomo_mitigar as id,descripcion as Anomalia_detectada,descripcionFotoBien as Como_solucionar FROM shiteckhibernate.como_mitigar where id_item_no_conf = "+idItemNoConf;
 					metodosSql metodos=new metodosSql();
 					metodos.llenarJtable(jTableFotosDeItems, consulta);
@@ -309,64 +298,8 @@ public class PlanillaNoConformidad extends JFrame {
 	private JMenuBar getJJMenuBarNoConforme() {
 		if (jJMenuBarNoConforme == null) {
 			jJMenuBarNoConforme = new JMenuBar();
-			jJMenuBarNoConforme.add(getJMenuAbm());
 		}
 		return jJMenuBarNoConforme;
-	}
-
-	/**
-	 * This method initializes jMenuAbm	
-	 * 	
-	 * @return javax.swing.JMenu	
-	 */
-	private JMenu getJMenuAbm() {
-		if (jMenuAbm == null) {
-			jMenuAbm = new JMenu();
-			jMenuAbm.setText("ABM");
-			jMenuAbm.add(getJMenuItemCliente());
-			jMenuAbm.add(getJMenuItemCategoria());
-			jMenuAbm.add(getJMenuItems());
-		}
-		return jMenuAbm;
-	}
-
-	/**
-	 * This method initializes jMenuItemCliente	
-	 * 	
-	 * @return javax.swing.JMenuItem	
-	 */
-	private JMenuItem getJMenuItemCliente() {
-		if (jMenuItemCliente == null) {
-			jMenuItemCliente = new JMenuItem();
-			jMenuItemCliente.setText("Clientes");
-		}
-		return jMenuItemCliente;
-	}
-
-	/**
-	 * This method initializes jMenuItemCategoria	
-	 * 	
-	 * @return javax.swing.JMenuItem	
-	 */
-	private JMenuItem getJMenuItemCategoria() {
-		if (jMenuItemCategoria == null) {
-			jMenuItemCategoria = new JMenuItem();
-			jMenuItemCategoria.setText("Categorias");
-		}
-		return jMenuItemCategoria;
-	}
-
-	/**
-	 * This method initializes jMenuItems	
-	 * 	
-	 * @return javax.swing.JMenuItem	
-	 */
-	private JMenuItem getJMenuItems() {
-		if (jMenuItems == null) {
-			jMenuItems = new JMenuItem();
-			jMenuItems.setText("Items");
-		}
-		return jMenuItems;
 	}
 
 	/**
@@ -387,13 +320,11 @@ public class PlanillaNoConformidad extends JFrame {
 						JOptionPane.showMessageDialog(null,"Seleccione una fila para asociar la mitigación");
 					}else{
 					int fila=row;
-					long contenido=Long.parseLong(jTableNoConformes.getValueAt(fila,0).toString());
-					System.out.println(contenido);
+					int itemNoConfNro=Integer.parseInt(jTableNoConformes.getValueAt(fila,0).toString());
+				
 					
+					String cliente=jComboBoxCliente.getSelectedItem().toString();
 					
-					String cliente=choiceClientes.getSelectedItem();
-					long itemNoConfNro=0;
-					itemNoConfNro=contenido;
 					if(cliente!=null && itemNoConfNro!=0){
 						Mitigacion mi=new Mitigacion(cliente,itemNoConfNro);
 						mi.setVisible(true);
@@ -434,7 +365,7 @@ public class PlanillaNoConformidad extends JFrame {
 						hayError=1;
 						
 					}
-					if(choiceClientes.getSelectedItem()==null){
+					if(jComboBoxCliente.getSelectedItem()==null){
 						JOptionPane.showMessageDialog(null,"Seleccione un cliente primero");
 						hayError=1;
 					}
@@ -485,7 +416,7 @@ public class PlanillaNoConformidad extends JFrame {
 					
 					registroNuevoEnTabla.setNroItem(item.getNroItem());
 					
-					registroNuevoEnTabla.setClienteDeptoNro(Integer.parseInt(choiceClientes.getSelectedItem()));
+					registroNuevoEnTabla.setClienteDeptoNro(jComboBoxCliente.getSelectedItem().toString());
 					
 					int status=0;
 					status=Hibernate.guardarObjeto(registroNuevoEnTabla);
@@ -537,16 +468,17 @@ public class PlanillaNoConformidad extends JFrame {
 			jButtonTablaRefresh.setBounds(new Rectangle(4, 38, 174, 20));
 			jButtonTablaRefresh.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
+					try{
 					String consultaSql=null;
 					jLabelNombreTabla1.setText("TABLA= mitigacion_item_no_conf");
-					int nroCliente=0;
-					nroCliente=Integer.parseInt(choiceClientes.getSelectedItem());
+					String nroCliente=null;
+					nroCliente=jComboBoxCliente.getSelectedItem().toString();
 					consultaSql="select `m`.`idmitigacion_item_no_conf` AS `id`,`i`.`nroitem` AS `351`,`i`.`descripcion` AS `descripcion`,`m`.`esta_cumplido` "+
 					" AS `esta_cumplido`,`m`.`fecha_prometida_mitigacion`"+
 					" AS`fecha_prometida_mitigacion`,`m`.`fecha_cumplida_mitigacion`"+ 
 					" AS `fecha_cumplida_mitigacion`,`i`.`norma_vigente`" +
 					" from (`mitigacion_item_no_conf` `m` join `itemnoconf` `i`)" +
-					" where ((`m`.`cliente_depto_nro` = "+nroCliente+") and (`i`.`nroItem` = `m`.`nro_item_no_conf`))";
+					" where ((`m`.`cliente_depto_nro` = '"+nroCliente+"') and (`i`.`nroItem` = `m`.`nro_item_no_conf`))";
 					
 					metodosSql metodos=new metodosSql();
 					metodos.llenarJtable(jTableNoConformes, consultaSql);
@@ -557,6 +489,12 @@ public class PlanillaNoConformidad extends JFrame {
 					
 					ColumnResizer.adjustColumnPreferredWidths(jTableNoConformes);
 					jContentPane.updateUI();
+					}catch(Exception e1){
+						System.out.println("Haciendo nada, entrada inválida");
+						metodosSql metodos=new metodosSql();
+						metodos.vaciarTabla(jTableNoConformes);
+						metodos.vaciarTabla(jTableFotosDeItems);
+					}
 				}
 			});
 		}
@@ -590,7 +528,7 @@ public class PlanillaNoConformidad extends JFrame {
 	private JTextField getJTextFieldFecha() {
 		if (jTextFieldFecha == null) {
 			jTextFieldFecha = new JTextField();
-			jTextFieldFecha.setBounds(new Rectangle(312, 28, 96, 25));
+			jTextFieldFecha.setBounds(new Rectangle(1000, 156, 96, 25));
 			jTextFieldFecha.setEditable(false);
 		}
 		return jTextFieldFecha;
@@ -604,7 +542,7 @@ public class PlanillaNoConformidad extends JFrame {
 	private JButton getJButtonCalendario() {
 		if (jButtonCalendario == null) {
 			jButtonCalendario = new JButton();
-			jButtonCalendario.setBounds(new Rectangle(457, 24, 37, 34));
+			jButtonCalendario.setBounds(new Rectangle(1103, 158, 37, 34));
 			jButtonCalendario.setIcon(new ImageIcon(getClass().getResource("/iconos/calendario.png")));
 			jButtonCalendario.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -624,7 +562,7 @@ public class PlanillaNoConformidad extends JFrame {
 	private JScrollPane getJScrollPane1() {
 		if (jScrollPane1 == null) {
 			jScrollPane1 = new JScrollPane();
-			jScrollPane1.setBounds(new Rectangle(8, 353, 1093, 119));
+			jScrollPane1.setBounds(new Rectangle(8, 431, 1093, 119));
 			jScrollPane1.setViewportView(getJTableFotosDeItems());
 		}
 		return jScrollPane1;
@@ -646,7 +584,7 @@ public class PlanillaNoConformidad extends JFrame {
 					metodosSql metodos=new metodosSql();
 					String consulta="SELECT foto FROM shiteckhibernate.como_mitigar where idcomo_mitigar="+idComo_mitigar;
 					String consulta2="SELECT fotoBien FROM shiteckhibernate.como_mitigar where idcomo_mitigar="+idComo_mitigar;
-					VerFoto fotos=new VerFoto(metodos.dameImagen(consulta, "foto"),metodos.dameImagen(consulta2, "fotoBien"));
+					VerFoto fotos=new VerFoto(metodos.dameImagen(consulta, "foto"),metodos.dameImagen(consulta2, "fotoBien"),Integer.parseInt(idComo_mitigar));
 					fotos.setVisible(true);
 				
 					
@@ -654,6 +592,110 @@ public class PlanillaNoConformidad extends JFrame {
 			});
 		}
 		return jTableFotosDeItems;
+	}
+
+	/**
+	 * This method initializes jComboBoxEmpresa	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */
+	private JComboBox<String> getJComboBoxEmpresa() {
+		if (jComboBoxEmpresa == null) {
+			jComboBoxEmpresa = new JComboBox<String>();
+			jComboBoxEmpresa.setBounds(new Rectangle(6, 30, 502, 25));
+			jComboBoxEmpresa.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					metodosSql metodos=new metodosSql();
+					try { 
+						if(jComboBoxEmpresa.getItemCount()>1){
+							
+						}else{
+						
+						metodos.llenarComboBox(jComboBoxEmpresa,"select nombre from empresa");
+						
+						}
+						
+						
+							
+									
+					} catch (SQLException e1) {
+						JOptionPane.showMessageDialog(null, "Hubo un error : "+e1.getMessage());
+						
+					}
+				}
+			});
+			jComboBoxEmpresa.addItemListener(new java.awt.event.ItemListener() {
+				public void itemStateChanged(java.awt.event.ItemEvent e) {
+					try{
+						metodosSql metodos=new metodosSql();
+						String cuit=null;
+						cuit=metodos.consultarUnaColumna("select cuit_cuip from empresa where nombre= '"+jComboBoxEmpresa.getSelectedItem()+"';").get(0);
+						jTextFieldCuit.setText(cuit);
+						
+						
+					
+						}catch(java.lang.IndexOutOfBoundsException e1){
+							jTextFieldCuit.setText("");
+							
+						}
+				}
+			});
+		}
+		return jComboBoxEmpresa;
+	}
+
+	/**
+	 * This method initializes jTextFieldCuit	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getJTextFieldCuit() {
+		if (jTextFieldCuit == null) {
+			jTextFieldCuit = new JTextField();
+			jTextFieldCuit.setBounds(new Rectangle(212, 56, 277, 25));
+			jTextFieldCuit.setEditable(false);
+			jTextFieldCuit.addCaretListener(new javax.swing.event.CaretListener() {
+				public void caretUpdate(javax.swing.event.CaretEvent e) {
+					metodosSql metodos=new metodosSql();
+					try {
+						
+						metodos.llenarComboBox(jComboBoxCliente, "select idcliente from cliente where empresa_cuit='"+jTextFieldCuit.getText()+"';");
+						if(jComboBoxCliente.getItemCount()>1){
+							jComboBoxCliente.setBackground(Color.GREEN);
+							//System.out.println(jComboBoxCliente.getItemCount()+" ELEMENTOS");
+							jLabel3InfoDepto.setText("Mostrando departamentos de la empresa "+jComboBoxEmpresa.getSelectedItem().toString());
+						}else{
+							jComboBoxCliente.setBackground(Color.white);
+							jLabel3InfoDepto.setText("Esta empresa no tiene departamentos, hágalo con ABM");
+						}
+					
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
+			});
+			
+		}
+		return jTextFieldCuit;
+	}
+
+	/**
+	 * This method initializes jComboBoxCliente	
+	 * 	
+	 * @return javax.swing.JComboBox	
+	 */
+	private JComboBox<String> getJComboBoxCliente() {
+		if (jComboBoxCliente == null) {
+			jComboBoxCliente = new JComboBox<String>();
+			jComboBoxCliente.setBounds(new Rectangle(6, 115, 272, 24));
+			jComboBoxCliente.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					jButtonTablaRefresh.doClick();
+				}
+			});
+		}
+		return jComboBoxCliente;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

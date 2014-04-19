@@ -8,9 +8,12 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import noConformidad.ComoMitigar;
+
 import Base.metodosSql;
 
 import pantallasBase.PantallaPpal;
+import persistencia.Hibernate;
 import reporte.Auditoria;
 import reporte.GeneradorDeReporte;
 
@@ -63,6 +66,8 @@ public class Shiteck {
 		
 		pan.setVisible(true);
 	
+		
+		//metodos.generarAuditoriasDeLaBase(1234567892132,"00:00","00:00","lb","AU4","D:\\Desktop\\2014-04-18Ford MotorsDPnro1234567892132AU4.pdf");
 		
 
 	}
