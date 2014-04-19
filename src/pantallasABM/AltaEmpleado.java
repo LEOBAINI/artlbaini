@@ -23,6 +23,7 @@ import persistencia.Hibernate;
 import Base.metodosSql;
 import ObjetosPersistentes.Empleado;
 
+@SuppressWarnings("unused")
 public class AltaEmpleado extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -62,7 +63,7 @@ public class AltaEmpleado extends JFrame {
 		metodosSql metodos=new metodosSql();
 		try {
 			String consulta="SELECT concat('EMPRESA NOMBRE :', e.nombre,'||NOMBRE DEPTO :' " +
-					" ,c.nombre,'||NRO_DEPTO :',e.cuit_cuip,'/',c.departamento_nro) FROM cliente c,empresa e " +
+					" ,c.nombre,'||NRO_DEPTO :',c.idcliente) FROM cliente c,empresa e " +
 					" where c.empresa_cuit=e.cuit_cuip;";
 			metodos.llenarComboBox(jComboBoxEmpresaDepto,consulta);
 		} catch (SQLException e) {
@@ -244,7 +245,7 @@ public class AltaEmpleado extends JFrame {
 					if(!hayCamposVacios()){
 					String seleccion=jComboBoxEmpresaDepto.getSelectedItem().toString();
 					int ultimoIndice=seleccion.lastIndexOf("NRO_DEPTO :");
-					ultimoIndice=ultimoIndice+11;				
+					ultimoIndice=ultimoIndice+11;//lo que esta después de NRO_DEPTO :				
 					
 					System.out.println(seleccion.substring(ultimoIndice)); // TODO Auto-generated Event stub actionPerformed()
 						
@@ -260,8 +261,10 @@ public class AltaEmpleado extends JFrame {
 					int status=Hibernate.guardarObjeto(emp);
 					if(status==1){
 						JOptionPane.showMessageDialog(null,"Datos guardados OK!");
+						dispose();
 					}else{
 						JOptionPane.showMessageDialog(null,"Error, no se guardaron los datos ");
+						
 					}
 					
 					

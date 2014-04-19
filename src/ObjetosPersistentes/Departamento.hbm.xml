@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<class name="ObjetosPersistentes.Departamento" table="cliente">
+<id name="idCliente" column="idCliente">
+</id>
+
+<property name="nombre"/>
+<property name="departamento_nro"/>
+<property name="email"/>
+<property name="domicilio"/>
+<property name="superficie"/>
+<property name="provincia" />
+<property name="cp_cpa"/>
+<property name="empresa_cuit"/>
+<property name="telefono"/>
+<property name="tipo_zona"/>
+<property name="CertificadoMunicTipoZona"/>
+<property name="localidad"/>
+
+</class>
+</hibernate-mapping>

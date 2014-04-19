@@ -95,11 +95,11 @@ String consulta="SELECT "+
 "mitigacion_item_no_conf M "+
 
 
-"where C.cliente_depto="+clienteDeptoNro+" "+
+"where C.cliente_depto='"+clienteDeptoNro+"' "+
 "and C.id_item_no_conf=I.nroItem " +
 "and C.id_item_no_conf=M.idmitigacion_item_no_conf "+
 "and I.categoriaNro=CAT.idcategoria "+
-"and CLI.departamento_nro=C.cliente_depto " +
+"and CLI.idcliente=C.cliente_depto " +
 
 
 "GROUP BY C.idCOMO_MITIGAR order by C.cumplido desc; ";//GROUP BY C.idCOMO_MITIGAR PK DE COMO MITIGAR
@@ -162,7 +162,7 @@ String consulta="SELECT "+
         		nombreEmpresaCliente = rs.getString("nombre");
         		normaVigente = rs.getString("norma_vigente");
         		metodosSql metodos=new metodosSql();
-        		porcentajeCumplido =metodos.consultarUnaColumna("call porcentajeCumplido("+nroEstablecimiento+")").get(0);
+        		porcentajeCumplido =metodos.consultarUnaColumna("call porcentajeCumplido('"+nroEstablecimiento+"')").get(0);
         		responsable = Nombreresponsable;
         		telefonoCliente = rs.getString("telefono");
         		  Blob blobLogoCli = rs.getBlob("logo");
@@ -262,13 +262,13 @@ String consulta="SELECT "+
 		
 	}
 public int llenarComboBox(JComboBox<String> desplegable,String consultaSQL) throws SQLException{
-		
+	    desplegable.removeAllItems();
 		ArrayList<String>lista;
 		lista=consultarUnaColumna(consultaSQL);
-		desplegable.removeAll();
 		
 		
 		
+		desplegable.addItem("Seleccione...");
 		
 		
 		for(int i=0;i<lista.size();i++)
@@ -521,6 +521,7 @@ public int llenarComboBox(JComboBox<String> desplegable,String consultaSQL) thro
 		
 		
 		ConexionMySql con = new ConexionMySql();
+		System.out.println(SentenciaSql);
 		
 		
 		try {

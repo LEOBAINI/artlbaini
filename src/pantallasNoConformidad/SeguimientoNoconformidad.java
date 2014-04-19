@@ -85,6 +85,8 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JTextField jTextFieldCuit = null;
 	private JCheckBox jCheckBoxPrevisualizar = null;
 	private JLabel jLabelPre = null;
+	private JLabel jLabelveces = null;
+	private JLabel jLabelCantidad = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -131,11 +133,11 @@ public class SeguimientoNoconformidad extends JFrame {
 	 * 
 	 * @param clienteNro 
 	 */
-	private void actualizarPorcentaje(int clienteNro){
-		String nroCliente=String.valueOf(clienteNro);
+	private void actualizarPorcentaje(String clienteNro){
+		
 		metodosSql metodos=new metodosSql();
 		Double porcentajeCumplido=0.0;
-		String SentenciaPorcentaje="call PorcentajeCumplido("+nroCliente+")";
+		String SentenciaPorcentaje="call PorcentajeCumplido('"+clienteNro+"')";
 		porcentajeCumplido=Double.parseDouble(metodos.consultarUnaColumna(SentenciaPorcentaje).get(0).toString());
 		
 		
@@ -155,13 +157,13 @@ public class SeguimientoNoconformidad extends JFrame {
 		int idItemNoConf=0;
 		idItemNoConf=idItemPadre;
 		String consulta=null;
-		// consulta="SELECT idcomo_mitigar as id,descripcion,descripcionfotobien as 'COMO MITIGAR',cumplido as 'ESTA CUMPLIDO',fechaCumplido as 'FECHA DE CUMPLIMIENTO' FROM shiteckhibernate.como_mitigar where id_item_no_conf = "+idItemNoConf;
+		consulta="SELECT idcomo_mitigar as id,descripcion,descripcionfotobien as 'COMO MITIGAR',cumplido as 'ESTA CUMPLIDO',fechaCumplido as 'FECHA DE CUMPLIMIENTO' FROM shiteckhibernate.como_mitigar where id_item_no_conf = "+idItemNoConf;
 		//metodosSql metodos=new metodosSql();
-		consulta="SELECT M.idcomo_mitigar,M.descripcion,M.cumplido as 'ESTA CUMPLIDO'," +
+		/*consulta="SELECT M.idcomo_mitigar,M.descripcion,M.cumplido as 'ESTA CUMPLIDO'," +
 				" M.fechaCumplido as 'FECHA DE CUMPLIMIENTO',COUNT(H.IDCOMOMITIGAR) AS 'VECES RELEVADO' " +
 				" FROM shiteckhibernate.como_mitigar M,historialrelevamiento H " +
 				" where M.id_item_no_conf ="+idItemNoConf+" AND H.IDCOMOMITIGAR=M.IDCOMO_MITIGAR " +
-				" GROUP BY M.IDCOMO_MITIGAR;";
+				" GROUP BY M.IDCOMO_MITIGAR;";*/
 				
 		metodos.llenarJtable(jTableDetalle, consulta);
 		
@@ -179,9 +181,9 @@ public class SeguimientoNoconformidad extends JFrame {
 	 * @param cliente_depto
 	 * @return
 	 */
-	private String totalmenteCumplido(int cliente_depto){
+	private String totalmenteCumplido(long cliente_depto){
 		/*En esta consulta es total detalleitem*100/detalleItemCumplido */
-		String consultaSql="call PorcentajeCumplido("+cliente_depto+")";
+		String consultaSql="call PorcentajeCumplido('"+cliente_depto+"')";
 		metodosSql metodos=new metodosSql();
 		Double cienPorCiento=0.0;
 		cienPorCiento=Double.parseDouble(metodos.consultarUnaColumna(consultaSql).get(0).toString());
@@ -226,7 +228,7 @@ public class SeguimientoNoconformidad extends JFrame {
 		}
 	}
 	
-	private String totalmenteCumplidoItem(int cliente_depto,int nroItemNoConforme){
+	private String totalmenteCumplidoItem(String cliente_depto,int nroItemNoConforme){
 		String estaCumplido="NO SE";
 		try{
 		metodosSql metodos=new metodosSql();
@@ -252,7 +254,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	 * Coloca si o no a un  item dado de la tabla mitigacion_item_no_conf, SI EL IDITEMPADRE=-1, IGNORA LA OPERACION.Cuando no está cumplido itempadre poner null en la fecha.
 	 * 
 	 */
-	private void actualizarItemNoConformeCumplidoSioNo(int clienteNro,int idItemPadre,String estado,String fechaCumplidoPadre){
+	private void actualizarItemNoConformeCumplidoSioNo(String clienteNro,int idItemPadre,String estado,String fechaCumplidoPadre){
 		if(idItemPadre!=-1){
 		String sentenciaSql=null;
 		
@@ -261,7 +263,7 @@ public class SeguimientoNoconformidad extends JFrame {
 			sentenciaSql="update shiteckhibernate.mitigacion_item_no_conf set esta_cumplido='"+estado+"',fecha_cumplida_mitigacion='"+fechaCumplidoPadre+"' where cliente_depto_nro="+clienteNro+" "+
 				" and idmitigacion_item_no_conf="+idItemPadre+";";
 		}else{
-			sentenciaSql="update shiteckhibernate.mitigacion_item_no_conf set esta_cumplido='"+estado+"',fecha_cumplida_mitigacion=null where cliente_depto_nro="+clienteNro+" "+
+			sentenciaSql="update shiteckhibernate.mitigacion_item_no_conf set esta_cumplido='"+estado+"',fecha_cumplida_mitigacion=null where cliente_depto_nro='"+clienteNro+"' "+
 			" and idmitigacion_item_no_conf="+idItemPadre+";";
 			
 		}
@@ -282,19 +284,18 @@ public class SeguimientoNoconformidad extends JFrame {
 		
 
 	
-	private void actualizarTablaItemsNoConformes(int clienteNro){
+	private void actualizarTablaItemsNoConformes(String clienteNro){
 		jTableNoConformes.removeAll();
 		String consultaSql=null;
 		jTextFieldObjCumplidos.removeAll();
 		metodosSql metodos=new metodosSql();
-		int nroCliente=0;
-		nroCliente=clienteNro;
+		
 		consultaSql="select `m`.`idmitigacion_item_no_conf` AS `id`,`i`.`nroitem` AS `351`,`i`.`descripcion` AS `descripcion`,`m`.`esta_cumplido` "+
 		" AS `esta_cumplido`,`m`.`fecha_prometida_mitigacion`"+
 		" AS`fecha_prometida_mitigacion`,`m`.`fecha_cumplida_mitigacion`"+ 
 		" AS `fecha_cumplida_mitigacion`,`i`.`norma_vigente`" +
 		" from (`mitigacion_item_no_conf` `m` join `itemnoconf` `i`)" +
-		" where ((`m`.`cliente_depto_nro` = "+nroCliente+") and (`i`.`nroItem` = `m`.`nro_item_no_conf`))";
+		" where ((`m`.`cliente_depto_nro` = '"+clienteNro+"') and (`i`.`nroItem` = `m`.`nro_item_no_conf`))";
 		//actualizarPorcentaje();
 		metodos.llenarJtable(jTableNoConformes, consultaSql);
 		
@@ -340,7 +341,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	 * @param cumplidoSubItemSiNo
 	 */
 	
-	private void actualizarTodo(int clienteNro, int idItemPadre,String cumplidoItemPadreSiNo, int idSubItem, String cumplidoSubItemSiNo,String fechaCumplido) {
+	private void actualizarTodo(String clienteNro, int idItemPadre,String cumplidoItemPadreSiNo, int idSubItem, String cumplidoSubItemSiNo,String fechaCumplido) {
 		
 		
 		
@@ -487,6 +488,7 @@ public class SeguimientoNoconformidad extends JFrame {
 					int idTablaPadre=0;
 					idTablaPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
 					actualizarTablaDetalle(idTablaPadre);
+					jLabelCantidad.setText("");
 					metodosSql metodos=new metodosSql();
 					metodos.vaciarTabla(jTableStatus);
 				}
@@ -531,6 +533,7 @@ public class SeguimientoNoconformidad extends JFrame {
 			jTableDetalle = new JTable();
 			jTableDetalle.addMouseListener(new java.awt.event.MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
+					jLabelCantidad.setText("");
 
 					try{
 					/*SELECT * FROM shiteckhibernate.auditoria where auditorianro in
@@ -538,6 +541,9 @@ public class SeguimientoNoconformidad extends JFrame {
 					int idComomitigar=Integer.parseInt(jTableDetalle.getValueAt(jTableDetalle.getSelectedRow(),0).toString());
 					
 					actualizarTablaStatusItemNoConforme(idComomitigar);
+					try{
+					jLabelCantidad.setText(String.valueOf(jTableStatus.getRowCount()));
+					}catch(Exception r){}
 					}catch(Exception e1){
 						JOptionPane.showMessageDialog(null,"Error action listener al llenar tabla status "+e1.getMessage());
 						e1.printStackTrace();
@@ -590,7 +596,7 @@ public class SeguimientoNoconformidad extends JFrame {
 			jButtonCumplido.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 				try{	
-					int clienteNro=Integer.parseInt(choiceCliente.getSelectedItem());
+					String clienteNro=choiceCliente.getSelectedItem();
 					
 					int idItemPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
 					
@@ -673,11 +679,9 @@ public class SeguimientoNoconformidad extends JFrame {
 						System.out.println("cambio");
 						
 						String clienteNro=choiceCliente.getSelectedItem();
-						actualizarTablaItemsNoConformes(Integer.parseInt(clienteNro));
-						actualizarPorcentaje(Integer.parseInt(clienteNro));
-						System.out.println("Presed2");
+						actualizarTablaItemsNoConformes(clienteNro);
+						actualizarPorcentaje(clienteNro);
 						
-						System.out.println("Presed3");
 						
 						}catch(Exception e1){
 							//System.out.println(e1.getMessage());
@@ -715,7 +719,7 @@ public class SeguimientoNoconformidad extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					
 					try{	
-						int clienteNro=Integer.parseInt(choiceCliente.getSelectedItem());
+						String clienteNro=choiceCliente.getSelectedItem();
 						
 						int idItemPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
 						
@@ -772,6 +776,12 @@ public class SeguimientoNoconformidad extends JFrame {
 	 */
 	private JPanel getJPanelDetalles() {
 		if (jPanelDetalles == null) {
+			jLabelCantidad = new JLabel();
+			jLabelCantidad.setBounds(new Rectangle(441, 147, 95, 23));
+			jLabelCantidad.setText("");
+			jLabelveces = new JLabel();
+			jLabelveces.setBounds(new Rectangle(324, 147, 114, 23));
+			jLabelveces.setText("Veces relevado =");
 			jPanelDetalles = new JPanel();
 			jPanelDetalles.setLayout(null);
 			jPanelDetalles.setBounds(new Rectangle(13, 261, 1237, 323));
@@ -782,6 +792,8 @@ public class SeguimientoNoconformidad extends JFrame {
 			jPanelDetalles.add(getJButtonNoOk(), null);
 			jPanelDetalles.add(getJButtonCumplido(), null);
 			jPanelDetalles.add(jLabelDetalleItemsNoConformes, null);
+			jPanelDetalles.add(jLabelveces, null);
+			jPanelDetalles.add(jLabelCantidad, null);
 		}
 		return jPanelDetalles;
 	}
@@ -873,10 +885,13 @@ public class SeguimientoNoconformidad extends JFrame {
 						confirm=JOptionPane.showConfirmDialog(null,"IMPORTANTE, si genera 2 auditorias con el mismo número de auditoría para el mismo cliente y mismo depto, la última sustituye a la anterior","¿Desea continuar?",JOptionPane.YES_NO_OPTION);
 						if(confirm==0){
 						//System.out.println(confirm);
-						String clienteDeptpNro=choiceCliente.getSelectedItem();
+						String sclienteDeptpNro=choiceCliente.getSelectedItem();
+						String clienteDeptpNro=sclienteDeptpNro;
 						String responsable=jTextFieldResponsable.getText();
 						String auditoriaNro="AU"+jTextFieldAudNro.getText();
 						String fecha=jTextFieldFecha.getText();
+						String scuit=jTextFieldCuit.getText();
+						String cuit=scuit;
 						
 						String rutaCarpeta=null;
 						FileChooser examinar=new FileChooser();
@@ -891,7 +906,7 @@ public class SeguimientoNoconformidad extends JFrame {
 						
 						
 					metodosSql metodos=new metodosSql();
-					String consultaNombreEmp="SELECT nombre FROM shiteckhibernate.empresa where cuit_cuip=(SELECT empresa_cuit  FROM shiteckhibernate.cliente where departamento_nro='"+clienteDeptpNro+"')";
+					String consultaNombreEmp="SELECT nombre FROM shiteckhibernate.empresa where cuit_cuip=(SELECT empresa_cuit  FROM shiteckhibernate.cliente where idcliente='"+clienteDeptpNro+"')";
 					String empresaNombre=metodos.consultarUnaColumna(consultaNombreEmp).get(0);
 					String rutaFull=rutaCarpeta+"\\"+fecha+empresaNombre+"DPnro"+clienteDeptpNro+auditoriaNro+".pdf";
 					System.out.println(rutaFull);
@@ -899,7 +914,7 @@ public class SeguimientoNoconformidad extends JFrame {
 					String horaOut=choiceHoraOut.getSelectedItem()+":"+choiceMinutoOut.getSelectedItem();
 					
 				    
-					metodos.insertarOmodif(	"call insertarEnHistorialYauditoria("+auditoriaNro.replaceAll("AU","")+","+clienteDeptpNro+",28737766,'"+fecha+"','"+horaIn+"','"+horaOut+"');");
+					metodos.insertarOmodif(	"call insertarEnHistorialYauditoria("+auditoriaNro.replaceAll("AU","")+",'"+clienteDeptpNro+"','"+cuit+"','"+fecha+"','"+horaIn+"','"+horaOut+"');");
 					
 					metodos.generarAuditoriasDeLaBase(clienteDeptpNro,horaIn,horaOut,responsable,auditoriaNro,rutaFull);	
 					
@@ -991,7 +1006,7 @@ public class SeguimientoNoconformidad extends JFrame {
 					jTextFieldObjCumplidos.setText("");
 					
 					actualizarTablaDetalle(-1);
-					actualizarTablaItemsNoConformes(-1);
+					//actualizarTablaItemsNoConformes(-1);
 					actualizarTablaStatusItemNoConforme(-1);
 					
 					}catch(java.lang.IndexOutOfBoundsException e1){
@@ -1160,7 +1175,7 @@ public class SeguimientoNoconformidad extends JFrame {
 					metodosSql metodos=new metodosSql();
 					try {
 						
-						metodos.llenarChoice(choiceCliente, "select TRIM(departamento_nro) from cliente where empresa_cuit='"+jTextFieldCuit.getText()+"';");
+						metodos.llenarChoice(choiceCliente, "select idcliente from cliente where empresa_cuit='"+jTextFieldCuit.getText()+"';");
 						if(choiceCliente.getItemCount()>1){
 							choiceCliente.setBackground(Color.GREEN);
 							System.out.println(choiceCliente.getItemCount()+" ELEMENTOS");

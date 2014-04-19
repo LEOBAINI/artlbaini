@@ -42,6 +42,7 @@
     <mapping resource="noConformidad/MitigacionItemNoConf.hbm.xml"/>
     <mapping resource="ObjetosPersistentes/Empresa.hbm.xml"/>
     <mapping resource="ObjetosPersistentes/Empleado.hbm.xml"/>
+    <mapping resource="ObjetosPersistentes/Departamento.hbm.xml"/>
  
   </session-factory>
  

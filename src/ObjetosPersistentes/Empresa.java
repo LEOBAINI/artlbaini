@@ -1,8 +1,10 @@
 package ObjetosPersistentes;
 
+
+
 import javax.swing.JOptionPane;
 
-public class Empresa {
+public class Empresa   {
 	
 	
 	String cuit_cuip;//, varchar(50), NO, PRI, , 
@@ -19,11 +21,10 @@ public class Empresa {
 	public Empresa() {
 	
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public String noHayVacios(){
-		if(this.cuit_cuip.isEmpty())
-			return "cuit_cuip";
+		
 		if(this.nombre.isEmpty())
 			return "nombre";
 		if(this.domicilio.isEmpty())
@@ -85,12 +86,10 @@ public class Empresa {
 	public int getCp_cpa() {
 		return cp_cpa;
 	}
-	public void setCp_cpa(String cp_cpa) {
-		try{
-		this.cp_cpa = Integer.parseInt(cp_cpa);
-		}catch(NumberFormatException e){
-			e.getMessage();
-		}
+	public void setCp_cpa(int cp_cpa) {
+		
+		this.cp_cpa =cp_cpa;
+		
 	}
 	public String getProvincia() {
 		return provincia;
