@@ -31,6 +31,8 @@ import ObjetosPersistentes.Empresa;
 import java.awt.Toolkit;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JRadioButton;
+import javax.swing.JCheckBox;
 
 @SuppressWarnings("unused")
 public class ModifDepartamento extends JFrame {
@@ -58,7 +60,6 @@ public class ModifDepartamento extends JFrame {
 	private JTextField jTextFieldCpPA = null;
 	private JTextField jTextFieldLocalidad = null;	
 	private JTextField jTextFieldTelefono = null;
-	private JLabel jLabelCUITVALOR = null;
 	private JLabel jLabelTipoZona = null;
 	private JComboBox <String>jComboBoxTipoZona = null;
 	private JLabel jLabelCertificado = null;
@@ -71,7 +72,10 @@ public class ModifDepartamento extends JFrame {
 	private JButton jButtonAlta = null;
 	private JScrollPane jScrollPaneDepto = null;
 	private JTable jTableDeptos = null;
-
+	private JTextField jTextFieldCuit = null;
+	private JButton jButtonBorrarDepto = null;
+	private JCheckBox jCheckBoxBorrado = null;
+	private JLabel jLabelHabilitarBorrado = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -87,12 +91,14 @@ public class ModifDepartamento extends JFrame {
 	 * @return void
 	 */
 	private void initialize() {
-		this.setSize(1146, 639);
+		this.setSize(1146, 674);
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/iconos/Departamento.png")));
 		this.setContentPane(getJContentPane());
 		this.setTitle("Modificación de Departamentos");
 		Empresa emp=new Empresa();
 		empresas=Hibernate.DameListaDeObjetos("select cuit_cuip from empresa", emp);
+		metodosSql metodos=new metodosSql();
+		metodos.llenarJtable(jTableDeptos, "select * from cliente");
 		
 		
 		try {
@@ -130,20 +136,20 @@ public class ModifDepartamento extends JFrame {
 	 */
 	private JPanel getJPanelAltaEstablecimientos() {
 		if (jPanelAltaEstablecimientos == null) {
-			jLabelCUITVALOR = new JLabel();
-			jLabelCUITVALOR.setBounds(new Rectangle(467, 78, 312, 29));
-			jLabelCUITVALOR.setText("");
+			jLabelHabilitarBorrado = new JLabel();
+			jLabelHabilitarBorrado.setBounds(new Rectangle(777, 326, 116, 29));
+			jLabelHabilitarBorrado.setText(" Habilitar Borrado");
 			jLabelCuit = new JLabel();
-			jLabelCuit.setBounds(new Rectangle(403, 77, 62, 29));
+			jLabelCuit.setBounds(new Rectangle(396, 79, 62, 29));
 			jLabelCuit.setText("CUIT/CUIP");
 			jLabelRutaCertificado = new JLabel();
-			jLabelRutaCertificado.setBounds(new Rectangle(8, 303, 743, 25));
+			jLabelRutaCertificado.setBounds(new Rectangle(7, 339, 743, 25));
 			jLabelRutaCertificado.setText("Ruta al certificado");
 			jLabelCertificado = new JLabel();
-			jLabelCertificado.setBounds(new Rectangle(7, 268, 301, 30));
+			jLabelCertificado.setBounds(new Rectangle(7, 304, 301, 30));
 			jLabelCertificado.setText("Certiificado              ====>");
 			jLabelTipoZona = new JLabel();
-			jLabelTipoZona.setBounds(new Rectangle(405, 10, 301, 25));
+			jLabelTipoZona.setBounds(new Rectangle(396, 6, 301, 31));
 			jLabelTipoZona.setIcon(new ImageIcon(getClass().getResource("/iconos/Info.png")));
 			jLabelTipoZona.setText("Tipo de Zona");
 			jLabelTelefono = new JLabel();
@@ -151,39 +157,39 @@ public class ModifDepartamento extends JFrame {
 			jLabelTelefono.setIcon(new ImageIcon(getClass().getResource("/iconos/Phone-icon.png")));
 			jLabelTelefono.setText("Telefono");
 			jLabelEmail = new JLabel();
-			jLabelEmail.setBounds(new Rectangle(3, 196, 301, 31));
+			jLabelEmail.setBounds(new Rectangle(7, 211, 301, 31));
 			jLabelEmail.setIcon(new ImageIcon(getClass().getResource("/iconos/Email.png")));
 			jLabelEmail.setText("Email");
 			jLabelNombreDepto = new JLabel();
 			jLabelNombreDepto.setBounds(new Rectangle(779, 6, 301, 31));
 			jLabelNombreDepto.setText("Nombre del Departamento");
 			jLabelDepartamento = new JLabel();
-			jLabelDepartamento.setBounds(new Rectangle(3, 66, 301, 31));
+			jLabelDepartamento.setBounds(new Rectangle(7, 79, 301, 31));
 			jLabelDepartamento.setText("Departamento Nro");
 			jLabelCP = new JLabel();
 			jLabelCP.setBounds(new Rectangle(780, 79, 301, 30));
 			jLabelCP.setText("CP/CPA");
 			jLabelProvincia = new JLabel();
-			jLabelProvincia.setBounds(new Rectangle(406, 197, 301, 30));
+			jLabelProvincia.setBounds(new Rectangle(396, 211, 301, 30));
 			jLabelProvincia.setText("Provincia");
 			jLabelLocalidad = new JLabel();
 			jLabelLocalidad.setBounds(new Rectangle(780, 145, 301, 30));
 			jLabelLocalidad.setText("Localidad");
 			jLabeldomicilio = new JLabel();
-			jLabeldomicilio.setBounds(new Rectangle(406, 131, 301, 30));
+			jLabeldomicilio.setBounds(new Rectangle(396, 145, 301, 30));
 			jLabeldomicilio.setIcon(new ImageIcon(getClass().getResource("/iconos/Departamento.png")));
 			jLabeldomicilio.setText("Domicilio");
 			jLabelSuperficie = new JLabel();
-			jLabelSuperficie.setBounds(new Rectangle(3, 130, 301, 31));
+			jLabelSuperficie.setBounds(new Rectangle(7, 145, 301, 30));
 			jLabelSuperficie.setText("Superficie en Metros Cuadrados (nro decimal)");
 			jLabelNombre = new JLabel();
-			jLabelNombre.setBounds(new Rectangle(2, 2, 301, 31));
+			jLabelNombre.setBounds(new Rectangle(7, 6, 301, 31));
 			jLabelNombre.setIcon(new ImageIcon(getClass().getResource("/iconos/Profile.png")));
 			jLabelNombre.setText("Nombre de la Empresa");
 			
 			jPanelAltaEstablecimientos = new JPanel();
 			jPanelAltaEstablecimientos.setLayout(null);
-			jPanelAltaEstablecimientos.setBounds(new Rectangle(7, 273, 1104, 335));
+			jPanelAltaEstablecimientos.setBounds(new Rectangle(7, 273, 1104, 370));
 			jPanelAltaEstablecimientos.setBorder(BorderFactory.createTitledBorder(null, "", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, null));
 			jPanelAltaEstablecimientos.add(jLabelNombre, null);
 			jPanelAltaEstablecimientos.add(jLabelSuperficie, null);
@@ -210,9 +216,12 @@ public class ModifDepartamento extends JFrame {
 			jPanelAltaEstablecimientos.add(getJButtonCertificado(), null);
 			jPanelAltaEstablecimientos.add(jLabelRutaCertificado, null);
 			jPanelAltaEstablecimientos.add(jLabelCuit, null);
-			jPanelAltaEstablecimientos.add(jLabelCUITVALOR, null);
 			jPanelAltaEstablecimientos.add(getJComboBoxNombreEmpresa(), null);
 			jPanelAltaEstablecimientos.add(getJButtonAlta(), null);
+			jPanelAltaEstablecimientos.add(getJTextFieldCuit(), null);
+			jPanelAltaEstablecimientos.add(getJButtonBorrarDepto(), null);
+			jPanelAltaEstablecimientos.add(getJCheckBoxBorrado(), null);
+			jPanelAltaEstablecimientos.add(jLabelHabilitarBorrado, null);
 		}
 		return jPanelAltaEstablecimientos;
 	}
@@ -225,7 +234,7 @@ public class ModifDepartamento extends JFrame {
 	private JTextField getJTextFieldMetrosCuadrados() {
 		if (jTextFieldMetrosCuadrados == null) {
 			jTextFieldMetrosCuadrados = new JTextField();
-			jTextFieldMetrosCuadrados.setBounds(new Rectangle(3, 163, 301, 31));
+			jTextFieldMetrosCuadrados.setBounds(new Rectangle(7, 178, 301, 31));
 		}
 		return jTextFieldMetrosCuadrados;
 	}
@@ -238,7 +247,8 @@ public class ModifDepartamento extends JFrame {
 	private JTextField getJTextFieldDepartamentoNro() {
 		if (jTextFieldDepartamentoNro == null) {
 			jTextFieldDepartamentoNro = new JTextField();
-			jTextFieldDepartamentoNro.setBounds(new Rectangle(3, 95, 301, 31));
+			jTextFieldDepartamentoNro.setBounds(new Rectangle(7, 109, 301, 30));
+			jTextFieldDepartamentoNro.setEditable(false);
 		}
 		return jTextFieldDepartamentoNro;
 	}
@@ -264,7 +274,7 @@ public class ModifDepartamento extends JFrame {
 	private JTextField getJTextFieldEmail() {
 		if (jTextFieldEmail == null) {
 			jTextFieldEmail = new JTextField();
-			jTextFieldEmail.setBounds(new Rectangle(3, 229, 301, 31));
+			jTextFieldEmail.setBounds(new Rectangle(7, 244, 301, 31));
 		}
 		return jTextFieldEmail;
 	}
@@ -277,7 +287,7 @@ public class ModifDepartamento extends JFrame {
 	private JTextField getJTextFieldDomicilio() {
 		if (jTextFieldDomicilio == null) {
 			jTextFieldDomicilio = new JTextField();
-			jTextFieldDomicilio.setBounds(new Rectangle(406, 164, 301, 30));
+			jTextFieldDomicilio.setBounds(new Rectangle(396, 178, 301, 30));
 		}
 		return jTextFieldDomicilio;
 	}
@@ -290,7 +300,7 @@ public class ModifDepartamento extends JFrame {
 	private JTextField getJTextFieldProvincia() {
 		if (jTextFieldProvincia == null) {
 			jTextFieldProvincia = new JTextField();
-			jTextFieldProvincia.setBounds(new Rectangle(406, 230, 301, 30));
+			jTextFieldProvincia.setBounds(new Rectangle(396, 244, 301, 30));
 		}
 		return jTextFieldProvincia;
 	}
@@ -342,7 +352,7 @@ public class ModifDepartamento extends JFrame {
 	private JComboBox<String> getJComboBoxTipoZona() {
 		if (jComboBoxTipoZona == null) {
 			jComboBoxTipoZona = new JComboBox<String>();
-			jComboBoxTipoZona.setBounds(new Rectangle(405, 36, 301, 31));
+			jComboBoxTipoZona.setBounds(new Rectangle(396, 38, 301, 31));
 			jComboBoxTipoZona.addItem("Zona Residencial exclusiva");
 			jComboBoxTipoZona.addItem("Zona Industrial exclusiva");
 			jComboBoxTipoZona.addItem("Zona Residencial mixta");
@@ -362,7 +372,7 @@ public class ModifDepartamento extends JFrame {
 	private JButton getJButtonCertificado() {
 		if (jButtonCertificado == null) {
 			jButtonCertificado = new JButton();
-			jButtonCertificado.setBounds(new Rectangle(313, 267, 50, 32));
+			jButtonCertificado.setBounds(new Rectangle(312, 303, 50, 32));
 			jButtonCertificado.setIcon(new ImageIcon(getClass().getResource("/iconos/Modify.png")));
 			jButtonCertificado.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
@@ -391,11 +401,12 @@ public class ModifDepartamento extends JFrame {
 	private JComboBox<String>getJComboBoxNombreEmpresa() {
 		if (jComboBoxNombreEmpresa == null) {
 			jComboBoxNombreEmpresa = new JComboBox<String>();
-			jComboBoxNombreEmpresa.setBounds(new Rectangle(3, 35, 300, 29));
+			jComboBoxNombreEmpresa.setBounds(new Rectangle(7, 38, 300, 31));
+			jComboBoxNombreEmpresa.setEnabled(false);
 			jComboBoxNombreEmpresa.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{
-					jLabelCUITVALOR.setText(String.valueOf(((Empresa)empresas.get(jComboBoxNombreEmpresa.getSelectedIndex())).getCuit_cuip()));
+					
 					}catch(Exception e1){
 						
 					}
@@ -406,6 +417,10 @@ public class ModifDepartamento extends JFrame {
 		return jComboBoxNombreEmpresa;
 	}
 
+	private void refrescarTablaDeptos(){
+		metodosSql metodos=new metodosSql();
+		metodos.llenarJtable(jTableDeptos, "select * from cliente");
+	}
 	/**
 	 * This method initializes jButtonAlta	
 	 * 	
@@ -416,18 +431,21 @@ public class ModifDepartamento extends JFrame {
 			jButtonAlta = new JButton();
 			jButtonAlta.setBounds(new Rectangle(936, 283, 145, 33));
 			jButtonAlta.setIcon(new ImageIcon(getClass().getResource("/iconos/Save.png")));
-			jButtonAlta.setText("Dar de Alta");
+			jButtonAlta.setText("Modificar");
 			jButtonAlta.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{
-					String cuitEmpresa=jLabelCUITVALOR.getText();
+						
+				
 					Departamento depa=new Departamento();
-					//MAX CONCAT 9,223,372,036,854,775,807
+					String idCliente=jTextFieldCuit.getText()+jTextFieldDepartamentoNro.getText();
+					depa=(Departamento)Hibernate.dameObjeto(idCliente, depa);
+					
 					
 					String nombre=jTextFieldNombreDepto.getText();
 					depa.setNombre(nombre);
-					String departamento_nro=jTextFieldDepartamentoNro.getText();
-					depa.setDepartamento_nro(departamento_nro);
+					//String departamento_nro=jTextFieldDepartamentoNro.getText();
+					//depa.setDepartamento_nro(departamento_nro);
 					String eMail=jTextFieldEmail.getText();
 					depa.setEmail(eMail);
 					String domicilio=jTextFieldDomicilio.getText();
@@ -438,7 +456,7 @@ public class ModifDepartamento extends JFrame {
 					depa.setProvincia(provincia);
 					int cp_cpa=Integer.parseInt(jTextFieldCpPA.getText());
 					depa.setCp_cpa(cp_cpa);
-					String empresa_cuit=jLabelCUITVALOR.getText();
+					String empresa_cuit=jTextFieldCuit.getText();
 					depa.setEmpresa_cuit(empresa_cuit);
 					String telefono= jTextFieldTelefono.getText();
 					depa.setTelefono(telefono);
@@ -448,18 +466,22 @@ public class ModifDepartamento extends JFrame {
 					depa.setCertificadoMunicTipoZona(certificadoMunicTipoZona);
 					String localidad=jTextFieldLocalidad.getText();	
 					depa.setLocalidad(localidad);
-					String concatIdCli=depa.getEmpresa_cuit()+depa.getDepartamento_nro();
-					String idCliente=concatIdCli;
-					depa.setIdCliente(idCliente);
+					//String concatIdCli=depa.getEmpresa_cuit()+depa.getDepartamento_nro();
+					//String idCliente=concatIdCli;
+					//depa.setIdCliente(idCliente);
 					int status=0;
-					status=Hibernate.guardarObjeto(depa);
+					status=Hibernate.modificarObjeto(depa);
 					if(status==1){
 						JOptionPane.showMessageDialog(null,"Guardado ok");
+						refrescarTablaDeptos();
+						
 					}else{
 						JOptionPane.showMessageDialog(null,"No se guardaron lo datos, verifique campos.");
+					
 					}
 					}catch(Exception e1){
 						JOptionPane.showMessageDialog(null,"Error verifique campos "+e1.getMessage());
+					
 						
 					}
 					
@@ -507,8 +529,118 @@ public class ModifDepartamento extends JFrame {
 	private JTable getJTableDeptos() {
 		if (jTableDeptos == null) {
 			jTableDeptos = new JTable();
+			jTableDeptos.addMouseListener(new java.awt.event.MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					String idCliente=null; // nro cuit concat(nro depto); 
+					idCliente=jTableDeptos.getValueAt(jTableDeptos.getSelectedRow(),0).toString();
+					Departamento depto=new  Departamento();
+					depto=(Departamento) Hibernate.dameObjeto(idCliente, depto);
+					jTextFieldCuit.setText(depto.getEmpresa_cuit());
+					jTextFieldDepartamentoNro.setText(depto.getDepartamento_nro());					
+					jTextFieldMetrosCuadrados.setText(String.valueOf(depto.getSuperficie()));
+					jTextFieldEmail.setText(depto.getEmail());
+					jTextFieldDomicilio.setText(depto.getDomicilio());
+					jTextFieldProvincia.setText(depto.getProvincia());
+					jTextFieldNombreDepto.setText(depto.getNombre());
+					jTextFieldCpPA.setText(String.valueOf(depto.getCp_cpa()));
+					jTextFieldLocalidad.setText(depto.getLocalidad());
+					jTextFieldTelefono.setText(depto.getTelefono());
+					jLabelRutaCertificado.setText(depto.getCertificadoMunicTipoZona());
+					jComboBoxTipoZona.setSelectedItem(depto.getTipo_zona());
+					String CuitElegido=(String) jTableDeptos.getValueAt(jTableDeptos.getSelectedRow(), jTableDeptos.getColumn("EMPRESA_CUIT").getModelIndex());
+					Empresa emp=new Empresa();
+					emp=(Empresa)Hibernate.dameObjeto(CuitElegido, emp);
+					jComboBoxNombreEmpresa.setSelectedItem(emp.getNombre());
+					}
+			});
 		}
 		return jTableDeptos;
+	}
+
+	/**
+	 * This method initializes jTextFieldCuit	
+	 * 	
+	 * @return javax.swing.JTextField	
+	 */
+	private JTextField getJTextFieldCuit() {
+		if (jTextFieldCuit == null) {
+			jTextFieldCuit = new JTextField();
+			jTextFieldCuit.setBounds(new Rectangle(396, 109, 236, 30));
+			jTextFieldCuit.setEditable(false);
+		}
+		return jTextFieldCuit;
+	}
+
+	/**
+	 * This method initializes jButtonBorrarDepto	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonBorrarDepto() {
+		if (jButtonBorrarDepto == null) {
+			jButtonBorrarDepto = new JButton();
+			jButtonBorrarDepto.setBounds(new Rectangle(936, 324, 145, 31));
+			jButtonBorrarDepto.setIcon(new ImageIcon(getClass().getResource("/iconos/Warning.png")));
+			jButtonBorrarDepto.setEnabled(false);
+			jButtonBorrarDepto.setText("Borrar");
+			jButtonBorrarDepto.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					int opcion=JOptionPane.showConfirmDialog(null, "Está a punto de BORRAR TODO lo relacionado a ése departamento seleccionado \n (HISTORIAL, AUDITORIAS,EMPLEADOS,NO CONFORMIDADES...\n ¿ESTÁ REALMENTE SEGURO?)");
+					if(opcion==0){
+					try{
+					
+					String idCliente=(String) jTableDeptos.getValueAt(jTableDeptos.getSelectedRow(), jTableDeptos.getColumn("IDCLIENTE").getModelIndex());;
+					Departamento depa=new Departamento();
+					depa=(Departamento) Hibernate.dameObjeto(idCliente, depa);
+					int status=0;
+					status=Hibernate.borrarObjeto(depa);
+					if(status==1){
+						JOptionPane.showMessageDialog(null,"Guardado OK!");
+						refrescarTablaDeptos();
+					}else{
+						JOptionPane.showMessageDialog(null,"No se guardaron los datos, reintente!");
+					}
+					}catch(IllegalArgumentException il){
+						JOptionPane.showMessageDialog(null,"Primero seleccione un elemento para borrar...");
+						
+					}catch(Exception e1){
+						e1.printStackTrace();
+					}
+				}else{
+					JOptionPane.showMessageDialog(null,"Acción cancelada por el usuario");
+				}
+				
+				
+				
+				
+				}
+				
+			});
+			
+		}
+		return jButtonBorrarDepto;
+	}
+
+	/**
+	 * This method initializes jCheckBoxBorrado	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getJCheckBoxBorrado() {
+		if (jCheckBoxBorrado == null) {
+			jCheckBoxBorrado = new JCheckBox();
+			jCheckBoxBorrado.setBounds(new Rectangle(757, 325, 21, 18));
+			jCheckBoxBorrado.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if(jCheckBoxBorrado.isSelected()){
+						jButtonBorrarDepto.setEnabled(true);
+					}else{
+						jButtonBorrarDepto.setEnabled(false);
+					}
+				}
+			});
+		}
+		return jCheckBoxBorrado;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,-71"

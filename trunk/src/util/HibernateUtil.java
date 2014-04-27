@@ -3,6 +3,7 @@
 package util;
 import org.hibernate.*;
 import org.hibernate.cfg.*;
+
 @SuppressWarnings("deprecation")
 public class HibernateUtil {
 private static final SessionFactory sessionFactory;

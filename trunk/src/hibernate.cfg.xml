@@ -43,6 +43,7 @@
     <mapping resource="ObjetosPersistentes/Empresa.hbm.xml"/>
     <mapping resource="ObjetosPersistentes/Empleado.hbm.xml"/>
     <mapping resource="ObjetosPersistentes/Departamento.hbm.xml"/>
+    <mapping resource="ObjetosPersistentes/Consulta.hbm.xml"/>
  
   </session-factory>
  

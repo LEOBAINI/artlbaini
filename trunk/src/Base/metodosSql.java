@@ -218,8 +218,8 @@ String consulta="SELECT "+
             }
            rs.close();
            conexion.close();
-           GeneradorDeReporte jasperReports=new GeneradorDeReporte();
-           jasperReports.crearReporte(auditorias, "src\\reporte\\Plantilladeauditoria.jasper", rutaDeSalidaMasNombrePDF);
+           GeneradorDeReporte jasperReports=new GeneradorDeReporte();//src\\reporte
+           jasperReports.crearReporte(auditorias, ".\\Plantilladeauditoria.jasper", rutaDeSalidaMasNombrePDF);
            
            
            
@@ -468,6 +468,7 @@ public int llenarComboBox(JComboBox<String> desplegable,String consultaSQL) thro
 			JOptionPane.showMessageDialog(null,"Error en metodosSql.consultar"+e.getMessage());
 			System.out.println("Error en metodosSql.consultar"+e.getMessage());
 			System.out.println(e.getLocalizedMessage());
+			return null;
 			
 		}
 

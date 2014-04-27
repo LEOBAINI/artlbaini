@@ -1,6 +1,8 @@
 package pantallasBase;
 
 import java.awt.BorderLayout;
+
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 import java.awt.Dimension;
@@ -12,9 +14,14 @@ import java.awt.Rectangle;
 import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 
+import PantallasConsulta.ConsultaGral;
+import PantallasConsulta.CrearConsulta;
+
 import pantallasABM.AltaEmpleado;
 import pantallasABM.AltaEmpresa;
 import pantallasABM.AltaDepartamento;
+import pantallasABM.ModifDepartamento;
+import pantallasABM.ModifEmpleado;
 import pantallasABM.ModifEmpresa;
 import pantallasNoConformidad.PlanillaNoConformidad;
 import pantallasNoConformidad.SeguimientoNoconformidad;
@@ -40,6 +47,10 @@ public class PantallaPpal extends JFrame {
 	private JMenuItem jMenuItemAltaEmpleado = null;
 	private JMenu jMenuModificaciones = null;
 	private JMenuItem jMenuItemEmpresa = null;
+	private JMenuItem jMenuItemDepartaementos = null;
+	private JMenuItem jMenuItemCargarConsulta = null;
+	private JMenuItem jMenuItemCreadas = null;
+	private JMenuItem jMenuItemModifEmpleados = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -137,6 +148,12 @@ public class PantallaPpal extends JFrame {
 		if (jMenuInformes == null) {
 			jMenuInformes = new JMenu();
 			jMenuInformes.setText("Informes");
+			jMenuInformes.setEnabled(false);
+			jMenuInformes.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					JOptionPane.showMessageDialog(null,"En construcción");
+				}
+			});
 		}
 		return jMenuInformes;
 	}
@@ -150,6 +167,8 @@ public class PantallaPpal extends JFrame {
 		if (jMenuConsultas == null) {
 			jMenuConsultas = new JMenu();
 			jMenuConsultas.setText("Consultas");
+			jMenuConsultas.add(getJMenuItemCargarConsulta());
+			jMenuConsultas.add(getJMenuItemCreadas());
 		}
 		return jMenuConsultas;
 	}
@@ -310,6 +329,8 @@ public class PantallaPpal extends JFrame {
 			jMenuModificaciones = new JMenu();
 			jMenuModificaciones.setText("Modificaciones");
 			jMenuModificaciones.add(getJMenuItemEmpresa());
+			jMenuModificaciones.add(getJMenuItemDepartaementos());
+			jMenuModificaciones.add(getJMenuItemModifEmpleados());
 		}
 		return jMenuModificaciones;
 	}
@@ -331,6 +352,82 @@ public class PantallaPpal extends JFrame {
 			});
 		}
 		return jMenuItemEmpresa;
+	}
+
+	/**
+	 * This method initializes jMenuItemDepartaementos	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItemDepartaementos() {
+		if (jMenuItemDepartaementos == null) {
+			jMenuItemDepartaementos = new JMenuItem();
+			jMenuItemDepartaementos.setText("Departamentos");
+			jMenuItemDepartaementos.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+				ModifDepartamento moddepa=new ModifDepartamento();
+				moddepa.setVisible(true);
+				}
+			});
+		}
+		return jMenuItemDepartaementos;
+	}
+
+	/**
+	 * This method initializes jMenuItemCargarConsulta	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItemCargarConsulta() {
+		if (jMenuItemCargarConsulta == null) {
+			jMenuItemCargarConsulta = new JMenuItem();
+			jMenuItemCargarConsulta.setText("Crear nueva consulta");
+			jMenuItemCargarConsulta.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					CrearConsulta crear=new CrearConsulta();
+					crear.setVisible(true);
+				}
+			});
+		}
+		return jMenuItemCargarConsulta;
+	}
+
+	/**
+	 * This method initializes jMenuItemCreadas	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItemCreadas() {
+		if (jMenuItemCreadas == null) {
+			jMenuItemCreadas = new JMenuItem();
+			jMenuItemCreadas.setText("Ver las consultas creadas por el usuario");
+			jMenuItemCreadas.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					ConsultaGral cons=new ConsultaGral();
+					cons.setVisible(true);
+				}
+			});
+		}
+		return jMenuItemCreadas;
+	}
+
+	/**
+	 * This method initializes jMenuItemModifEmpleados	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItemModifEmpleados() {
+		if (jMenuItemModifEmpleados == null) {
+			jMenuItemModifEmpleados = new JMenuItem();
+			jMenuItemModifEmpleados.setText("Empleados");
+			jMenuItemModifEmpleados.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+				ModifEmpleado modEmp=new ModifEmpleado();
+				modEmp.setVisible(true);
+				}
+			});
+		}
+		return jMenuItemModifEmpleados;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

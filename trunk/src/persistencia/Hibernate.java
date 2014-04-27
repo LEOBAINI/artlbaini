@@ -3,10 +3,15 @@ package persistencia;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import noConformidad.ComoMitigar;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionException;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
+import org.hibernate.exception.GenericJDBCException;
 
 import Base.metodosSql;
 
@@ -48,6 +53,9 @@ public class Hibernate {
 		    
 		return como;
 	}
+	private static void publicarMensajes(String mensaje){
+		JOptionPane.showMessageDialog(null, mensaje);
+	}
 	
 	public static int guardarObjeto(Object objeto){
 		int status=0;
@@ -64,10 +72,16 @@ public class Hibernate {
 		System.out.println("Guardado ok");
 		}catch(SessionException e){
 			System.out.println("Error desde consola "+e.getMessage());
+			publicarMensajes("Error desde consola "+e.getMessage());
 		session.getTransaction().rollback();	
 		
 		status=0;
 			
+		}catch( HibernateException Gen){
+			
+			publicarMensajes(Gen.getLocalizedMessage());
+			session.getTransaction().rollback();
+			return 0;
 		}
 		HibernateUtil.getSessionFactory().getCurrentSession().close();
 		return status;
