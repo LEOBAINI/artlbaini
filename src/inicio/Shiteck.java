@@ -11,6 +11,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import noConformidad.ComoMitigar;
 
 import Base.metodosSql;
+import ObjetosPersistentes.Consulta;
 
 import pantallasBase.PantallaPpal;
 import persistencia.Hibernate;
@@ -58,7 +59,7 @@ public class Shiteck {
 	        
 	   
 	   
-	    
+	  
 		PantallaPpal pan=new PantallaPpal();
 		
 		

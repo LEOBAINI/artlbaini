@@ -36,10 +36,22 @@ CREATE TABLE `historialrelevamiento` (
   `cumplido` varchar(45) DEFAULT 'NO',
   `fechaCumplido` date DEFAULT NULL,
   `auditoriaNro` bigint(20) DEFAULT NULL,
-  `cuit_empresa` varchar(60) DEFAULT NULL,
-  PRIMARY KEY (`idhistorialrelevamiento`)
-) ENGINE=InnoDB AUTO_INCREMENT=321 DEFAULT CHARSET=latin1 COMMENT='Son todos los sub items de un ítem asociados a un departamen';
+  `cuit_empresa` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idhistorialrelevamiento`),
+  KEY `HIST_COMOMITIGAR` (`idComoMitigar`),
+  CONSTRAINT `HIST_COMOMITIGAR` FOREIGN KEY (`idComoMitigar`) REFERENCES `como_mitigar` (`idcomo_mitigar`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1 COMMENT='Son todos los sub items de un ítem asociados a un departamen';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `historialrelevamiento`
+--
+
+LOCK TABLES `historialrelevamiento` WRITE;
+/*!40000 ALTER TABLE `historialrelevamiento` DISABLE KEYS */;
+INSERT INTO `historialrelevamiento` VALUES (2,1,'PROBLEM	','SOLUTION',NULL,NULL,'20-28737766-61234',1,'NO',NULL,1234,'20-28737766-6'),(9,1,'PROBLEM	','SOLUTION',NULL,NULL,'20-28737766-61234',1,'NO',NULL,12,'20-28737766-6'),(10,1,'PROBLEM	','SOLUTION',NULL,NULL,'20-28737766-61234',1,'NO',NULL,123,'20-28737766-6');
+/*!40000 ALTER TABLE `historialrelevamiento` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -50,4 +62,4 @@ CREATE TABLE `historialrelevamiento` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2014-04-11  4:24:54
+-- Dump completed on 2014-04-27  5:15:45

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Plantilla de auditoria" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="a1c0d38f-0865-4e58-a52c-25e9e29764fd">
 	<property name="ireport.zoom" value="0.75"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="48"/>
+	<property name="ireport.y" value="0"/>
 	<field name="logoCliente" class="java.lang.Object"/>
 	<field name="auditoriaNro" class="java.lang.String"/>
 	<field name="responsable" class="java.lang.String"/>
@@ -28,13 +28,13 @@
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="639" splitType="Stretch">
+		<band height="737" splitType="Stretch">
 			<staticText>
-				<reportElement x="13" y="375" width="160" height="20" uuid="514a9151-3304-4a1f-8d70-cd3a9ce8df75"/>
+				<reportElement x="13" y="341" width="160" height="20" uuid="514a9151-3304-4a1f-8d70-cd3a9ce8df75"/>
 				<text><![CDATA[Fotografía de ítem a corregir por:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="171" y="375" width="185" height="20" uuid="14423a9a-8567-4646-81f4-12a115c340e4"/>
+				<reportElement x="171" y="341" width="185" height="20" uuid="14423a9a-8567-4646-81f4-12a115c340e4"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -45,7 +45,7 @@
 				<textFieldExpression><![CDATA[$F{nombreEmpresaCliente}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="FillFrame">
-				<reportElement x="13" y="395" width="210" height="93" uuid="488f9242-fbd8-4615-ba43-e9af2114ffeb"/>
+				<reportElement x="13" y="361" width="210" height="93" uuid="488f9242-fbd8-4615-ba43-e9af2114ffeb"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -56,12 +56,12 @@
 				<imageExpression><![CDATA[$F{fotoMal}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="356" y="375" width="185" height="20" uuid="2dc1180a-686e-4cc5-ae4a-22eaca9efcc3"/>
+				<reportElement x="356" y="341" width="185" height="20" uuid="2dc1180a-686e-4cc5-ae4a-22eaca9efcc3"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Detalle del la falla detectada:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="356" y="395" width="185" height="93" uuid="bdc6c10b-790d-4575-9d26-a67b100e8406"/>
+				<reportElement x="356" y="361" width="185" height="93" uuid="bdc6c10b-790d-4575-9d26-a67b100e8406"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -72,7 +72,7 @@
 				<textFieldExpression><![CDATA[$F{detalleFotoMal}]]></textFieldExpression>
 			</textField>
 			<image scaleImage="FillFrame">
-				<reportElement x="13" y="508" width="211" height="93" uuid="3e893e71-28ff-4395-aae4-f54bbf759128"/>
+				<reportElement x="8" y="618" width="211" height="93" uuid="3e893e71-28ff-4395-aae4-f54bbf759128"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -83,12 +83,12 @@
 				<imageExpression><![CDATA[$F{fotoBien}]]></imageExpression>
 			</image>
 			<staticText>
-				<reportElement x="356" y="488" width="185" height="20" uuid="d433a6cf-0b07-4660-9b03-39b694922339"/>
+				<reportElement x="351" y="598" width="185" height="20" uuid="d433a6cf-0b07-4660-9b03-39b694922339"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Detalle de resolución de la falla:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="356" y="508" width="185" height="93" uuid="25e5c426-96d8-4119-8df6-e1a454afaff7"/>
+				<reportElement x="351" y="618" width="185" height="93" uuid="25e5c426-96d8-4119-8df6-e1a454afaff7"/>
 				<box>
 					<pen lineWidth="1.0"/>
 					<topPen lineWidth="1.0"/>
@@ -99,16 +99,16 @@
 				<textFieldExpression><![CDATA[$F{detalleFotoBien}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="13" y="488" width="270" height="20" uuid="bf96369b-ecaa-4d4c-abcc-66f2a1a32ebe"/>
+				<reportElement x="8" y="598" width="270" height="20" uuid="bf96369b-ecaa-4d4c-abcc-66f2a1a32ebe"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Fotografía de cómo debe resolverse la falla detectada.]]></text>
 			</staticText>
 			<textField evaluationTime="Report">
-				<reportElement x="515" y="613" width="40" height="20" uuid="93bc8b17-5a18-4082-97cb-098440a8de87"/>
+				<reportElement x="511" y="711" width="40" height="20" uuid="93bc8b17-5a18-4082-97cb-098440a8de87"/>
 				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="435" y="613" width="80" height="20" uuid="8465200c-6804-4ee3-bec1-f307bb25ca88"/>
+				<reportElement x="431" y="711" width="80" height="20" uuid="8465200c-6804-4ee3-bec1-f307bb25ca88"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
 			</textField>
@@ -148,14 +148,14 @@
 					<bottomPen lineWidth="2.0"/>
 					<rightPen lineWidth="2.0"/>
 				</box>
-				<imageExpression><![CDATA["D:\\Desktop\\GESTIONIT\\ShiteckHibernate\\src\\iconos\\logoShiteck.gif"]]></imageExpression>
+				<imageExpression><![CDATA[".\\logoShiteck.gif"]]></imageExpression>
 			</image>
 			<image scaleImage="FillFrame">
 				<reportElement x="268" y="32" width="273" height="97" uuid="22cd5ce0-e1b9-4365-a745-599e8722d83c"/>
 				<imageExpression><![CDATA[$F{logoCliente}]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="true">
-				<reportElement x="55" y="129" width="100" height="20" uuid="a0aad16c-1297-4b6f-9f8c-e1d901477e1c"/>
+				<reportElement x="35" y="129" width="78" height="20" uuid="a0aad16c-1297-4b6f-9f8c-e1d901477e1c"/>
 				<box>
 					<pen lineWidth="2.0"/>
 					<topPen lineWidth="2.0"/>
@@ -169,7 +169,7 @@
 				<textFieldExpression><![CDATA[$F{auditoriaNro}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="232" y="129" width="100" height="20" uuid="fd703f41-485b-456b-ae86-3ce2858b2f9b"/>
+				<reportElement x="171" y="129" width="132" height="20" uuid="fd703f41-485b-456b-ae86-3ce2858b2f9b"/>
 				<box>
 					<pen lineWidth="2.0"/>
 					<topPen lineWidth="2.0"/>
@@ -183,7 +183,7 @@
 				<textFieldExpression><![CDATA[$F{responsable}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="475" y="129" width="66" height="20" uuid="6a715a15-ac9c-46db-a60f-6dc812afe84f"/>
+				<reportElement x="416" y="129" width="125" height="20" uuid="6a715a15-ac9c-46db-a60f-6dc812afe84f"/>
 				<box>
 					<pen lineWidth="2.0"/>
 					<topPen lineWidth="2.0"/>
@@ -195,7 +195,7 @@
 				<textFieldExpression><![CDATA[$F{nroEstablecimiento}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="13" y="129" width="42" height="20" uuid="9964640b-f217-449c-976a-fe44da0722c5"/>
+				<reportElement x="13" y="129" width="22" height="20" uuid="9964640b-f217-449c-976a-fe44da0722c5"/>
 				<box>
 					<pen lineWidth="2.0"/>
 					<topPen lineWidth="2.0"/>
@@ -209,7 +209,7 @@
 				<text><![CDATA[AU]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="155" y="129" width="77" height="20" uuid="58f6c87a-e4fc-433f-bb15-d46c6c350147"/>
+				<reportElement x="113" y="129" width="58" height="20" uuid="58f6c87a-e4fc-433f-bb15-d46c6c350147"/>
 				<box>
 					<pen lineWidth="2.0"/>
 					<topPen lineWidth="2.0"/>
@@ -223,7 +223,7 @@
 				<text><![CDATA[Contacto]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="332" y="129" width="143" height="20" uuid="7f4c59b2-21d1-4ce2-8a2a-f217bd2d1ad7"/>
+				<reportElement x="303" y="129" width="113" height="20" uuid="7f4c59b2-21d1-4ce2-8a2a-f217bd2d1ad7"/>
 				<box>
 					<pen lineWidth="2.0"/>
 					<topPen lineWidth="2.0"/>
@@ -440,19 +440,19 @@
 		</band>
 	</detail>
 	<summary>
-		<band height="155">
+		<band height="714">
 			<staticText>
-				<reportElement x="13" y="100" width="211" height="20" uuid="4049b8aa-9100-4c9c-bd5b-ae35f0aaa8c3"/>
+				<reportElement x="8" y="663" width="211" height="20" uuid="4049b8aa-9100-4c9c-bd5b-ae35f0aaa8c3"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Firma Auditor SHITECK HSE MANAGEMENT]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="232" y="100" width="114" height="20" uuid="4e687f5e-d0a4-4188-8506-f3aeefa896b1"/>
+				<reportElement x="227" y="663" width="114" height="20" uuid="4e687f5e-d0a4-4188-8506-f3aeefa896b1"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Firma Responsable de]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="346" y="100" width="195" height="20" uuid="17377617-8bcc-4ebd-90b4-0a723273e050"/>
+				<reportElement x="341" y="663" width="195" height="20" uuid="17377617-8bcc-4ebd-90b4-0a723273e050"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -490,7 +490,7 @@
 				<textFieldExpression><![CDATA[$F{telefonoCliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="13" y="134" width="100" height="20" uuid="40f0089e-72e1-40a0-98b7-25cdc922cca6"/>
+				<reportElement x="8" y="683" width="100" height="20" uuid="40f0089e-72e1-40a0-98b7-25cdc922cca6"/>
 				<text><![CDATA[www.shiteck.com.ar]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
@@ -595,6 +595,45 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textFieldExpression><![CDATA[$F{mailCliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="156" width="529" height="119" uuid="ffeb46ad-c12f-45a0-81a5-fdb6749c71c3"/>
+				<text><![CDATA[IMPORTANTE: recordamos a todos nuestros clientes que los ítems relevados son de vital importancia y que el no cumplimiento de los mismos ante cualquier inspección ya sea de ministerio de trabajo como inspecciones municipales desencadenará en severas multas las cuales es sumamente responsable el cliente de su seguimiento y cumplimiento de dichos Ítems.
+
+La función de Shiteck es auditar, avisar y sugerir al cliente para que luego el cliente pueda corregir dichos ítems, y así evitar accidentes, enfermedades profesionales, multas y sanciones.
+Todo cliente deberá informar a SHITECK cada una de las no conformidades que haya ido adecuando para que SHITECK pueda verificar el cumplimiento de las mismas y dar cierre a cada una de las mismas.
+]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement x="267" y="439" width="273" height="97" uuid="deb575b9-f2b2-4497-b38d-884ecbdb41d6"/>
+				<box>
+					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0"/>
+					<leftPen lineWidth="2.0"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="2.0"/>
+				</box>
+				<imageExpression><![CDATA[$F{logoCliente}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement x="13" y="439" width="255" height="97" uuid="31d1f0e5-8802-4bb4-94ea-14cbf04be5d2"/>
+				<box>
+					<pen lineWidth="2.0"/>
+					<topPen lineWidth="2.0"/>
+					<leftPen lineWidth="2.0"/>
+					<bottomPen lineWidth="2.0"/>
+					<rightPen lineWidth="2.0"/>
+				</box>
+				<imageExpression><![CDATA[".\\logoShiteck.gif"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="414" y="683" width="80" height="20" uuid="2f23872a-74ff-4029-b6e7-b5bae5f1dcf9"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="494" y="683" width="40" height="20" uuid="42afcf54-612f-4277-af8a-4aec5061e61b"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>
