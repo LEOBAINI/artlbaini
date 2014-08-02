@@ -16,6 +16,7 @@ import javax.swing.JMenuItem;
 
 import PantallasConsulta.ConsultaGral;
 import PantallasConsulta.CrearConsulta;
+import PantallasConsulta.ReimpresionAU;
 
 import pantallasABM.AltaEmpleado;
 import pantallasABM.AltaEmpresa;
@@ -25,6 +26,10 @@ import pantallasABM.ModifEmpleado;
 import pantallasABM.ModifEmpresa;
 import pantallasNoConformidad.PlanillaNoConformidad;
 import pantallasNoConformidad.SeguimientoNoconformidad;
+import javax.swing.JProgressBar;
+import java.awt.Cursor;
+import java.awt.Color;
+import javax.swing.BorderFactory;
 
 @SuppressWarnings("unused")
 public class PantallaPpal extends JFrame {
@@ -51,6 +56,9 @@ public class PantallaPpal extends JFrame {
 	private JMenuItem jMenuItemCargarConsulta = null;
 	private JMenuItem jMenuItemCreadas = null;
 	private JMenuItem jMenuItemModifEmpleados = null;
+	private JProgressBar jProgressBarProgreso = null;
+	private JMenu jMenuReimpresion = null;
+	private JMenuItem jMenuItemReimprimirAu = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -74,6 +82,17 @@ public class PantallaPpal extends JFrame {
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 	}
+	public void aumentarProgresBar(){
+		jProgressBarProgreso.setVisible(true);
+		jProgressBarProgreso.setStringPainted(true);
+		for(int i=0;jProgressBarProgreso.getValue()<100;i++){
+			jProgressBarProgreso.setValue((int) (i/100000));
+			
+		}
+		jProgressBarProgreso.setVisible(false);
+			
+	}
+	
 
 	/**
 	 * This method initializes jContentPane
@@ -89,6 +108,7 @@ public class PantallaPpal extends JFrame {
 			jContentPane = new JPanel();
 			jContentPane.setLayout(null);
 			jContentPane.add(jLabelLogo, null);
+			jContentPane.add(getJProgressBarProgreso(), null);
 		}
 		return jContentPane;
 	}
@@ -106,6 +126,7 @@ public class PantallaPpal extends JFrame {
 			jJMenuBarMenu.add(getJMenuInformes());
 			jJMenuBarMenu.add(getJMenuConsultas());
 			jJMenuBarMenu.add(getJMenuABM());
+			jJMenuBarMenu.add(getJMenuReimpresion());
 		}
 		return jJMenuBarMenu;
 	}
@@ -428,6 +449,56 @@ public class PantallaPpal extends JFrame {
 			});
 		}
 		return jMenuItemModifEmpleados;
+	}
+
+	/**
+	 * This method initializes jProgressBarProgreso	
+	 * 	
+	 * @return javax.swing.JProgressBar	
+	 */
+	private JProgressBar getJProgressBarProgreso() {
+		if (jProgressBarProgreso == null) {
+			jProgressBarProgreso = new JProgressBar();
+			jProgressBarProgreso.setBounds(new Rectangle(502, 264, 324, 20));
+			jProgressBarProgreso.setBackground(Color.white);
+			jProgressBarProgreso.setBorder(BorderFactory.createMatteBorder(5, 5, 5, 5, Color.lightGray));
+			jProgressBarProgreso.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+		return jProgressBarProgreso;
+	}
+
+	/**
+	 * This method initializes jMenuReimpresion	
+	 * 	
+	 * @return javax.swing.JMenu	
+	 */
+	private JMenu getJMenuReimpresion() {
+		if (jMenuReimpresion == null) {
+			jMenuReimpresion = new JMenu();
+			jMenuReimpresion.setText("Reimpresiones");
+			jMenuReimpresion.add(getJMenuItemReimprimirAu());
+		}
+		return jMenuReimpresion;
+	}
+
+	/**
+	 * This method initializes jMenuItemReimprimirAu	
+	 * 	
+	 * @return javax.swing.JMenuItem	
+	 */
+	private JMenuItem getJMenuItemReimprimirAu() {
+		if (jMenuItemReimprimirAu == null) {
+			jMenuItemReimprimirAu = new JMenuItem();
+			jMenuItemReimprimirAu.setText("Reimprimir Auditorías");
+			jMenuItemReimprimirAu.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					ReimpresionAU re=new ReimpresionAU();
+					JFrame.setDefaultLookAndFeelDecorated(true);
+					re.setVisible(true);
+				}
+			});
+		}
+		return jMenuItemReimprimirAu;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"
