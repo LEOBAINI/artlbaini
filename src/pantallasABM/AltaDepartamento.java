@@ -360,7 +360,7 @@ public class AltaDepartamento extends JFrame {
 			jButtonCertificado.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{
-						JOptionPane.showMessageDialog(null,"(Solo se guardará la ruta no el archivo en sí, por lo que el archivo en el servidor debe ser INAMOVIBLE O INRENOMBRABLE)");
+						JOptionPane.showMessageDialog(null,"(Solo se guardará la ruta no el archivo en sí, mantenga la ubicación del archivo y el nombre)");
 						String ruta=null;
 						FileChooser fileChoose=new FileChooser();
 						ruta=fileChoose.lanzarSeleccion();

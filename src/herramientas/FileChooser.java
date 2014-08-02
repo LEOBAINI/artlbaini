@@ -17,7 +17,7 @@ chooser.setCurrentDirectory(new java.io.File("."));
 
 //Titulo que llevara la ventana
 
-chooser.setDialogTitle("Titulo");
+chooser.setDialogTitle("Seleccione");
 
 //Elegiremos archivos del directorio
 
@@ -49,7 +49,7 @@ public String lanzarSeleccionDeCarpeta(){
 
 	//Titulo que llevara la ventana
 
-	chooser.setDialogTitle("Titulo");
+	chooser.setDialogTitle("Seleccione una carpeta destino");
 
 	//Elegiremos archivos del directorio
 

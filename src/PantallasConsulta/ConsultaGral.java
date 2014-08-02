@@ -18,6 +18,7 @@ import persistencia.Hibernate;
 import Base.metodosSql;
 import ObjetosPersistentes.Consulta;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 
 @SuppressWarnings("unused")
 public class ConsultaGral extends JFrame {
@@ -30,6 +31,8 @@ public class ConsultaGral extends JFrame {
 	private JTable jTableConsulta = null;
 	private JButton jButtonBorrar = null;
 	private JLabel jLabelDescripcion = null;
+	private JCheckBox jCheckBoxHabilitarBorrado = null;
+	private JLabel jLabel = null;
 
 	/**
 	 * This is the default constructor
@@ -65,6 +68,9 @@ public class ConsultaGral extends JFrame {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			jLabel = new JLabel();
+			jLabel.setBounds(new Rectangle(879, 36, 328, 24));
+			jLabel.setText("Tilde la opción para habilitar el borrado.");
 			jLabelDescripcion = new JLabel();
 			jLabelDescripcion.setBounds(new Rectangle(154, 3, 809, 26));
 			jLabelDescripcion.setText("");
@@ -78,6 +84,8 @@ public class ConsultaGral extends JFrame {
 			jContentPane.add(getJScrollPaneConsultas(), null);
 			jContentPane.add(getJButtonBorrar(), null);
 			jContentPane.add(jLabelDescripcion, null);
+			jContentPane.add(getJCheckBoxHabilitarBorrado(), null);
+			jContentPane.add(jLabel, null);
 		}
 		return jContentPane;
 	}
@@ -142,8 +150,9 @@ public class ConsultaGral extends JFrame {
 	private JButton getJButtonBorrar() {
 		if (jButtonBorrar == null) {
 			jButtonBorrar = new JButton();
-			jButtonBorrar.setBounds(new Rectangle(875, 28, 282, 33));
+			jButtonBorrar.setBounds(new Rectangle(1067, 1, 173, 33));
 			jButtonBorrar.setText("Borrar consulta");
+			jButtonBorrar.setEnabled(false);
 			jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					try{
@@ -175,6 +184,29 @@ public class ConsultaGral extends JFrame {
 			});
 		}
 		return jButtonBorrar;
+	}
+
+	/**
+	 * This method initializes jCheckBoxHabilitarBorrado	
+	 * 	
+	 * @return javax.swing.JCheckBox	
+	 */
+	private JCheckBox getJCheckBoxHabilitarBorrado() {
+		if (jCheckBoxHabilitarBorrado == null) {
+			jCheckBoxHabilitarBorrado = new JCheckBox();
+			jCheckBoxHabilitarBorrado.setBounds(new Rectangle(1206, 42, 27, 20));
+			jCheckBoxHabilitarBorrado
+					.addActionListener(new java.awt.event.ActionListener() {
+						public void actionPerformed(java.awt.event.ActionEvent e) {
+							if(jCheckBoxHabilitarBorrado.isSelected()){
+								jButtonBorrar.setEnabled(true);
+							}else{
+								jButtonBorrar.setEnabled(false);
+							}
+						}
+					});
+		}
+		return jCheckBoxHabilitarBorrado;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

@@ -24,6 +24,7 @@ import persistencia.Hibernate;
 
 import noConformidad.ComoMitigar;
 import noConformidad.MitigacionItemNoConf;
+import javax.swing.JTextArea;
 
 @SuppressWarnings("unused")
 public class VerFoto extends JFrame {
@@ -38,9 +39,13 @@ public class VerFoto extends JFrame {
 	private JButton jButtonCambiarFoto2 = null;
 	private JButton jButtonConfirmar = null;
 	private int idComoMitigar=0;
-	private String rutaFotoMAl;
+	private String rutaFotoMAl;  //  @jve:decl-index=0:
 	private String rutaFotoBien;
 	private JButton jButtonSalir = null;
+	private JTextArea jTextAreaDescFotoMal = null;
+	private JTextArea jTextAreaDescFotoBien = null;
+	private JButton jButtonBorrar = null;
+	private ComoMitigar comoM=null;
 
 	/**
 	 * This is the default constructor
@@ -48,6 +53,7 @@ public class VerFoto extends JFrame {
 	public VerFoto(ImageIcon fotoMal,ImageIcon fotoBien,int id) {
 		super();
 		initialize(fotoMal,fotoBien,id);
+		
 	}
 
 	/**
@@ -57,7 +63,7 @@ public class VerFoto extends JFrame {
 	 */
 	private void initialize(ImageIcon fotoMal,ImageIcon fotoBien,int id) {
 		this.idComoMitigar=id;
-		this.setSize(712, 420);
+		this.setSize(832, 536);
 		this.setContentPane(getJContentPane());
 		if(fotoMal!=null){
         ImageIcon icono = new ImageIcon(fotoMal.getImage().getScaledInstance(jLabelFoto.getWidth(),jLabelFoto.getHeight(), Image.SCALE_DEFAULT));
@@ -68,6 +74,12 @@ public class VerFoto extends JFrame {
         ImageIcon iconoBien = new ImageIcon(fotoBien.getImage().getScaledInstance(jLabelFotoBien.getWidth(),jLabelFotoBien.getHeight(), Image.SCALE_DEFAULT));
         jLabelFotoBien.setIcon(iconoBien);
 		}
+		
+		ComoMitigar como=new ComoMitigar();
+		como=(ComoMitigar) Hibernate.dameObjeto(id, como);
+		this.comoM=como;
+		jTextAreaDescFotoMal.setText(como.getDescripcion());
+		jTextAreaDescFotoBien.setText(como.getDescripcionOk());
 		
 		this.setTitle("Foto");
 	}
@@ -101,6 +113,9 @@ public class VerFoto extends JFrame {
 			jContentPane.add(getJButtonCambiarFoto2(), null);
 			jContentPane.add(getJButtonConfirmar(), null);
 			jContentPane.add(getJButtonSalir(), null);
+			jContentPane.add(getJTextAreaDescFotoMal(), null);
+			jContentPane.add(getJTextAreaDescFotoBien(), null);
+			jContentPane.add(getJButtonBorrar(), null);
 		}
 		return jContentPane;
 	}
@@ -113,7 +128,7 @@ public class VerFoto extends JFrame {
 	private JButton getJButtonCambiarFoto1() {
 		if (jButtonCambiarFoto1 == null) {
 			jButtonCambiarFoto1 = new JButton();
-			jButtonCambiarFoto1.setBounds(new Rectangle(15, 352, 130, 38));
+			jButtonCambiarFoto1.setBounds(new Rectangle(16, 453, 130, 38));
 			jButtonCambiarFoto1.setIcon(new ImageIcon(getClass().getResource("/iconos/Picture.png")));
 			jButtonCambiarFoto1.setText("Cambiar");
 			jButtonCambiarFoto1.addActionListener(new java.awt.event.ActionListener() {
@@ -144,7 +159,7 @@ public class VerFoto extends JFrame {
 	private JButton getJButtonCambiarFoto2() {
 		if (jButtonCambiarFoto2 == null) {
 			jButtonCambiarFoto2 = new JButton();
-			jButtonCambiarFoto2.setBounds(new Rectangle(340, 352, 130, 38));
+			jButtonCambiarFoto2.setBounds(new Rectangle(341, 453, 130, 38));
 			jButtonCambiarFoto2.setIcon(new ImageIcon(getClass().getResource("/iconos/Picture.png")));
 			jButtonCambiarFoto2.setText("Cambiar");
 			jButtonCambiarFoto2.addActionListener(new java.awt.event.ActionListener() {
@@ -175,7 +190,7 @@ public class VerFoto extends JFrame {
 	private JButton getJButtonConfirmar() {
 		if (jButtonConfirmar == null) {
 			jButtonConfirmar = new JButton();
-			jButtonConfirmar.setBounds(new Rectangle(471, 352, 130, 38));
+			jButtonConfirmar.setBounds(new Rectangle(472, 453, 130, 38));
 			jButtonConfirmar.setIcon(new ImageIcon(getClass().getResource("/iconos/Save.png")));
 			jButtonConfirmar.setText("Confirmar");
 			jButtonConfirmar.addActionListener(new java.awt.event.ActionListener() {
@@ -205,8 +220,11 @@ public class VerFoto extends JFrame {
 						     comoM.setFotografiaOk(bFileBien);  
 						     flagBien=1;
 					        }
-				       if(flagBien!=0||flagMal!=0){
+					        
+				      // if(flagBien!=0||flagMal!=0){// Si hay foto que updatear
 				        int status=0;
+				       comoM.setDescripcion(jTextAreaDescFotoMal.getText());
+				       comoM.setDescripcionOk(jTextAreaDescFotoBien.getText());
 				        status=Hibernate.modificarObjeto(comoM);
 				        if(status==1){
 				        	  JOptionPane.showMessageDialog(null,"Datos guardados con éxito!");
@@ -218,10 +236,11 @@ public class VerFoto extends JFrame {
 				        
 				        
 				        
-				       }else{
+				     //  }
+				        /*else{
 				    	   JOptionPane.showMessageDialog(null,"Saliendo sin modificaciónes");
 				    	   dispose();
-				       }
+				       }*/
 				        }catch(Exception e1){
 				        	e1.printStackTrace();
 				        	
@@ -258,7 +277,7 @@ public class VerFoto extends JFrame {
 	private JButton getJButtonSalir() {
 		if (jButtonSalir == null) {
 			jButtonSalir = new JButton();
-			jButtonSalir.setBounds(new Rectangle(604, 352, 88, 38));
+			jButtonSalir.setBounds(new Rectangle(723, 453, 88, 38));
 			jButtonSalir.setIcon(new ImageIcon(getClass().getResource("/iconos/Exit.png")));
 			jButtonSalir.setText("Salir");
 			jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -268,6 +287,58 @@ public class VerFoto extends JFrame {
 			});
 		}
 		return jButtonSalir;
+	}
+
+	/**
+	 * This method initializes jTextAreaDescFotoMal	
+	 * 	
+	 * @return javax.swing.JTextArea	
+	 */
+	private JTextArea getJTextAreaDescFotoMal() {
+		if (jTextAreaDescFotoMal == null) {
+			jTextAreaDescFotoMal = new JTextArea();
+			jTextAreaDescFotoMal.setBounds(new Rectangle(15, 346, 337, 86));
+		}
+		return jTextAreaDescFotoMal;
+	}
+
+	/**
+	 * This method initializes jTextAreaDescFotoBien	
+	 * 	
+	 * @return javax.swing.JTextArea	
+	 */
+	private JTextArea getJTextAreaDescFotoBien() {
+		if (jTextAreaDescFotoBien == null) {
+			jTextAreaDescFotoBien = new JTextArea();
+			jTextAreaDescFotoBien.setBounds(new Rectangle(359, 346, 332, 86));
+		}
+		return jTextAreaDescFotoBien;
+	}
+
+	/**
+	 * This method initializes jButtonBorrar	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonBorrar() {
+		if (jButtonBorrar == null) {
+			jButtonBorrar = new JButton();
+			jButtonBorrar.setBounds(new Rectangle(606, 453, 111, 38));
+			jButtonBorrar.setIcon(new ImageIcon(getClass().getResource("/iconos/Delete.png")));
+			jButtonBorrar.setText("Borrar");
+			jButtonBorrar.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+				
+					if(Hibernate.borrarObjeto(comoM)==1){
+						JOptionPane.showMessageDialog(null,"Borrado Exitoso!");
+						dispose();
+					}else{
+						JOptionPane.showMessageDialog(null,"No se pudo borrar, reintente...");
+					}
+				}
+			});
+		}
+		return jButtonBorrar;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

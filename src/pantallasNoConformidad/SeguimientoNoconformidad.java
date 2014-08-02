@@ -166,6 +166,9 @@ public class SeguimientoNoconformidad extends JFrame {
 				" GROUP BY M.IDCOMO_MITIGAR;";*/
 				
 		metodos.llenarJtable(jTableDetalle, consulta);
+		if(jTableDetalle.getRowCount()==0){
+			JOptionPane.showMessageDialog(null,"Éste elemento no tiene detalle o mitigación, \ncárguelo en Alta de no conformidad -> Cargar mitigación");
+		}
 		
 		//ColumnResizer.adjustColumnPreferredWidths(jTableDetalle);
 		}else{
