@@ -34,6 +34,7 @@ import javax.swing.table.DefaultTableModel;
 import persistencia.Hibernate;
 
 import noConformidad.CategoriaNoConf;
+import noConformidad.ComoMitigar;
 import noConformidad.ItemNoConf;
 import noConformidad.MitigacionItemNoConf;
 import javax.swing.JComboBox;
@@ -625,11 +626,10 @@ public class PlanillaNoConformidad extends JFrame {
 				
 					String  idComo_mitigar=null;
 					idComo_mitigar=jTableFotosDeItems.getValueAt(jTableFotosDeItems.getSelectedRow(),0).toString();
-					metodosSql metodos=new metodosSql();
-					String consulta="SELECT foto FROM shiteckhibernate.como_mitigar where idcomo_mitigar="+idComo_mitigar;
-					String consulta2="SELECT fotoBien FROM shiteckhibernate.como_mitigar where idcomo_mitigar="+idComo_mitigar;
-					VerFoto fotos=new VerFoto(metodos.dameImagen(consulta, "foto"),metodos.dameImagen(consulta2, "fotoBien"),Integer.parseInt(idComo_mitigar));
-					fotos.setVisible(true);
+					
+									
+				//	VerFoto fotos=VerFoto.getInstance(Integer.parseInt(idComo_mitigar));
+				//	fotos.setVisible(true);
 				
 					
 				}
