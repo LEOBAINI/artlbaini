@@ -41,8 +41,10 @@ public class Hibernate {
 
 		    try 
 		    { 
+		    	
 		    	session.beginTransaction();
-		        como =  session.get(objeto.getClass(), (Serializable) id); 
+		        como =  session.get(objeto.getClass(), (Serializable) id);
+		       
 		    } finally 
 		    { 
 		        session.close(); 
@@ -99,6 +101,7 @@ public class Hibernate {
 		session.getTransaction().commit();
 		return 1;
 		}catch(Exception e){
+		e.getStackTrace();
 		session.getTransaction().rollback();	
 		return 0;
 			
@@ -142,6 +145,8 @@ public class Hibernate {
 		
 	}
 	
-	
+	public static void forzarCierreSesion(){
+		HibernateUtil.getSessionFactory().getCurrentSession().close();
+	}
 
 }
