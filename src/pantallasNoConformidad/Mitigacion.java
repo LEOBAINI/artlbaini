@@ -206,23 +206,25 @@ public class Mitigacion extends JFrame {
 			        	
 			        	
 						if(getRutaFoto()!=null){
-						File fileMal = new File(getRutaFoto());					
+						/*File fileMal = new File(getRutaFoto());					
 				        byte[] bFileMal = new byte[(int) fileMal.length()];
 				        FileInputStream fileInputStream = new FileInputStream(fileMal);
 					     //convert file into array of bytes
 					     fileInputStream.read(bFileMal);
-					     fileInputStream.close();
-					     comoM.setFotografia(bFileMal);
+					     fileInputStream.close();*/
+					     comoM.setFotografia(getRutaFoto());//bFileMal
+					     System.out.println(getRutaFoto());
 					     flagMal=1;
 						}
 				        if(getRutaFotoBien()!=null){
-				        File fileBien = new File(getRutaFotoBien());
+				        /*File fileBien = new File(getRutaFotoBien());
 				        byte[] bFileBien = new byte[(int) fileBien.length()];
 				        FileInputStream fileInputStream2 = new FileInputStream(fileBien);
 					     //convert file into array of bytes
 					     fileInputStream2.read(bFileBien);
-					     fileInputStream2.close();	
-					     comoM.setFotografiaOk(bFileBien);  
+					     fileInputStream2.close();	*/
+					     comoM.setFotografiaOk(getRutaFotoBien());//bFileBien  
+					     System.out.println(getRutaFotoBien());
 					     flagBien=1;
 				        }
 					     
