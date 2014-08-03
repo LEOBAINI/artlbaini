@@ -13,11 +13,11 @@ public String lanzarSeleccion(){
 	
 JFileChooser chooser = new JFileChooser();
 
-chooser.setCurrentDirectory(new java.io.File("."));
+chooser.setCurrentDirectory(new java.io.File("D:\\Fotos"));
 
 //Titulo que llevara la ventana
 
-chooser.setDialogTitle("Seleccione");
+chooser.setDialogTitle("Seleccione un archivo");
 
 //Elegiremos archivos del directorio
 
@@ -36,6 +36,7 @@ System.out.println("Directorio: " + chooser.getSelectedFile());
 } else {
 
 System.out.println("No seleccion ");
+return "No seleccion";
 
 }
 return chooser.getSelectedFile().toString();
