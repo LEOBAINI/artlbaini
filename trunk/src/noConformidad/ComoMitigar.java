@@ -13,9 +13,9 @@ public class ComoMitigar {
 	}
 	int idcomo_mitigar;
 	String descripcion;  
-	byte[] fotografia;
+	String fotografia;
 	String descripcionOk;
-	byte[] fotografiaOk;
+	String fotografiaOk;  //  @jve:decl-index=0:
 	String cliente_depto;
 	long id_item_no_conf;
 	
@@ -37,11 +37,11 @@ public class ComoMitigar {
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
-	public byte[] getFotografia() {
+	public String getFotografia() {
 		return fotografia;
 	}
-	public void setFotografia(byte[] fotografia) {
-		this.fotografia = fotografia;
+	public void setFotografia(String string) {
+		this.fotografia = string;
 	}
 	public String getCliente_depto() {
 		return cliente_depto;
@@ -55,11 +55,11 @@ public class ComoMitigar {
 	public void setDescripcionOk(String descripcionOk) {
 		this.descripcionOk = descripcionOk;
 	}
-	public byte[] getFotografiaOk() {
+	public String getFotografiaOk() {
 		return fotografiaOk;
 	}
-	public void setFotografiaOk(byte[] fotografiaOk) {
-		this.fotografiaOk = fotografiaOk;
+	public void setFotografiaOk(String string) {
+		this.fotografiaOk = string;
 	}
 	
 	
