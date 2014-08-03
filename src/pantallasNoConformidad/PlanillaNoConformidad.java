@@ -81,6 +81,7 @@ public class PlanillaNoConformidad extends JFrame {
 	private JLabel jLabel3InfoDepto = null;
 	private JLabel jLabel3Depto = null;
 	private JTextArea jTextArea = null;
+	private JButton jButtonSalir = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -197,6 +198,7 @@ public class PlanillaNoConformidad extends JFrame {
 			jContentPane.add(jLabel3InfoDepto, null);
 			jContentPane.add(jLabel3Depto, null);
 			jContentPane.add(getJTextArea(), null);
+			jContentPane.add(getJButtonSalir(), null);
 		}
 		return jContentPane;
 	}
@@ -626,10 +628,14 @@ public class PlanillaNoConformidad extends JFrame {
 				
 					String  idComo_mitigar=null;
 					idComo_mitigar=jTableFotosDeItems.getValueAt(jTableFotosDeItems.getSelectedRow(),0).toString();
-					
+					int id=Integer.parseInt(idComo_mitigar);
 									
 				//	VerFoto fotos=VerFoto.getInstance(Integer.parseInt(idComo_mitigar));
 				//	fotos.setVisible(true);
+				VerFotoYmodificar fot;
+				fot=VerFotoYmodificar.getInstance(id);
+				fot.setLocationRelativeTo(null);
+				fot.setVisible(true);
 				
 					
 				}
@@ -755,6 +761,26 @@ public class PlanillaNoConformidad extends JFrame {
 			jTextArea.setText("Seleccione una fila\npara ver su contenido\n y editar si lo desea.");
 		}
 		return jTextArea;
+	}
+
+	/**
+	 * This method initializes jButtonSalir	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonSalir() {
+		if (jButtonSalir == null) {
+			jButtonSalir = new JButton();
+			jButtonSalir.setBounds(new Rectangle(1115, 9, 109, 43));
+			jButtonSalir.setIcon(new ImageIcon(getClass().getResource("/iconos/Exit.png")));
+			jButtonSalir.setText("SALIR");
+			jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+				dispose();
+				}
+			});
+		}
+		return jButtonSalir;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

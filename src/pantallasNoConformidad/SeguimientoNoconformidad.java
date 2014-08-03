@@ -87,6 +87,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JLabel jLabelPre = null;
 	private JLabel jLabelveces = null;
 	private JLabel jLabelCantidad = null;
+	private JButton jButtonSalir = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -380,7 +381,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
 			jLabelPre = new JLabel();
-			jLabelPre.setBounds(new Rectangle(1122, 38, 99, 22));
+			jLabelPre.setBounds(new Rectangle(1087, 81, 99, 22));
 			jLabelPre.setText("Previsualizar");
 			jLabelCuit = new JLabel();
 			jLabelCuit.setBounds(new Rectangle(13, 36, 136, 17));
@@ -442,6 +443,7 @@ public class SeguimientoNoconformidad extends JFrame {
 			jContentPane.add(getJTextFieldCuit(), null);
 			jContentPane.add(getJCheckBoxPrevisualizar(), null);
 			jContentPane.add(jLabelPre, null);
+			jContentPane.add(getJButtonSalir(), null);
 		}
 		return jContentPane;
 	}
@@ -849,7 +851,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JTextField getJTextFieldResponsable() {
 		if (jTextFieldResponsable == null) {
 			jTextFieldResponsable = new JTextField();
-			jTextFieldResponsable.setBounds(new Rectangle(896, 41, 196, 31));
+			jTextFieldResponsable.setBounds(new Rectangle(896, 41, 188, 31));
 			jTextFieldResponsable.addKeyListener(new java.awt.event.KeyAdapter() {
 				public void keyTyped(java.awt.event.KeyEvent e) {
 					if(e.getKeyCode()==153){
@@ -869,7 +871,7 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JButton getJButtonGenerarAuditoria() {
 		if (jButtonGenerarAuditoria == null) {
 			jButtonGenerarAuditoria = new JButton();
-			jButtonGenerarAuditoria.setBounds(new Rectangle(1121, 8, 135, 27));
+			jButtonGenerarAuditoria.setBounds(new Rectangle(1086, 42, 135, 27));
 			jButtonGenerarAuditoria.setText("Generar Auditoría");
 			jButtonGenerarAuditoria.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {		
@@ -1204,9 +1206,29 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JCheckBox getJCheckBoxPrevisualizar() {
 		if (jCheckBoxPrevisualizar == null) {
 			jCheckBoxPrevisualizar = new JCheckBox();
-			jCheckBoxPrevisualizar.setBounds(new Rectangle(1226, 42, 21, 17));
+			jCheckBoxPrevisualizar.setBounds(new Rectangle(1192, 82, 21, 17));
 		}
 		return jCheckBoxPrevisualizar;
+	}
+
+	/**
+	 * This method initializes jButtonSalir	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonSalir() {
+		if (jButtonSalir == null) {
+			jButtonSalir = new JButton();
+			jButtonSalir.setBounds(new Rectangle(1085, 1, 169, 33));
+			jButtonSalir.setIcon(new ImageIcon(getClass().getResource("/iconos/Exit.png")));
+			jButtonSalir.setText("SALIR");
+			jButtonSalir.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					dispose();
+				}
+			});
+		}
+		return jButtonSalir;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,-3"

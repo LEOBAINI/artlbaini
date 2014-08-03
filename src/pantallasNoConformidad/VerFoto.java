@@ -207,7 +207,7 @@ public class VerFoto extends JFrame {
 						     //convert file into array of bytes
 						     fileInputStream.read(bFileMal);
 						     fileInputStream.close();
-						     comoM.setFotografia(bFileMal);
+						    // comoM.setFotografia(bFileMal);
 						     flagMal=1;
 							}
 					        if(getRutaFotoBien()!=null){
@@ -217,7 +217,7 @@ public class VerFoto extends JFrame {
 						     //convert file into array of bytes
 						     fileInputStream2.read(bFileBien);
 						     fileInputStream2.close();	
-						     comoM.setFotografiaOk(bFileBien);  
+						    // comoM.setFotografiaOk(bFileBien);  
 						     flagBien=1;
 					        }
 					        
