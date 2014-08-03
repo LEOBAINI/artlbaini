@@ -7,12 +7,12 @@
 <id name="idcomo_mitigar" column="idcomo_mitigar">
 
 </id>
-<property name="fotografia" type="binary" column="foto"/>
+<property name="fotografia" column="foto"/>
 <property name="descripcion"/>
 <property name="id_item_no_conf"/>
 <property name="cliente_depto"/>
 <property name="descripcionOk" column="descripcionFotoBien"/>
-<property name="fotografiaOk" type="binary" column="fotoBien"/>
+<property name="fotografiaOk" column="fotoBien"/>
 
 
 </class>
