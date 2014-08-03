@@ -11,7 +11,7 @@ public class ConexionMySql {
         protected  Statement statemente;
         protected  ResultSet resulsete;
         private  String base="shiteckhibernate";
-        public static  String host="localhost";//192.1.1.8";
+        public static  String host="localhost";//"localhost";//192.1.1.8";
         private  String cadena="jdbc:mysql://"+host+"/"+base;
        // private static String cadena="jdbc:mysql://localhost/pruebas";
         private  String driver="com.mysql.jdbc.Driver";
@@ -53,7 +53,7 @@ public class ConexionMySql {
             try{
             	
                 Class.forName(driver);
-                c=DriverManager.getConnection(cadena,"gestorit","zayb9183");
+                c=DriverManager.getConnection(cadena,"root","root");
                  statemente=c.createStatement();
                  c.setAutoCommit(false);
                //  System.out.println("Conectado OK");
