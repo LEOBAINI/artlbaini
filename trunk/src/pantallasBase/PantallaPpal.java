@@ -476,6 +476,7 @@ public class PantallaPpal extends JFrame {
 		if (jMenuReimpresion == null) {
 			jMenuReimpresion = new JMenu();
 			jMenuReimpresion.setText("Reimpresiones");
+			jMenuReimpresion.setEnabled(false);
 			jMenuReimpresion.add(getJMenuItemReimprimirAu());
 		}
 		return jMenuReimpresion;
