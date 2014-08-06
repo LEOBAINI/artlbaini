@@ -78,7 +78,7 @@ public class PantallaPpal extends JFrame {
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/iconos/logoShiteck.gif")));
 		this.setJMenuBar(getJJMenuBarMenu());
 		this.setContentPane(getJContentPane());
-		this.setTitle("Shiteck ");
+		this.setTitle("SHITECK  ");
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 	}

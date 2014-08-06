@@ -22,6 +22,7 @@ import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import java.awt.Choice;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Graphics;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -32,6 +33,7 @@ import Base.metodosSql;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.sql.SQLException;
 import javax.swing.JScrollBar;
 import javax.swing.border.TitledBorder;
@@ -88,6 +90,8 @@ public class SeguimientoNoconformidad extends JFrame {
 	private JLabel jLabelveces = null;
 	private JLabel jLabelCantidad = null;
 	private JButton jButtonSalir = null;
+	private JButton jButtonVerDetalle = null;
+	private JButton jButtonRefresh = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -236,8 +240,8 @@ public class SeguimientoNoconformidad extends JFrame {
 		String estaCumplido="NO SE";
 		try{
 		metodosSql metodos=new metodosSql();
-		String consultaTotalSubItems="SELECT count(*) FROM shiteckhibernate.como_mitigar where cliente_depto="+cliente_depto+" and id_item_no_conf="+nroItemNoConforme+";";
-		String consultaTotalSubItemsCumplidos="SELECT count(*) FROM shiteckhibernate.como_mitigar where cliente_depto="+cliente_depto+" and id_item_no_conf="+nroItemNoConforme+" and cumplido='SI';";
+		String consultaTotalSubItems="SELECT count(*) FROM shiteckhibernate.como_mitigar where cliente_depto='"+cliente_depto+"' and id_item_no_conf="+nroItemNoConforme+";";
+		String consultaTotalSubItemsCumplidos="SELECT count(*) FROM shiteckhibernate.como_mitigar where cliente_depto='"+cliente_depto+"' and id_item_no_conf="+nroItemNoConforme+" and cumplido='SI';";
 		int totalSubItems=Integer.parseInt(metodos.consultarUnaColumna(consultaTotalSubItems).get(0));
 		int totalSubItemsCumplidos=Integer.parseInt(metodos.consultarUnaColumna(consultaTotalSubItemsCumplidos).get(0));
 		if(totalSubItemsCumplidos==totalSubItems){
@@ -264,7 +268,7 @@ public class SeguimientoNoconformidad extends JFrame {
 		
 		metodosSql metodos=new metodosSql();
 		if(fechaCumplidoPadre!=null){
-			sentenciaSql="update shiteckhibernate.mitigacion_item_no_conf set esta_cumplido='"+estado+"',fecha_cumplida_mitigacion='"+fechaCumplidoPadre+"' where cliente_depto_nro="+clienteNro+" "+
+			sentenciaSql="update shiteckhibernate.mitigacion_item_no_conf set esta_cumplido='"+estado+"',fecha_cumplida_mitigacion='"+fechaCumplidoPadre+"' where cliente_depto_nro='"+clienteNro+"' "+
 				" and idmitigacion_item_no_conf="+idItemPadre+";";
 		}else{
 			sentenciaSql="update shiteckhibernate.mitigacion_item_no_conf set esta_cumplido='"+estado+"',fecha_cumplida_mitigacion=null where cliente_depto_nro='"+clienteNro+"' "+
@@ -545,6 +549,7 @@ public class SeguimientoNoconformidad extends JFrame {
 					(SELECT auditorianro FROM shiteckhibernate.historialrelevamiento where idcomomitigar=6);*/
 					int idComomitigar=Integer.parseInt(jTableDetalle.getValueAt(jTableDetalle.getSelectedRow(),0).toString());
 					
+					
 					actualizarTablaStatusItemNoConforme(idComomitigar);
 					try{
 					jLabelCantidad.setText(String.valueOf(jTableStatus.getRowCount()));
@@ -601,6 +606,7 @@ public class SeguimientoNoconformidad extends JFrame {
 			jButtonCumplido.addActionListener(new java.awt.event.ActionListener() {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 				try{	
+					metodosSql metodos=new metodosSql();
 					String clienteNro=choiceCliente.getSelectedItem();
 					
 					int idItemPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
@@ -619,14 +625,19 @@ public class SeguimientoNoconformidad extends JFrame {
 						try {				
 							
 							actualizarTodo(clienteNro,-1,"No interesa por -1",idComo_mitigar,"SI",fechaCumplido);
+							metodos.vaciarTabla(jTableDetalle);
+							
+							
 					
 							if(totalmenteCumplidoItem(clienteNro,idItemPadre).equals("SI")){//si estan todos los subitems cumplidos poner si en item padre
 								
 							   actualizarTodo(clienteNro,idItemPadre,"SI",-1,"no interesa por -1",fechaCumplido);
+							   metodos.vaciarTabla(jTableDetalle);
 					
 							}else{
 								
 							  actualizarTodo(clienteNro,idItemPadre,"NO",idComo_mitigar,"SI",null);
+							  metodos.vaciarTabla(jTableDetalle);
 								
 							}
 					
@@ -645,6 +656,7 @@ public class SeguimientoNoconformidad extends JFrame {
 						else{//Si la tabla del medio NO tiene filas solo actualizar primera
 							
 							actualizarTodo(clienteNro, idItemPadre,"SI", -1, "No interesa por -1",fechaCumplido);
+							metodos.vaciarTabla(jTableDetalle);
 							
 				}
 					
@@ -724,6 +736,7 @@ public class SeguimientoNoconformidad extends JFrame {
 				public void actionPerformed(java.awt.event.ActionEvent e) {
 					
 					try{	
+						metodosSql metodos=new metodosSql();
 						String clienteNro=choiceCliente.getSelectedItem();
 						
 						int idItemPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
@@ -741,7 +754,7 @@ public class SeguimientoNoconformidad extends JFrame {
 			
 									
 								actualizarTodo(clienteNro,idItemPadre,"NO",idComo_mitigar,"NO",null);
-									
+								metodos.vaciarTabla(jTableDetalle);
 								
 						
 								JOptionPane.showMessageDialog(null,"Se actualizó correctamente ");
@@ -759,6 +772,7 @@ public class SeguimientoNoconformidad extends JFrame {
 							else{//Si la tabla del medio NO tiene filas solo actualizar primera
 								
 								actualizarTodo(clienteNro, idItemPadre,"NO", -1, "No interesa por -1",null);
+								metodos.vaciarTabla(jTableDetalle);
 								
 					}
 						
@@ -799,6 +813,8 @@ public class SeguimientoNoconformidad extends JFrame {
 			jPanelDetalles.add(jLabelDetalleItemsNoConformes, null);
 			jPanelDetalles.add(jLabelveces, null);
 			jPanelDetalles.add(jLabelCantidad, null);
+			jPanelDetalles.add(getJButtonVerDetalle(), null);
+			jPanelDetalles.add(getJButtonRefresh(), null);
 		}
 		return jPanelDetalles;
 	}
@@ -924,23 +940,27 @@ public class SeguimientoNoconformidad extends JFrame {
 					metodos.generarAuditoriasDeLaBase(clienteDeptpNro,horaIn,horaOut,responsable,auditoriaNro,rutaFull);	
 					
 					if(jCheckBoxPrevisualizar.isSelected()){
-					pdfopener pdf=new pdfopener(rutaFull);
-					pdf.abrirDocumento();
-					}
-						
-					
-					//JOptionPane.showMessageDialog(null,"Reporte generado OK!");
-					
-					
-					
+						try {
+						    File file = new File(rutaFull);
+						    Desktop.getDesktop().open(file);
+						    ((BarThread) hilo).setBandera(1);
+						} catch(Exception ex) {
+						    System.out.println("No se puede abrir el documento, parece estar dañado");
+						    ex.printStackTrace();
+						    ((BarThread) hilo).setBandera(1);
+						}
+					/*pdfopener pdf=new pdfopener(rutaFull);
+					pdf.abrirDocumento();*/
+					}		
 					((BarThread) hilo).setBandera(1);
-					
 					
 						}else{
 							JOptionPane.showMessageDialog(null,"Acción cancelada por el usuario...");
+							
 						}
 						}else{
 							JOptionPane.showMessageDialog(null,"Acción cancelada por el usuario...");
+							
 						}
 					 
 					}catch(Exception e1){
@@ -1229,6 +1249,66 @@ public class SeguimientoNoconformidad extends JFrame {
 			});
 		}
 		return jButtonSalir;
+	}
+
+	/**
+	 * This method initializes jButtonVerDetalle	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonVerDetalle() {
+		if (jButtonVerDetalle == null) {
+			jButtonVerDetalle = new JButton();
+			jButtonVerDetalle.setBounds(new Rectangle(196, 13, 278, 26));
+			jButtonVerDetalle.setIcon(new ImageIcon(getClass().getResource("/iconos/Line Chart.png")));
+			jButtonVerDetalle.setText("Seleccione fila y vea el detalle");
+			jButtonVerDetalle.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if(jTableDetalle.getSelectedRow()!=-1){
+					String  idComo_mitigar=null;
+					idComo_mitigar=jTableDetalle.getValueAt(jTableDetalle.getSelectedRow(),0).toString();
+					int id=Integer.parseInt(idComo_mitigar);
+									
+				//	VerFoto fotos=VerFoto.getInstance(Integer.parseInt(idComo_mitigar));
+				//	fotos.setVisible(true);
+				VerFotoYmodificar fot;
+				fot=VerFotoYmodificar.getInstance(id);
+				fot.setLocationRelativeTo(null);
+				fot.setVisible(true);
+				
+				
+				}
+					else{
+						JOptionPane.showMessageDialog(null,"Seleccione una fila primero de la tabla 'Detalle de items no conformes'...");
+				}
+					
+				}
+			});
+		}
+		return jButtonVerDetalle;
+	}
+
+	/**
+	 * This method initializes jButtonRefresh	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonRefresh() {
+		if (jButtonRefresh == null) {
+			jButtonRefresh = new JButton();
+			jButtonRefresh.setBounds(new Rectangle(479, 13, 119, 26));
+			jButtonRefresh.setIcon(new ImageIcon(getClass().getResource("/iconos/Info.png")));
+			jButtonRefresh.setText("Refresh");
+			jButtonRefresh.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					if(jTableNoConformes.getSelectedRow()!=-1){
+						int idItemPadre=Integer.parseInt(jTableNoConformes.getValueAt(jTableNoConformes.getSelectedRow(), 0).toString());
+							actualizarTablaDetalle(idItemPadre);
+						}
+				}
+			});
+		}
+		return jButtonRefresh;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,-3"
