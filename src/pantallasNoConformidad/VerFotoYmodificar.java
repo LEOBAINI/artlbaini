@@ -3,6 +3,7 @@ package pantallasNoConformidad;
 import herramientas.FileChooser;
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
@@ -12,6 +13,9 @@ import javax.swing.JFrame;
 import java.awt.Dimension;
 import javax.swing.JLabel;
 import java.awt.Rectangle;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 
@@ -39,6 +43,9 @@ public class VerFotoYmodificar extends JFrame {
 	private ComoMitigar como=new ComoMitigar();  //  @jve:decl-index=0:
 	private JCheckBox jCheckBoxBorrar = null;
 	private JLabel jLabel = null;
+	private JButton jButtonVerFotoSola = null;
+	private JLabel jLabel1 = null;
+	private JButton jButtonVerFotoOk = null;
 	/**
 	 * This is the default constructor
 	 */
@@ -108,6 +115,9 @@ public class VerFotoYmodificar extends JFrame {
 	 */
 	private JPanel getJContentPane() {
 		if (jContentPane == null) {
+			jLabel1 = new JLabel();
+			jLabel1.setBounds(new Rectangle(502, 1, 196, 14));
+			jLabel1.setText("Salga con botón SALIR no con X");
 			jLabel = new JLabel();
 			jLabel.setBounds(new Rectangle(412, 363, 106, 22));
 			jLabel.setText("Habilitar borrado");
@@ -130,6 +140,9 @@ public class VerFotoYmodificar extends JFrame {
 			jContentPane.add(getJTextAreaDescripcionBien(), null);
 			jContentPane.add(getJCheckBoxBorrar(), null);
 			jContentPane.add(jLabel, null);
+			jContentPane.add(getJButtonVerFotoSola(), null);
+			jContentPane.add(jLabel1, null);
+			jContentPane.add(getJButtonVerFotoOk(), null);
 		}
 		return jContentPane;
 	}
@@ -318,6 +331,61 @@ public class VerFotoYmodificar extends JFrame {
 			});
 		}
 		return jCheckBoxBorrar;
+	}
+
+	/**
+	 * This method initializes jButtonVerFotoSola	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonVerFotoSola() {
+		if (jButtonVerFotoSola == null) {
+			jButtonVerFotoSola = new JButton();
+			jButtonVerFotoSola.setBounds(new Rectangle(203, 223, 141, 31));
+			jButtonVerFotoSola.setIcon(new ImageIcon(getClass().getResource("/iconos/Search.png")));
+			jButtonVerFotoSola.setText("Ver la foto");
+			jButtonVerFotoSola.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					 File file = new File(rutaFotoMal);
+					    try {
+							Desktop.getDesktop().open(file);
+						} catch (Exception e1) {
+							// TODO Auto-generated catch block
+							JOptionPane.showMessageDialog(null,"No encuentro "+rutaFotoMal);
+							e1.printStackTrace();
+							
+						}
+				}
+			});
+		}
+		return jButtonVerFotoSola;
+	}
+
+	/**
+	 * This method initializes jButtonVerFotoOk	
+	 * 	
+	 * @return javax.swing.JButton	
+	 */
+	private JButton getJButtonVerFotoOk() {
+		if (jButtonVerFotoOk == null) {
+			jButtonVerFotoOk = new JButton();
+			jButtonVerFotoOk.setBounds(new Rectangle(543, 222, 141, 31));
+			jButtonVerFotoOk.setIcon(new ImageIcon(getClass().getResource("/iconos/Search.png")));
+			jButtonVerFotoOk.setText("Ver la foto");
+			jButtonVerFotoOk.addActionListener(new java.awt.event.ActionListener() {
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					File file = new File(rutaFotoBien);
+				    try {
+						Desktop.getDesktop().open(file);
+					} catch (Exception e1) {
+						JOptionPane.showMessageDialog(null,"No encuentro "+rutaFotoMal);// TODO Auto-generated catch block
+						e1.printStackTrace();
+						
+					}
+				}
+			});
+		}
+		return jButtonVerFotoOk;
 	}
 
 }  //  @jve:decl-index=0:visual-constraint="10,10"

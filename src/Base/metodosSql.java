@@ -166,23 +166,25 @@ String consulta="SELECT "+
         		responsable = Nombreresponsable;
         		telefonoCliente = rs.getString("telefono");
         		  Blob blobLogoCli = rs.getBlob("logo");
-        		  Blob blobFotBien = rs.getBlob("fotoBien");
-                  Blob blobFotMal = rs.getBlob("fotoMal");
+        		  ImageIcon FotBien = new ImageIcon(rs.getString("fotoBien"));
+        		  ImageIcon FotMal = new ImageIcon(rs.getString("fotoMal"));
+        		 // Blob blobFotBien = rs.getBlob("fotoBien");
+                 // Blob blobFotMal = rs.getBlob("fotoMal");
                 if(blobLogoCli!=null){
                 BufferedImage logCli = javax.imageio.ImageIO.read(blobLogoCli.getBinaryStream());
                 if(logCli!=null)
                 logoCliente = new ImageIcon(logCli).getImage(); 
                 }
-                if(blobFotBien!=null){
-               	BufferedImage fotBien = javax.imageio.ImageIO.read(blobFotBien.getBinaryStream());
+               /* if(FotBien!=null){
+               	BufferedImage fotBien = javax.imageio.ImageIO.read(FotBien.getBinaryStream());
                 if(fotBien!=null)
                	fotoBien = new ImageIcon(fotBien).getImage();
                 }
-                if(blobFotMal!=null){                   
-                BufferedImage fotMal = javax.imageio.ImageIO.read(blobFotMal.getBinaryStream());
+                if(FotMal!=null){                   
+                BufferedImage fotMal = javax.imageio.ImageIO.read(FotMal.getBinaryStream());
                 if(fotMal!=null)
                 fotoMal = new ImageIcon(fotMal).getImage();
-                }
+                }*/
                 
               
                
@@ -201,8 +203,8 @@ String consulta="SELECT "+
          		au.setEstadoCumplimiento(estadoCumplimiento);		
          		au.setFechaCumplido(fechaCumplido);		
          		au.setFechaPrometida(fechaPrometida);
-         		au.setFotoBien(fotoBien);
-         		au.setFotoMal(fotoMal);		
+         		au.setFotoBien(FotBien.getImage());
+         		au.setFotoMal(FotMal.getImage());		
          		au.setHorarioOut(horarioOut);		
          		au.setHorarioIn(horarioIn);
          		au.setLogoCliente(logoCliente);		

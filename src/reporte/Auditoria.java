@@ -2,6 +2,8 @@ package reporte;
 
 import java.awt.Image;
 
+import javax.swing.ImageIcon;
+
 public class Auditoria {
 	
 	Image logoCliente; //" class="java.lang.Object"/>
@@ -156,8 +158,8 @@ public class Auditoria {
 	public Image getFotoBien() {
 		return fotoBien;
 	}
-	public void setFotoBien(Image fotoBien) {
-		this.fotoBien = fotoBien;
+	public void setFotoBien(Image image) {
+		this.fotoBien = image;
 	}
 	
 

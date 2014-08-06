@@ -49,8 +49,8 @@ public class Shiteck {
 		ConexionMySql con=new ConexionMySql();
 		if(con.conectar()==1){
 			pan.aumentarProgresBar();
-			pan.setTitle("Shiteck");
-			JOptionPane.showMessageDialog(null,"PRUEBA DE CONEXIÓN OK, CONECTADO A "+con.getHost()+" BASE DE DATOS "+con.getBase());
+			pan.setTitle("Shiteck                                                                    				\t\t\t                                     PRUEBA DE CONEXIÓN OK, CONECTADO A "+con.getHost().toUpperCase()+" BASE DE DATOS "+con.getBase().toUpperCase());
+			//JOptionPane.showMessageDialog(null,"PRUEBA DE CONEXIÓN OK, CONECTADO A "+con.getHost()+" BASE DE DATOS "+con.getBase());
 			
 			
 			

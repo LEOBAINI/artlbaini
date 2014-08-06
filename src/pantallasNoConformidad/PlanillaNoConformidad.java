@@ -447,6 +447,10 @@ public class PlanillaNoConformidad extends JFrame {
 					if(status==1){
 					JOptionPane.showMessageDialog(null,"Guardado ok");
 					jButtonTablaRefresh.doClick();
+					int ultimaFila=jTableNoConformes.getRowCount();
+					jTableNoConformes.getSelectionModel().setSelectionInterval(ultimaFila-1,ultimaFila-1);
+					jButtonCargaMitigacion.doClick();
+					
 					}else{
 					JOptionPane.showMessageDialog(null,"Error!, reintente.");
 					}
